@@ -1,0 +1,14 @@
+flowchart LR
+  ui[Django routes / UI] --> ordering[Ordering]
+  ui --> network[Network]
+  ui --> catalog[Catalog]
+  ordering --> inventory[Inventory]
+  ordering --> loyalty[Loyalty policy]
+  ordering --> delivery[Delivery policy]
+  ordering --> payments[Payment port]
+  ordering --> prescriptions[Prescription policy]
+  inventory --> catalog
+  inventory --> network
+  ordering --> events[Event publisher port]
+  events --> notifications[Async notification observers]
+  network --> identity[Identity / authorization]

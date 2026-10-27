@@ -1,0 +1,9 @@
+stateDiagram-v2
+ [*] --> CREATED
+ CREATED --> ACTIVE: stock held atomically
+ ACTIVE --> FULFILLED: handover/fulfilment
+ ACTIVE --> RELEASED: order cancelled
+ ACTIVE --> EXPIRED: hold timeout
+ FULFILLED --> [*]
+ RELEASED --> [*]
+ EXPIRED --> [*]

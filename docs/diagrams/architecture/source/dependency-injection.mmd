@@ -1,0 +1,10 @@
+flowchart TB
+  C[composition.py] --> S[CheckoutService]
+  S --> O[OrderRepository Protocol]
+  S --> U[UnitOfWork Protocol]
+  R[DjangoOrderRepository] -. implements .-> O
+  F[FakeOrderRepository] -. implements .-> O
+  DU[DjangoUnitOfWork] -. implements .-> U
+  FU[FakeUnitOfWork] -. implements .-> U
+  R --> ORM[Django ORM]
+  ORM --> DB[(DB Engine)]

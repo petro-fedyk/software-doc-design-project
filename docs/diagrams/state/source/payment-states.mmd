@@ -1,0 +1,10 @@
+stateDiagram-v2
+ [*] --> PENDING
+ PENDING --> PROCESSING: start payment attempt
+ PROCESSING --> SUCCEEDED: trusted sandbox confirmation
+ PROCESSING --> FAILED: provider failure
+ PENDING --> CANCELLED: user abort
+ SUCCEEDED --> [*]
+ FAILED --> [*]
+ CANCELLED --> [*]
+ note right of SUCCEEDED: Refund has a separate lifecycle
