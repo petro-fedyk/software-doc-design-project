@@ -1,0 +1,10 @@
+stateDiagram-v2
+ [*] --> CREATED
+ CREATED --> PREPARING: shipment opened
+ PREPARING --> SHIPPED: carrier handoff
+ SHIPPED --> DELIVERED: delivery confirmed
+ PREPARING --> EXCEPTION: blocked shipment
+ SHIPPED --> EXCEPTION: delivery issue
+ EXCEPTION --> PREPARING: resolved before handoff
+ EXCEPTION --> SHIPPED: resumed in transit
+ DELIVERED --> [*]

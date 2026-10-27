@@ -1,0 +1,15 @@
+stateDiagram-v2
+ [*] --> PENDING_CONFIRMATION
+ PENDING_CONFIRMATION --> CONFIRMED: reserve stock / validate
+ CONFIRMED --> PROCESSING: employee accepts
+ PROCESSING --> READY_FOR_PICKUP: pickup ready
+ PROCESSING --> AWAITING_SHIPMENT: shipping ready
+ AWAITING_SHIPMENT --> SHIPPED: carrier handoff
+ READY_FOR_PICKUP --> COMPLETED: verified pickup and payment policy met
+ SHIPPED --> COMPLETED: delivery confirmed
+ PENDING_CONFIRMATION --> CANCELLED: cancel allowed
+ CONFIRMED --> CANCELLED: cancel allowed
+ PROCESSING --> CANCELLED: cancel allowed
+ READY_FOR_PICKUP --> CANCELLED: cancel allowed
+ COMPLETED --> [*]
+ CANCELLED --> [*]

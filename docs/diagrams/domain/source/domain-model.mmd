@@ -1,0 +1,44 @@
+classDiagram
+ direction LR
+ class User
+ class CustomerProfile
+ class EmployeeProfile
+ class PharmacyBranch
+ class EmployeeAssignment
+ class Product
+ class Category
+ class Manufacturer
+ class BranchAssortment
+ class StockBalance
+ class Cart
+ class CartItem
+ class Order
+ class OrderItem
+ class Reservation
+ class Payment
+ class Shipment
+ class PrescriptionVerification
+ class LoyaltyAccount
+ class LoyaltyEntry
+ User "1" --> "0..1" CustomerProfile
+ User "1" --> "0..1" EmployeeProfile
+ EmployeeProfile "1" --> "0..*" EmployeeAssignment
+ PharmacyBranch "1" --> "0..*" EmployeeAssignment
+ Category "1" --> "0..*" Product
+ Manufacturer "1" --> "0..*" Product
+ PharmacyBranch "1" --> "0..*" BranchAssortment
+ Product "1" --> "0..*" BranchAssortment
+ BranchAssortment "1" *-- "1" StockBalance
+ CustomerProfile "1" --> "0..*" Cart
+ Cart "1" *-- "0..*" CartItem
+ CustomerProfile "1" --> "0..*" Order
+ PharmacyBranch "1" --> "0..*" Order
+ Order "1" *-- "1..*" OrderItem
+ Product "1" --> "0..*" OrderItem
+ Order "1" --> "0..*" Reservation
+ BranchAssortment "1" --> "0..*" Reservation
+ Order "1" --> "0..*" Payment
+ Order "1" --> "0..*" Shipment
+ Order "1" --> "0..*" PrescriptionVerification
+ CustomerProfile "1" --> "0..1" LoyaltyAccount
+ LoyaltyAccount "1" *-- "0..*" LoyaltyEntry
