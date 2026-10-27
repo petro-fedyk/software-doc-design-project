@@ -1,0 +1,772 @@
+<mxfile host="65bd71144e">
+    <diagram id="page-1" name="UC-00 Загальна">
+        <mxGraphModel dx="2168" dy="1122" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1200" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="sys" parent="1" style="swimlane;html=1;startSize=34;horizontal=1;rounded=0;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#4b5563;fontStyle=1;fontSize=16;" value="Інформаційна система «Інтернет-аптека»" vertex="1">
+                    <mxGeometry height="970" width="1190" x="270" y="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_G01" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="G-01&lt;br&gt;Переглядати каталог" vertex="1">
+                    <mxGeometry height="78" width="230" x="350" y="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_G02" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="G-02&lt;br&gt;Керувати кошиком і замовленням" vertex="1">
+                    <mxGeometry height="78" width="230" x="350" y="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_G03" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="G-03&lt;br&gt;Оплачувати замовлення" vertex="1">
+                    <mxGeometry height="78" width="230" x="850" y="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_G04" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="G-04&lt;br&gt;Бронювати рецептурний препарат" vertex="1">
+                    <mxGeometry height="78" width="230" x="350" y="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_G05" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="G-05&lt;br&gt;Керувати особистим кабінетом" vertex="1">
+                    <mxGeometry height="78" width="230" x="350" y="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_G06" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="G-06&lt;br&gt;Отримувати сповіщення" vertex="1">
+                    <mxGeometry height="78" width="230" x="850" y="900" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_G07" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="G-07&lt;br&gt;Керувати операціями відділення" vertex="1">
+                    <mxGeometry height="78" width="230" x="1150" y="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_G08" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="G-08&lt;br&gt;Керувати мережею аптек" vertex="1">
+                    <mxGeometry height="78" width="230" x="1150" y="310" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_G09" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="G-09&lt;br&gt;Керувати програмою лояльності" vertex="1">
+                    <mxGeometry height="78" width="230" x="1150" y="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_G10" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="G-10&lt;br&gt;Налаштовувати оплату та доставку" vertex="1">
+                    <mxGeometry height="78" width="230" x="850" y="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_G11" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="G-11&lt;br&gt;Оформлювати доставку" vertex="1">
+                    <mxGeometry height="78" width="230" x="850" y="750" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_A0" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Відвідувач&lt;br&gt;«абстрактний»" vertex="1">
+                    <mxGeometry height="100" width="90" x="90" y="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_A2" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Покупець" vertex="1">
+                    <mxGeometry height="100" width="90" x="170" y="400" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_A4" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Адміністратор мережі" vertex="1">
+                    <mxGeometry height="100" width="90" x="1680" y="324" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_E2" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Сервіс перевізника&lt;br&gt;«емулятор»" vertex="1">
+                    <mxGeometry height="100" width="90" x="1535" y="740" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_A1" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Гість" vertex="1">
+                    <mxGeometry height="100" width="90" x="40" y="400" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_A3" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Працівник аптеки" vertex="1">
+                    <mxGeometry height="100" width="90" x="1700" y="194" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_E1" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Платіжний провайдер&lt;br&gt;«емулятор»" vertex="1">
+                    <mxGeometry height="100" width="90" x="1535" y="590" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_E3" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Сервіс повідомлень&lt;br&gt;«емулятор»" vertex="1">
+                    <mxGeometry height="100" width="90" x="1535" y="890" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" edge="1" parent="1" source="act_A0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_G01" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_G02" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_G03" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_G04" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_G05" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_G06" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_G11" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_G07" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_G08" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_G09" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e11" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_G10" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e12" edge="1" parent="1" source="act_E1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_G03" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e13" edge="1" parent="1" source="act_E2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_G11" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e14" edge="1" parent="1" source="act_E3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_G06" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e15" edge="1" parent="1" source="act_A1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;strokeColor=#2563eb;labelBackgroundColor=#ffffff;" target="act_A0" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e16" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;strokeColor=#2563eb;labelBackgroundColor=#ffffff;" target="act_A0" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="note" parent="1" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=14;fontColor=#475569;" value="Огляд цілей системи; деталізація — UC-01–UC-05. Зовнішні сервіси в цій моделі — навчальні емулятори." vertex="1">
+                    <mxGeometry height="75" width="1190" x="285" y="1060" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page-2" name="UC-01 Каталог і покупки">
+        <mxGraphModel dx="2168" dy="1122" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1200" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="sys" parent="1" style="swimlane;html=1;startSize=34;horizontal=1;rounded=0;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#4b5563;fontStyle=1;fontSize=16;" value="Інформаційна система «Інтернет-аптека»" vertex="1">
+                    <mxGeometry height="970" width="1190" x="270" y="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C01" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-01&lt;br&gt;Переглянути каталог" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C02" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-02&lt;br&gt;Знайти товар" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C03" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-03&lt;br&gt;Застосувати фільтри" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C04" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-04&lt;br&gt;Переглянути картку товару" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C05" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-05&lt;br&gt;Перевірити наявність за аптеками" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C06" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-06&lt;br&gt;Керувати кошиком" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C07" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-07&lt;br&gt;Оформити замовлення" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C08" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-08&lt;br&gt;Перевірити наявність і можливість резервування" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C09" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-09&lt;br&gt;Обрати спосіб отримання" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C10" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-10&lt;br&gt;Перевірити допустимість доставки" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C11" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-11&lt;br&gt;Вибрати аптеку для самовивозу" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C12" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-12&lt;br&gt;Зазначити адресу кур’єрської доставки" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C13" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-13&lt;br&gt;Вибрати поштового оператора та точку отримання" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C14" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-14&lt;br&gt;Обрати спосіб оплати" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C15" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-15&lt;br&gt;Розрахувати остаточну вартість" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C16" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-16&lt;br&gt;Застосувати дозволену знижку" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C17" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-17&lt;br&gt;Виконати онлайн-оплату" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="695" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C18" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-18&lt;br&gt;Переглянути результат оплати" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="695" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C19" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-19&lt;br&gt;Переглянути статус замовлення" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="695" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C20" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-20&lt;br&gt;Скасувати замовлення" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="695" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_C21" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="C-21&lt;br&gt;Оформити відправлення поштовим оператором" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="840" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_A0" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Відвідувач" vertex="1">
+                    <mxGeometry height="100" width="90" x="35" y="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_E1" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Платіжний провайдер&lt;br&gt;«емулятор»" vertex="1">
+                    <mxGeometry height="100" width="90" x="35" y="225" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_A2" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Покупець" vertex="1">
+                    <mxGeometry height="100" width="90" x="1535" y="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_E2" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Сервіс перевізника&lt;br&gt;«емулятор»" vertex="1">
+                    <mxGeometry height="100" width="90" x="1535" y="225" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" edge="1" parent="1" source="act_A0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C01" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" edge="1" parent="1" source="act_A0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C02" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" edge="1" parent="1" source="act_A0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C03" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" edge="1" parent="1" source="act_A0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C04" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" edge="1" parent="1" source="act_A0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C05" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C06" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C07" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C09" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C11" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C12" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e11" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C13" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e12" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C14" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e13" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C17" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e14" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C18" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e15" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C19" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e16" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C20" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e17" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C21" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e18" edge="1" parent="1" source="act_E1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C17" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e19" edge="1" parent="1" source="act_E2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_C21" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e20" edge="1" parent="1" source="uc_C07" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_C08" value="«include»">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e21" edge="1" parent="1" source="uc_C07" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_C09" value="«include»">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e22" edge="1" parent="1" source="uc_C07" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_C14" value="«include»">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e23" edge="1" parent="1" source="uc_C07" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_C15" value="«include»">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e24" edge="1" parent="1" source="uc_C09" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_C10" value="«include»">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e25" edge="1" parent="1" source="uc_C03" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_C01" value="«extend»&lt;br&gt;[за бажанням]">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e26" edge="1" parent="1" source="uc_C11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_C09" value="«extend»&lt;br&gt;[самовивіз]">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e27" edge="1" parent="1" source="uc_C12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_C09" value="«extend»&lt;br&gt;[кур’єр]">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e28" edge="1" parent="1" source="uc_C13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_C09" value="«extend»&lt;br&gt;[пошта]">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e29" edge="1" parent="1" source="uc_C16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_C15" value="«extend»&lt;br&gt;[знижка застосовна]">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e30" edge="1" parent="1" source="uc_C17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_C07" value="«extend»&lt;br&gt;[онлайн-оплата]">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e31" edge="1" parent="1" source="uc_C21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_C09" value="«extend»&lt;br&gt;[пошта та інтеграція існує]">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="note" parent="1" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=14;fontColor=#475569;" value="Навчальна модель із емуляторами оплати та перевізника. Точка розширення C-07: після створення замовлення — онлайн-оплата. Рецептурні товари — лише самовивіз." vertex="1">
+                    <mxGeometry height="75" width="1190" x="285" y="1060" as="geometry"/>
+                </mxCell>
+                <mxCell id="generalization_customer" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=0;strokeColor=#2563eb;" target="act_A0">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page-3" name="UC-02 Особистий кабінет">
+        <mxGraphModel dx="2168" dy="1122" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1200" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="sys" parent="1" style="swimlane;html=1;startSize=34;horizontal=1;rounded=0;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#4b5563;fontStyle=1;fontSize=16;" value="Інформаційна система «Інтернет-аптека»" vertex="1">
+                    <mxGeometry height="825" width="1190" x="270" y="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P01" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-01&lt;br&gt;Зареєструватися" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P02" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-02&lt;br&gt;Увійти до системи" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P03" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-03&lt;br&gt;Керувати профілем" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P04" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-04&lt;br&gt;Переглянути історію замовлень" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P05" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-05&lt;br&gt;Повторити замовлення" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P06" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-06&lt;br&gt;Зберегти дані рецепта" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P07" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-07&lt;br&gt;Переглянути збережені рецепти" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P08" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-08&lt;br&gt;Видалити збережений рецепт" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P09" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-09&lt;br&gt;Переглянути категорію лояльності" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P10" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-10&lt;br&gt;Переглянути бонусний баланс та історію" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P11" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-11&lt;br&gt;Переглянути сповіщення" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P12" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-12&lt;br&gt;Налаштувати сповіщення" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P13" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-13&lt;br&gt;Підписатися на появу товару" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P14" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-14&lt;br&gt;Налаштувати регулярне нагадування" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P15" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-15&lt;br&gt;Надіслати повідомлення" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P16" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-16&lt;br&gt;Отримати сповіщення про товар у наявності" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_P17" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="P-17&lt;br&gt;Отримати сповіщення про замовлення, бонуси й акції" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="695" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_A1" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Гість" vertex="1">
+                    <mxGeometry height="100" width="90" x="35" y="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_E3" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Сервіс повідомлень&lt;br&gt;«емулятор»" vertex="1">
+                    <mxGeometry height="100" width="90" x="35" y="225" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_A2" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Покупець" vertex="1">
+                    <mxGeometry height="100" width="90" x="1535" y="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" edge="1" parent="1" source="act_A1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P01" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" edge="1" parent="1" source="act_A1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P02" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P02" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P03" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P04" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P05" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P06" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P07" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P08" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P09" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e11" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P10" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e12" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P11" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e13" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P12" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e14" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P13" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e15" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P14" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e16" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P16" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e17" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P17" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e18" edge="1" parent="1" source="act_E3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_P15" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e19" edge="1" parent="1" source="uc_P05" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_P04" value="«extend»&lt;br&gt;[повторення обраного замовлення]">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e20" edge="1" parent="1" source="uc_P08" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_P07" value="«extend»&lt;br&gt;[за запитом]">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e22" edge="1" parent="1" source="uc_P16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_P15" value="«include»">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e23" edge="1" parent="1" source="uc_P17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_P15" value="«include»">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="note" parent="1" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=14;fontColor=#475569;" value="Лише власні дані покупця. P-16 і P-17 надсилаються через емулятор E3; тому включають P-15. Для рецептів використовуються тестові дані." vertex="1">
+                    <mxGeometry height="75" width="1190" x="285" y="1060" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page-4" name="UC-03 Управління аптекою">
+        <mxGraphModel dx="2168" dy="1122" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1200" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="sys" parent="1" style="swimlane;html=1;startSize=34;horizontal=1;rounded=0;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#4b5563;fontStyle=1;fontSize=16;" value="Інформаційна система «Інтернет-аптека»" vertex="1">
+                    <mxGeometry height="790" width="1190" x="270" y="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_W01" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="W-01&lt;br&gt;Переглянути список закріплених аптек" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_W02" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="W-02&lt;br&gt;Переглянути асортимент аптеки" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_W03" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="W-03&lt;br&gt;Додати товар до асортименту аптеки" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_W04" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="W-04&lt;br&gt;Змінити локальну ціну товару" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_W05" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="W-05&lt;br&gt;Оновити залишок товару" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_W06" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="W-06&lt;br&gt;Приховати товар у відділенні" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_W07" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="W-07&lt;br&gt;Переглянути замовлення відділення" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_W08" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="W-08&lt;br&gt;Підтвердити бронювання" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_W09" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="W-09&lt;br&gt;Опрацювати замовлення" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_W10" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="W-10&lt;br&gt;Змінити статус замовлення" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_W11" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="W-11&lt;br&gt;Підтвердити комплектацію" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_W12" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="W-12&lt;br&gt;Видати заброньований товар" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_W13" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="W-13&lt;br&gt;Перевірити рецепт під час видачі" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_W14" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="W-14&lt;br&gt;Переглянути статистику відділення" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_W15" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="W-15&lt;br&gt;Переглянути історію змін товару" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_A3" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Працівник аптеки" vertex="1">
+                    <mxGeometry height="100" width="90" x="35" y="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_A3a" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;whiteSpace=wrap;labelWidth=190;" value="Уповноважений фармацевтичний працівник" vertex="1">
+                    <mxGeometry height="100" width="90" x="1535" y="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_W01" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_W02" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_W03" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_W04" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_W05" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_W06" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_W07" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_W08" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_W09" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_W10" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e11" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_W11" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e12" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_W12" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e13" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_W14" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e14" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_W15" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e15" edge="1" parent="1" source="act_A3a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_W13" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e18" edge="1" parent="1" source="uc_W13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_W12" value="«extend»&lt;br&gt;[товар рецептурний]">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e19" edge="1" parent="1" source="act_A3a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;strokeColor=#2563eb;labelBackgroundColor=#ffffff;" target="act_A3" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="note" parent="1" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=14;fontColor=#475569;" value="Працівник має доступ лише до призначених відділень. Перевірку рецепта виконує лише уповноважений фармацевтичний працівник; невдала перевірка блокує видачу." vertex="1">
+                    <mxGeometry height="75" width="1190" x="285" y="1060" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page-5" name="UC-04 Адміністрування мережі">
+        <mxGraphModel dx="2168" dy="1122" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1200" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="sys" parent="1" style="swimlane;html=1;startSize=34;horizontal=1;rounded=0;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#4b5563;fontStyle=1;fontSize=16;" value="Інформаційна система «Інтернет-аптека»" vertex="1">
+                    <mxGeometry height="790" width="1190" x="270" y="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_M01" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="M-01&lt;br&gt;Створити відділення" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_M02" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="M-02&lt;br&gt;Редагувати або деактивувати відділення" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_M03" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="M-03&lt;br&gt;Створити обліковий запис працівника" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_M04" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="M-04&lt;br&gt;Призначити працівника до відділення" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_M05" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="M-05&lt;br&gt;Керувати ролями та дозволами" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_M06" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="M-06&lt;br&gt;Керувати загальним каталогом" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_M07" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="M-07&lt;br&gt;Переглянути залишки всієї мережі" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_M08" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="M-08&lt;br&gt;Переглянути замовлення всієї мережі" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_M09" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="M-09&lt;br&gt;Налаштувати категорії та правила лояльності" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_M10" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="M-10&lt;br&gt;Керувати акціями" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_M11" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="M-11&lt;br&gt;Налаштувати платіжні способи" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_M12" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="M-12&lt;br&gt;Налаштувати способи отримання та перевізників" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_M13" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="M-13&lt;br&gt;Переглянути статистику всієї мережі" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_M14" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="M-14&lt;br&gt;Переглянути журнал адміністративних операцій" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_M15" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="M-15&lt;br&gt;Керувати доступом працівника" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="550" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_A4" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Адміністратор мережі" vertex="1">
+                    <mxGeometry height="100" width="90" x="35" y="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_M01" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_M02" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_M03" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_M04" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_M05" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_M06" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_M07" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_M08" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_M09" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_M10" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e11" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_M11" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e12" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_M12" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e13" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_M13" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e14" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_M14" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e15" edge="1" parent="1" source="act_A4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_M15" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="note" parent="1" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=14;fontColor=#475569;" value="Глобальні повноваження адміністратора мережі. Призначення персоналу — самостійна дія. Адміністратор не успадковує професійні повноваження фармацевтичного працівника." vertex="1">
+                    <mxGeometry height="75" width="1190" x="285" y="1060" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page-6" name="UC-05 Рецептурне бронювання">
+        <mxGraphModel dx="1366" dy="707" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1200" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="sys" parent="1" style="swimlane;html=1;startSize=34;horizontal=1;rounded=0;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#4b5563;fontStyle=1;fontSize=16;" value="Інформаційна система «Інтернет-аптека»" vertex="1">
+                    <mxGeometry height="790" width="1190" x="270" y="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_R01" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="R-01&lt;br&gt;Переглянути рецептурний товар і його наявність" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_R02" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="R-02&lt;br&gt;Забронювати рецептурний препарат" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_R03" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="R-03&lt;br&gt;Вибрати фізичну аптеку" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_R04" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="R-04&lt;br&gt;Перевірити доступність товару" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_R05" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="R-05&lt;br&gt;Підтвердити бронювання" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_R06" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="R-06&lt;br&gt;Переглянути бронювання до видачі" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_R07" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="R-07&lt;br&gt;Перевірити рецепт" vertex="1">
+                    <mxGeometry height="78" width="230" x="865" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_R08" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="R-08&lt;br&gt;Відпустити заброньований препарат" vertex="1">
+                    <mxGeometry height="78" width="230" x="1140" y="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_R09" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="R-09&lt;br&gt;Відмовити у видачі" vertex="1">
+                    <mxGeometry height="78" width="230" x="315" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="uc_R10" parent="sys" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f5f3ff;strokeColor=#7c3aed;fontSize=13;" value="R-10&lt;br&gt;Переглянути статус бронювання" vertex="1">
+                    <mxGeometry height="78" width="230" x="590" y="405" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_A2" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Покупець" vertex="1">
+                    <mxGeometry height="100" width="90" x="80" y="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_A3a" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;whiteSpace=wrap;labelWidth=190;" value="Уповноважений фармацевтичний працівник" vertex="1">
+                    <mxGeometry height="100" width="90" x="1535" y="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_A3" parent="1" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;outlineConnect=0;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=13;" value="Працівник аптеки" vertex="1">
+                    <mxGeometry height="100" width="90" x="1535" y="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_R01" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_R02" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_R03" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" edge="1" parent="1" source="act_A2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_R10" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_R05" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" edge="1" parent="1" source="act_A3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_R06" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" edge="1" parent="1" source="act_A3a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_R07" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" edge="1" parent="1" source="act_A3a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_R08" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9" edge="1" parent="1" source="act_A3a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;strokeColor=#64748b;labelBackgroundColor=#ffffff;" target="uc_R09" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" edge="1" parent="1" source="uc_R02" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_R03" value="«include»">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e11" edge="1" parent="1" source="uc_R02" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_R04" value="«include»">
+                    <mxGeometry relative="1" x="0.3509" y="20" as="geometry">
+                        <mxPoint as="offset"/>
+                        <Array as="points">
+                            <mxPoint x="975" y="160"/>
+                            <mxPoint x="1525" y="160"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e12" edge="1" parent="1" source="uc_R08" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_R07" value="«include»">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e13" edge="1" parent="1" source="uc_R09" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;strokeColor=#7c3aed;fontSize=12;labelBackgroundColor=#ffffff;" target="uc_R07" value="«extend»&lt;br&gt;[рецепт невалідний / перевірка неуспішна]">
+                    <mxGeometry relative="1" x="-0.0203" y="-71" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e14" edge="1" parent="1" source="act_A3a" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=0;strokeColor=#2563eb;labelBackgroundColor=#ffffff;" target="act_A3" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="note" parent="1" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=14;fontColor=#475569;" value="Лише самовивіз у фізичній аптеці. Бронювання не означає відпуск. Перевірка рецепта модельована, без державної інтеграції; невдала перевірка блокує відпуск." vertex="1">
+                    <mxGeometry height="75" width="1190" x="285" y="1060" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
