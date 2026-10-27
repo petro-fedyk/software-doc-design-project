@@ -1,0 +1,24 @@
+sequenceDiagram
+  actor Customer
+  participant UI as Django Checkout Route
+  participant C as CheckoutService
+  participant S as Pricing Strategy
+  participant B as OrderDraft Builder
+  participant I as Inventory Port
+  participant O as Order/State
+  participant DB as SQLite + Outbox
+  participant W as Async Observer Worker
+  Customer->>UI: Checkout
+  UI->>C: place_order()
+  C->>S: calculate_discount()
+  S-->>C: discount
+  C->>B: build validated draft
+  B-->>C: OrderDraft
+  C->>I: reserve atomically
+  C->>O: transition order state
+  C->>DB: commit order + reservation + outbox
+  C-->>UI: accepted
+  UI-->>Customer: order confirmation
+  W->>DB: poll committed outbox
+  W->>W: notify subscribed handlers
+  W->>DB: record per-handler outcome

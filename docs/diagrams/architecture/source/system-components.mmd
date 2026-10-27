@@ -1,0 +1,10 @@
+flowchart TB
+  B[Browser HTML CSS JS] --> V[Django Views and JSON REST]
+  V --> A[Application Use Cases]
+  A --> D[Pure Python Domain]
+  A --> P[Ports and UnitOfWork]
+  I[Django ORM Infrastructure] -. implements .-> P
+  I --> DB[(SQLite or PostgreSQL)]
+  W[Outbox Management Command] --> I
+  C[Composition Root] --> A
+  C --> I
