@@ -52,7 +52,7 @@ class MySQLSchemaIntegrationTests(unittest.TestCase):
         cur.close()
 
     def _make_order_item(self, cur, now):
-        cur.execute('INSERT INTO orders(order_number,customer_id,pharmacy_id,status,fulfillment_method,payment_method,subtotal,discount_total,shipping_total,grand_total,currency,created_at,updated_at) VALUES (%s,%s,%s,\'PENDING_CONFIRMATION\',\'PICKUP\',\'DEMO_CARD\',10.00,0.00,0.00,10.00,\'UAH\',%s,%s)', (f'{self.tag}-{len(self.order_ids)+1}', self.user_id, self.pharmacy_id, now, now))
+        cur.execute('INSERT INTO orders(order_number,customer_id,pharmacy_id,status,fulfillment_method,payment_method,subtotal,discount_total,shipping_total,grand_total,currency,created_at,updated_at) VALUES (%s,%s,%s,\'PENDING_CONFIRMATION\',\'PICKUP\',\'CARD\',10.00,0.00,0.00,10.00,\'UAH\',%s,%s)', (f'{self.tag}-{len(self.order_ids)+1}', self.user_id, self.pharmacy_id, now, now))
         order_id = cur.lastrowid
         self.order_ids.append(order_id)
         cur.execute('INSERT INTO order_items(order_id,product_id,product_name_snapshot,unit_price_snapshot,quantity,line_total) VALUES (%s,%s,%s,10.00,1,10.00)', (order_id, self.product_id, 'Test item snapshot'))

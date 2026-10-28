@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Apply immutable numbered MySQL SQL migrations and optional dev seeds."""
+"""Apply immutable numbered MySQL SQL migrations."""
 from __future__ import annotations
 
 import argparse
@@ -14,7 +14,6 @@ from mysql.connector import Error
 
 ROOT = Path(__file__).resolve().parents[2]
 MIGRATIONS = ROOT / 'db' / 'migrations'
-SEED = ROOT / 'db' / 'seeds' / 'dev_seed.sql'
 
 
 def load_env_file(path: Path) -> None:
@@ -84,28 +83,15 @@ def apply_migrations(conn) -> None:
         cursor.close()
 
 
-def apply_dev_seed(conn) -> None:
-    cursor = conn.cursor()
-    try:
-        for sql in statements(SEED.read_text()):
-            cursor.execute(sql)
-    finally:
-        cursor.close()
-    print(f'APPLIED repeatable development seed: {SEED.relative_to(ROOT)}')
-
-
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--env-file', type=Path, default=ROOT / '.env')
-    parser.add_argument('--with-dev-seed', action='store_true', help='Apply synthetic development seed data')
     args = parser.parse_args()
     load_env_file(args.env_file)
     try:
         conn = connect()
         try:
             apply_migrations(conn)
-            if args.with_dev_seed:
-                apply_dev_seed(conn)
             print('Migration check complete.')
         finally:
             conn.close()
