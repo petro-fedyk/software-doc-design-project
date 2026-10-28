@@ -11,3 +11,7 @@ See the [Stage 04 architecture overview](docs/architecture/01-overview.md).
 ## UML class design (Stage 05)
 
 See the [Stage 05 class design guide](docs/class-design/README.md) and the six-page editable [UML class diagram file](docs/diagrams/Internet_Pharmacy_Class_Diagrams.drawio).
+
+## Django backend (Phase 2)
+
+See the [backend setup and API guide](docs/backend/README.md), [use-case traceability](docs/backend/architecture-and-traceability.md), and [schema proposals](docs/backend/schema-proposals.md). Start the API and asynchronous worker with `docker compose -f compose.yaml -f compose.backend.yaml up --build -d`. API documentation is served at `http://127.0.0.1:8000/api/docs/`.

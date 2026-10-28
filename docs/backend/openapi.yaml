@@ -1,0 +1,2945 @@
+openapi: 3.0.3
+info:
+  title: Internet Pharmacy API
+  version: 2.0.0
+  description: Educational pharmacy backend. Payments, shipments and prescriptions
+    are simulated.
+paths:
+  /api/admin/assignments/:
+    get:
+      operationId: admin_assignments_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - admin
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAssignmentList'
+          description: ''
+    post:
+      operationId: admin_assignments_create
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Assignment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Assignment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Assignment'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assignment'
+          description: ''
+  /api/admin/assignments/{id}/:
+    get:
+      operationId: admin_assignments_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this employee assignments.
+        required: true
+      tags:
+      - admin
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assignment'
+          description: ''
+    patch:
+      operationId: admin_assignments_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this employee assignments.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAssignment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAssignment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAssignment'
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assignment'
+          description: ''
+  /api/admin/audit/:
+    get:
+      operationId: admin_audit_retrieve
+      tags:
+      - admin
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/admin/delivery-rules/:
+    get:
+      operationId: admin_delivery_rules_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - admin
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeliveryRuleList'
+          description: ''
+    post:
+      operationId: admin_delivery_rules_create
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryRule'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeliveryRule'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeliveryRule'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryRule'
+          description: ''
+  /api/admin/delivery-rules/{id}/:
+    get:
+      operationId: admin_delivery_rules_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this delivery rules.
+        required: true
+      tags:
+      - admin
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryRule'
+          description: ''
+    patch:
+      operationId: admin_delivery_rules_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this delivery rules.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDeliveryRule'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDeliveryRule'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDeliveryRule'
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeliveryRule'
+          description: ''
+  /api/admin/loyalty-tiers/:
+    get:
+      operationId: admin_loyalty_tiers_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - admin
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTierList'
+          description: ''
+    post:
+      operationId: admin_loyalty_tiers_create
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tier'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Tier'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Tier'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tier'
+          description: ''
+  /api/admin/loyalty-tiers/{id}/:
+    get:
+      operationId: admin_loyalty_tiers_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this loyalty tiers.
+        required: true
+      tags:
+      - admin
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tier'
+          description: ''
+    patch:
+      operationId: admin_loyalty_tiers_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this loyalty tiers.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTier'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTier'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTier'
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tier'
+          description: ''
+  /api/admin/promotion-products/:
+    get:
+      operationId: admin_promotion_products_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - admin
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPromotionProductList'
+          description: ''
+    post:
+      operationId: admin_promotion_products_create
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PromotionProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PromotionProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PromotionProduct'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromotionProduct'
+          description: ''
+  /api/admin/promotion-products/{id}/:
+    get:
+      operationId: admin_promotion_products_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this promotion products.
+        required: true
+      tags:
+      - admin
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromotionProduct'
+          description: ''
+    patch:
+      operationId: admin_promotion_products_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this promotion products.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPromotionProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPromotionProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPromotionProduct'
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromotionProduct'
+          description: ''
+  /api/admin/promotions/:
+    get:
+      operationId: admin_promotions_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - admin
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPromotionList'
+          description: ''
+    post:
+      operationId: admin_promotions_create
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Promotion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Promotion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Promotion'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Promotion'
+          description: ''
+  /api/admin/promotions/{id}/:
+    get:
+      operationId: admin_promotions_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this promotions.
+        required: true
+      tags:
+      - admin
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Promotion'
+          description: ''
+    patch:
+      operationId: admin_promotions_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this promotions.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPromotion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPromotion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPromotion'
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Promotion'
+          description: ''
+  /api/admin/statistics/:
+    get:
+      operationId: admin_statistics_retrieve
+      tags:
+      - admin
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/admin/users/:
+    get:
+      operationId: admin_users_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - admin
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserAdminList'
+          description: ''
+    post:
+      operationId: admin_users_create
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAdmin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserAdmin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserAdmin'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAdmin'
+          description: ''
+  /api/admin/users/{id}/:
+    get:
+      operationId: admin_users_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this users.
+        required: true
+      tags:
+      - admin
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAdmin'
+          description: ''
+    patch:
+      operationId: admin_users_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this users.
+        required: true
+      tags:
+      - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserAdmin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserAdmin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserAdmin'
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserAdmin'
+          description: ''
+  /api/auth/register/:
+    post:
+      operationId: auth_register_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Register'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Register'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+          description: ''
+  /api/auth/token/:
+    post:
+      operationId: auth_token_create
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+          description: ''
+  /api/availability-watches/:
+    get:
+      operationId: availability_watches_retrieve
+      tags:
+      - availability-watches
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+    post:
+      operationId: availability_watches_create
+      tags:
+      - availability-watches
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Watch'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Watch'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Watch'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Watch'
+          description: ''
+  /api/cart/:
+    get:
+      operationId: cart_retrieve
+      tags:
+      - cart
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+    put:
+      operationId: cart_update
+      tags:
+      - cart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartChange'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CartChange'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CartChange'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/categories/:
+    get:
+      operationId: categories_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - categories
+      security:
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCategoryList'
+          description: ''
+    post:
+      operationId: categories_create
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /api/categories/{id}/:
+    get:
+      operationId: categories_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this categories.
+        required: true
+      tags:
+      - categories
+      security:
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+    patch:
+      operationId: categories_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this categories.
+        required: true
+      tags:
+      - categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCategory'
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /api/checkout/quote/:
+    post:
+      operationId: checkout_quote_create
+      tags:
+      - checkout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Quote'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Quote'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Quote'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/guest-cart/:
+    get:
+      operationId: guest_cart_retrieve
+      tags:
+      - guest-cart
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+    put:
+      operationId: guest_cart_update
+      tags:
+      - guest-cart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartChange'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CartChange'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CartChange'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/health/:
+    get:
+      operationId: health_retrieve
+      tags:
+      - health
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/loyalty/:
+    get:
+      operationId: loyalty_retrieve
+      tags:
+      - loyalty
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/manufacturers/:
+    get:
+      operationId: manufacturers_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - manufacturers
+      security:
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedManufacturerList'
+          description: ''
+    post:
+      operationId: manufacturers_create
+      tags:
+      - manufacturers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Manufacturer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Manufacturer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Manufacturer'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manufacturer'
+          description: ''
+  /api/manufacturers/{id}/:
+    get:
+      operationId: manufacturers_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this manufacturers.
+        required: true
+      tags:
+      - manufacturers
+      security:
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manufacturer'
+          description: ''
+    patch:
+      operationId: manufacturers_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this manufacturers.
+        required: true
+      tags:
+      - manufacturers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedManufacturer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedManufacturer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedManufacturer'
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Manufacturer'
+          description: ''
+  /api/me/:
+    get:
+      operationId: me_retrieve
+      tags:
+      - me
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/notifications/:
+    get:
+      operationId: notifications_retrieve
+      tags:
+      - notifications
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/notifications/{notification_id}/read/:
+    post:
+      operationId: notifications_read_create
+      parameters:
+      - in: path
+        name: notification_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - notifications
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/orders/:
+    get:
+      operationId: orders_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - orders
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderList'
+          description: ''
+    post:
+      operationId: orders_create
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Place'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Place'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Place'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/orders/{order_id}/reorder/:
+    post:
+      operationId: orders_reorder_create
+      parameters:
+      - in: path
+        name: order_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - orders
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/orders/{id}/:
+    get:
+      operationId: orders_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this orders.
+        required: true
+      tags:
+      - orders
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/orders/{id}/fulfillment/:
+    get:
+      operationId: orders_fulfillment_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this orders.
+        required: true
+      tags:
+      - orders
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/orders/{id}/pay/:
+    post:
+      operationId: orders_pay_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this orders.
+        required: true
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Payment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Payment'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/orders/{id}/refund/:
+    post:
+      operationId: orders_refund_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this orders.
+        required: true
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Refund'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Refund'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Refund'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/orders/{id}/ship/:
+    post:
+      operationId: orders_ship_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this orders.
+        required: true
+      tags:
+      - orders
+      security:
+      - bearerAuth: []
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/orders/{id}/transition/:
+    post:
+      operationId: orders_transition_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this orders.
+        required: true
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transition'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Transition'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Transition'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/orders/{id}/verify-prescription/:
+    post:
+      operationId: orders_verify_prescription_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this orders.
+        required: true
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Verification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Verification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Verification'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/payment-methods/:
+    get:
+      operationId: payment_methods_retrieve
+      tags:
+      - payment-methods
+      security:
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/pharmacies/:
+    get:
+      operationId: pharmacies_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - pharmacies
+      security:
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPharmacyList'
+          description: ''
+    post:
+      operationId: pharmacies_create
+      tags:
+      - pharmacies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pharmacy'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pharmacy'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pharmacy'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pharmacy'
+          description: ''
+  /api/pharmacies/{pharmacy_id}/audit/:
+    get:
+      operationId: pharmacies_audit_retrieve
+      parameters:
+      - in: path
+        name: pharmacy_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - pharmacies
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/pharmacies/{pharmacy_id}/inventory/:
+    get:
+      operationId: pharmacies_inventory_retrieve
+      parameters:
+      - in: path
+        name: pharmacy_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - pharmacies
+      security:
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/pharmacies/{pharmacy_id}/inventory/{product_id}/:
+    patch:
+      operationId: pharmacies_inventory_partial_update
+      parameters:
+      - in: path
+        name: pharmacy_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: product_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - pharmacies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedInventoryChange'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedInventoryChange'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedInventoryChange'
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/pharmacies/{pharmacy_id}/statistics/:
+    get:
+      operationId: pharmacies_statistics_retrieve
+      parameters:
+      - in: path
+        name: pharmacy_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - pharmacies
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/pharmacies/{id}/:
+    get:
+      operationId: pharmacies_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pharmacies.
+        required: true
+      tags:
+      - pharmacies
+      security:
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pharmacy'
+          description: ''
+    patch:
+      operationId: pharmacies_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this pharmacies.
+        required: true
+      tags:
+      - pharmacies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPharmacy'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPharmacy'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPharmacy'
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pharmacy'
+          description: ''
+  /api/preferences/:
+    get:
+      operationId: preferences_retrieve
+      tags:
+      - preferences
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+    post:
+      operationId: preferences_create
+      tags:
+      - preferences
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Preferences'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Preferences'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Preferences'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Preferences'
+          description: ''
+  /api/prescriptions/:
+    get:
+      operationId: prescriptions_retrieve
+      tags:
+      - prescriptions
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+    post:
+      operationId: prescriptions_create
+      tags:
+      - prescriptions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavedPrescription'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SavedPrescription'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SavedPrescription'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/prescriptions/{prescription_id}/:
+    delete:
+      operationId: prescriptions_destroy
+      parameters:
+      - in: path
+        name: prescription_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - prescriptions
+      security:
+      - bearerAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/products/:
+    get:
+      operationId: products_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - products
+      security:
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductList'
+          description: ''
+    post:
+      operationId: products_create
+      tags:
+      - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Product'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /api/products/{id}/:
+    get:
+      operationId: products_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this products.
+        required: true
+      tags:
+      - products
+      security:
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    patch:
+      operationId: products_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this products.
+        required: true
+      tags:
+      - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProduct'
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /api/products/{id}/availability/:
+    get:
+      operationId: products_availability_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this products.
+        required: true
+      tags:
+      - products
+      security:
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/profile/:
+    get:
+      operationId: profile_retrieve
+      tags:
+      - profile
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+    patch:
+      operationId: profile_partial_update
+      tags:
+      - profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProfile'
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/reminders/:
+    get:
+      operationId: reminders_retrieve
+      tags:
+      - reminders
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+    post:
+      operationId: reminders_create
+      tags:
+      - reminders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reminder'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Reminder'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Reminder'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reminder'
+          description: ''
+components:
+  schemas:
+    Assignment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+        pharmacy:
+          type: integer
+        is_active:
+          type: boolean
+      required:
+      - id
+      - is_active
+      - pharmacy
+      - user
+    CartChange:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          minimum: 1
+        quantity:
+          type: integer
+          maximum: 10000
+          minimum: 0
+      required:
+      - product_id
+      - quantity
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+      required:
+      - id
+      - name
+    DeliveryRule:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        method:
+          $ref: '#/components/schemas/FulfillmentMethodEnum'
+        requires_cold_chain:
+          type: boolean
+        cold_chain_supported:
+          type: boolean
+        enabled:
+          type: boolean
+        max_storage_min_c:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+        min_storage_max_c:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+      required:
+      - cold_chain_supported
+      - enabled
+      - id
+      - method
+      - requires_cold_chain
+    FulfillmentMethodEnum:
+      enum:
+      - PICKUP
+      - COURIER
+      - POSTAL
+      type: string
+      description: |-
+        * `PICKUP` - PICKUP
+        * `COURIER` - COURIER
+        * `POSTAL` - POSTAL
+    Line:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          minimum: 1
+        quantity:
+          type: integer
+          maximum: 10000
+          minimum: 1
+        expected_unit_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+      required:
+      - product_id
+      - quantity
+    Login:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 128
+      required:
+      - password
+      - username
+    Manufacturer:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 160
+      required:
+      - id
+      - name
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order_number:
+          type: string
+          maxLength: 36
+        customer_id:
+          type: integer
+          readOnly: true
+        pharmacy_id:
+          type: integer
+          readOnly: true
+        status:
+          type: string
+          maxLength: 32
+        fulfillment_method:
+          type: string
+          maxLength: 16
+        payment_method:
+          type: string
+          maxLength: 32
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        discount_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        shipping_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        grand_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        currency:
+          type: string
+          maxLength: 3
+        created_at:
+          type: string
+          format: date-time
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          readOnly: true
+      required:
+      - created_at
+      - currency
+      - customer_id
+      - discount_total
+      - fulfillment_method
+      - grand_total
+      - id
+      - items
+      - order_number
+      - payment_method
+      - pharmacy_id
+      - shipping_total
+      - status
+      - subtotal
+    PaginatedAssignmentList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Assignment'
+    PaginatedCategoryList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+    PaginatedDeliveryRuleList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryRule'
+    PaginatedManufacturerList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Manufacturer'
+    PaginatedOrderList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+    PaginatedPharmacyList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pharmacy'
+    PaginatedProductList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+    PaginatedPromotionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Promotion'
+    PaginatedPromotionProductList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromotionProduct'
+    PaginatedTierList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tier'
+    PaginatedUserAdminList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserAdmin'
+    PatchedAssignment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+        pharmacy:
+          type: integer
+        is_active:
+          type: boolean
+    PatchedCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+    PatchedDeliveryRule:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        method:
+          $ref: '#/components/schemas/FulfillmentMethodEnum'
+        requires_cold_chain:
+          type: boolean
+        cold_chain_supported:
+          type: boolean
+        enabled:
+          type: boolean
+        max_storage_min_c:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+        min_storage_max_c:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+    PatchedInventoryChange:
+      type: object
+      properties:
+        adjustment:
+          type: integer
+          maximum: 1000000
+          minimum: -1000000
+        quantity:
+          type: integer
+          maximum: 1000000
+          minimum: 1
+        unit_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        is_listed:
+          type: boolean
+    PatchedManufacturer:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 160
+    PatchedPharmacy:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          maxLength: 32
+        name:
+          type: string
+          maxLength: 160
+        address:
+          type: string
+          maxLength: 300
+        city:
+          type: string
+          maxLength: 100
+        phone:
+          type: string
+          nullable: true
+          maxLength: 32
+        is_active:
+          type: boolean
+    PatchedProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        sku:
+          type: string
+          maxLength: 64
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+        category:
+          type: integer
+        manufacturer:
+          type: integer
+        prescription_required:
+          type: boolean
+        storage_min_c:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+        storage_max_c:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+        is_active:
+          type: boolean
+    PatchedProfile:
+      type: object
+      properties:
+        full_name:
+          type: string
+          maxLength: 200
+        phone:
+          type: string
+          nullable: true
+          maxLength: 32
+        preferred_pharmacy_id:
+          type: integer
+          minimum: 1
+          nullable: true
+    PatchedPromotion:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          maxLength: 50
+        description:
+          type: string
+          nullable: true
+          maxLength: 200
+        discount_rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,4})?$
+        starts_at:
+          type: string
+          format: date-time
+        ends_at:
+          type: string
+          format: date-time
+        is_active:
+          type: boolean
+    PatchedPromotionProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        promotion:
+          type: integer
+        product:
+          type: integer
+    PatchedTier:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          maxLength: 24
+        bonus_rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,4})?$
+        discount_rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,4})?$
+    PatchedUserAdmin:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          maxLength: 254
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        is_active:
+          type: boolean
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 128
+          minLength: 12
+    Payment:
+      type: object
+      properties:
+        idempotency_key:
+          type: string
+          maxLength: 80
+          minLength: 8
+      required:
+      - idempotency_key
+    PaymentMethodEnum:
+      enum:
+      - CARD
+      - BANK_TRANSFER
+      - CASH_ON_DELIVERY
+      - ONLINE_GATEWAY
+      type: string
+      description: |-
+        * `CARD` - CARD
+        * `BANK_TRANSFER` - BANK_TRANSFER
+        * `CASH_ON_DELIVERY` - CASH_ON_DELIVERY
+        * `ONLINE_GATEWAY` - ONLINE_GATEWAY
+    Pharmacy:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          maxLength: 32
+        name:
+          type: string
+          maxLength: 160
+        address:
+          type: string
+          maxLength: 300
+        city:
+          type: string
+          maxLength: 100
+        phone:
+          type: string
+          nullable: true
+          maxLength: 32
+        is_active:
+          type: boolean
+      required:
+      - address
+      - city
+      - code
+      - id
+      - is_active
+      - name
+    Place:
+      type: object
+      properties:
+        pharmacy_id:
+          type: integer
+          minimum: 1
+        fulfillment_method:
+          $ref: '#/components/schemas/FulfillmentMethodEnum'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Line'
+        promotion:
+          type: string
+          maxLength: 50
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethodEnum'
+        expected_total:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        recipient:
+          $ref: '#/components/schemas/Recipient'
+      required:
+      - expected_total
+      - fulfillment_method
+      - items
+      - payment_method
+      - pharmacy_id
+    Preferences:
+      type: object
+      properties:
+        promotions_enabled:
+          type: boolean
+        reminders_enabled:
+          type: boolean
+      required:
+      - promotions_enabled
+      - reminders_enabled
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        sku:
+          type: string
+          maxLength: 64
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+        category:
+          type: integer
+        manufacturer:
+          type: integer
+        prescription_required:
+          type: boolean
+        storage_min_c:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+        storage_max_c:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+        is_active:
+          type: boolean
+      required:
+      - category
+      - id
+      - is_active
+      - manufacturer
+      - name
+      - prescription_required
+      - sku
+    Promotion:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          maxLength: 50
+        description:
+          type: string
+          nullable: true
+          maxLength: 200
+        discount_rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,4})?$
+        starts_at:
+          type: string
+          format: date-time
+        ends_at:
+          type: string
+          format: date-time
+        is_active:
+          type: boolean
+      required:
+      - code
+      - discount_rate
+      - ends_at
+      - id
+      - is_active
+      - starts_at
+    PromotionProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        promotion:
+          type: integer
+        product:
+          type: integer
+      required:
+      - id
+      - product
+      - promotion
+    Quote:
+      type: object
+      properties:
+        pharmacy_id:
+          type: integer
+          minimum: 1
+        fulfillment_method:
+          $ref: '#/components/schemas/FulfillmentMethodEnum'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Line'
+        promotion:
+          type: string
+          maxLength: 50
+      required:
+      - fulfillment_method
+      - items
+      - pharmacy_id
+    Recipient:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 200
+        phone:
+          type: string
+          maxLength: 32
+        destination:
+          type: string
+          maxLength: 300
+      required:
+      - destination
+      - name
+      - phone
+    Refund:
+      type: object
+      properties:
+        idempotency_key:
+          type: string
+          maxLength: 80
+          minLength: 8
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        reason:
+          type: string
+          maxLength: 200
+      required:
+      - amount
+      - idempotency_key
+      - reason
+    Register:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 128
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        full_name:
+          type: string
+          maxLength: 200
+      required:
+      - email
+      - full_name
+      - password
+      - username
+    Reminder:
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        product_id:
+          type: integer
+          minimum: 1
+        interval_days:
+          type: integer
+          maximum: 3650
+          minimum: 1
+        next_run_at:
+          type: string
+          format: date-time
+        is_active:
+          type: boolean
+          default: true
+      required:
+      - interval_days
+      - next_run_at
+      - product_id
+    RoleEnum:
+      enum:
+      - CUSTOMER
+      - STAFF
+      - ADMIN
+      type: string
+      description: |-
+        * `CUSTOMER` - CUSTOMER
+        * `STAFF` - STAFF
+        * `ADMIN` - ADMIN
+    SavedPrescription:
+      type: object
+      properties:
+        display_label:
+          type: string
+          maxLength: 100
+      required:
+      - display_label
+    StatusEnum:
+      enum:
+      - PROCESSING
+      - READY_FOR_PICKUP
+      - AWAITING_SHIPMENT
+      - COMPLETED
+      - CANCELLED
+      type: string
+      description: |-
+        * `PROCESSING` - PROCESSING
+        * `READY_FOR_PICKUP` - READY_FOR_PICKUP
+        * `AWAITING_SHIPMENT` - AWAITING_SHIPMENT
+        * `COMPLETED` - COMPLETED
+        * `CANCELLED` - CANCELLED
+    Tier:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          maxLength: 24
+        bonus_rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,4})?$
+        discount_rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,4})?$
+      required:
+      - bonus_rate
+      - code
+      - discount_rate
+      - id
+    Token:
+      type: object
+      properties:
+        access:
+          type: string
+        expires_in:
+          type: integer
+      required:
+      - access
+      - expires_in
+    Transition:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+      required:
+      - status
+    UserAdmin:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          maxLength: 254
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        is_active:
+          type: boolean
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 128
+          minLength: 12
+      required:
+      - email
+      - id
+      - is_active
+      - role
+      - username
+    Verification:
+      type: object
+      properties:
+        approved:
+          type: boolean
+      required:
+      - approved
+    Watch:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          minimum: 1
+        pharmacy_id:
+          type: integer
+          minimum: 1
+        is_active:
+          type: boolean
+          default: true
+      required:
+      - pharmacy_id
+      - product_id
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

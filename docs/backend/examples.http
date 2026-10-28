@@ -1,0 +1,54 @@
+# Use actual IDs from GET /api/products/ and /api/pharmacies/.
+# Replace the token placeholders in your REST client. Never supply real payment secrets.
+@base = http://127.0.0.1:8000/api
+@access = REPLACE_WITH_ACCESS_TOKEN
+
+### Health
+GET {{base}}/health/
+
+### Register a customer (choose a unique username/email)
+POST {{base}}/auth/register/
+Content-Type: application/json
+
+{"username":"course_customer","email":"course_customer@example.test","password":"Replace-With-Your-Own-Password","full_name":"Course Customer"}
+
+### Sign in
+POST {{base}}/auth/token/
+Content-Type: application/json
+
+{"username":"course_customer","password":"Replace-With-Your-Own-Password"}
+
+### Public catalogue
+GET {{base}}/products/?search=ДЕРМАЗОЛ
+
+### Quote (substitute valid IDs)
+POST {{base}}/checkout/quote/
+Authorization: Bearer {{access}}
+Content-Type: application/json
+
+{"pharmacy_id":1,"fulfillment_method":"PICKUP","items":[{"product_id":1,"quantity":1}]}
+
+### Place using the quoted unit price and grand total
+POST {{base}}/orders/
+Authorization: Bearer {{access}}
+Content-Type: application/json
+
+{"pharmacy_id":1,"fulfillment_method":"PICKUP","payment_method":"CARD","expected_total":"100.00","items":[{"product_id":1,"quantity":1,"expected_unit_price":"100.00"}]}
+
+### Start simulated payment for the actual created order
+POST {{base}}/orders/1/pay/
+Authorization: Bearer {{access}}
+Content-Type: application/json
+
+{"idempotency_key":"course-payment-unique-0001"}
+
+### Inspect asynchronous payment and shipment results
+GET {{base}}/orders/1/fulfillment/
+Authorization: Bearer {{access}}
+
+### Assigned staff transition; use a staff token
+POST {{base}}/orders/1/transition/
+Authorization: Bearer {{access}}
+Content-Type: application/json
+
+{"status":"PROCESSING"}
