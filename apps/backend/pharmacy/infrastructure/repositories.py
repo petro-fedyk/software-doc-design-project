@@ -57,7 +57,7 @@ class DjangoOrderRepository:
             fulfillment_method=draft.method,
             payment_method=payment_method,
             subtotal=draft.subtotal,
-            discount_total=draft.discount,
+            discount_total=draft.discount + draft.bonus_discount,
             shipping_total=draft.shipping,
             grand_total=draft.total,
             currency="UAH",
@@ -350,6 +350,68 @@ class DjangoPaymentRepository:
 
 
 class DjangoLoyaltyRepository:
+    def balance(self, customer_id, lock=False):
+        rows = m.LoyaltyAccounts.objects
+        if lock:
+            rows = rows.select_for_update()
+        account = rows.filter(customer_id=customer_id).first()
+        return int(account.balance) if account else 0
+
+    def redeem(self, order, points):
+        if not points:
+            return
+        account = m.LoyaltyAccounts.objects.select_for_update().filter(
+            customer_id=order.customer_id
+        ).first()
+        if not account or account.balance < points:
+            raise DomainError("INSUFFICIENT_BONUS_BALANCE", status=409)
+        event_key = f"order-redeem:{order.id}"
+        if m.LoyaltyTransactions.objects.filter(event_key=event_key).exists():
+            return
+        m.LoyaltyTransactions.objects.create(
+            account=account,
+            order_id=order.id,
+            points_delta=-points,
+            type="REDEEM",
+            event_key=event_key,
+            created_at=timezone.now(),
+        )
+        account.balance -= points
+        account.save(update_fields=["balance"])
+
+    def restore_redeemed(self, order):
+        redemption = m.LoyaltyTransactions.objects.filter(
+            order_id=order.id, type="REDEEM", points_delta__lt=0
+        ).first()
+        if not redemption:
+            return
+        refunded_key_prefix = f"redeem-refund:{order.id}:"
+        refunded_points = m.LoyaltyTransactions.objects.filter(
+            order_id=order.id,
+            type="ADJUST",
+            event_key__startswith=refunded_key_prefix,
+        ).aggregate(total=Sum("points_delta"))["total"] or 0
+        cancelled_key = f"order-redeem-restore:{order.id}"
+        cancelled_points = m.LoyaltyTransactions.objects.filter(
+            event_key=cancelled_key
+        ).aggregate(total=Sum("points_delta"))["total"] or 0
+        points = -redemption.points_delta - refunded_points - cancelled_points
+        if points <= 0:
+            return
+        account = m.LoyaltyAccounts.objects.select_for_update().get(
+            id=redemption.account_id
+        )
+        m.LoyaltyTransactions.objects.create(
+            account=account,
+            order_id=order.id,
+            points_delta=points,
+            type="ADJUST",
+            event_key=cancelled_key if not cancelled_points else f"{cancelled_key}:{-redemption.points_delta}",
+            created_at=timezone.now(),
+        )
+        account.balance += points
+        account.save(update_fields=["balance"])
+
     def policies(self, customer_id, promotion):
         policies = []
         account = (
@@ -426,34 +488,78 @@ class DjangoLoyaltyRepository:
         earned = m.LoyaltyTransactions.objects.filter(
             event_key=f"completion:{order.id}"
         ).first()
-        if not earned:
+        if earned:
+            account = m.LoyaltyAccounts.objects.select_for_update().get(
+                id=earned.account_id
+            )
+            refunded = m.Refunds.objects.filter(
+                payment__order_id=order.id, status="SUCCEEDED"
+            ).aggregate(total=Sum("amount"))["total"] or Decimal("0")
+            previous = -(
+                m.LoyaltyTransactions.objects.filter(
+                    order_id=order.id, type="ADJUST", event_key__startswith=f"refund-adjust:{order.id}:"
+                ).aggregate(total=Sum("points_delta"))["total"]
+                or 0
+            )
+            delta, desired = refund_points(
+                earned.points_delta, refunded, order.total, previous, account.balance
+            )
+            if delta > 0:
+                m.LoyaltyTransactions.objects.create(
+                    account=account,
+                    order_id=order.id,
+                    points_delta=-delta,
+                    type="ADJUST",
+                    event_key=f"refund-adjust:{order.id}:{desired}",
+                    created_at=timezone.now(),
+                )
+                account.balance -= delta
+                account.save(update_fields=["balance"])
+        self._restore_redeemed_for_refund(order)
+
+    def _restore_redeemed_for_refund(self, order):
+        redemption = m.LoyaltyTransactions.objects.filter(
+            order_id=order.id, type="REDEEM", points_delta__lt=0
+        ).first()
+        if not redemption:
             return
-        account = m.LoyaltyAccounts.objects.select_for_update().get(
-            id=earned.account_id
-        )
         refunded = m.Refunds.objects.filter(
             payment__order_id=order.id, status="SUCCEEDED"
         ).aggregate(total=Sum("amount"))["total"] or Decimal("0")
-        previous = -(
-            m.LoyaltyTransactions.objects.filter(
-                order_id=order.id, type="ADJUST"
-            ).aggregate(total=Sum("points_delta"))["total"]
-            or 0
+        redeemed = -redemption.points_delta
+        if order.total <= 0:
+            desired = redeemed if refunded > 0 else 0
+        else:
+            desired = min(redeemed, int(Decimal(redeemed) * min(Decimal("1"), refunded / order.total)))
+        prefix = f"redeem-refund:{order.id}:"
+        refund_restored = m.LoyaltyTransactions.objects.filter(
+            order_id=order.id, type="ADJUST", event_key__startswith=prefix
+        ).aggregate(total=Sum("points_delta"))["total"] or 0
+        cancelled_restored = m.LoyaltyTransactions.objects.filter(
+            order_id=order.id,
+            type="ADJUST",
+            event_key=f"order-redeem-restore:{order.id}",
+        ).aggregate(total=Sum("points_delta"))["total"] or 0
+        previous = refund_restored + cancelled_restored
+        delta = desired - previous
+        if delta <= 0:
+            return
+        event_key = f"{prefix}{desired}"
+        if m.LoyaltyTransactions.objects.filter(event_key=event_key).exists():
+            return
+        account = m.LoyaltyAccounts.objects.select_for_update().get(
+            id=redemption.account_id
         )
-        delta, desired = refund_points(
-            earned.points_delta, refunded, order.total, previous, account.balance
+        m.LoyaltyTransactions.objects.create(
+            account=account,
+            order_id=order.id,
+            points_delta=delta,
+            type="ADJUST",
+            event_key=event_key,
+            created_at=timezone.now(),
         )
-        if delta > 0:
-            m.LoyaltyTransactions.objects.create(
-                account=account,
-                order_id=order.id,
-                points_delta=-delta,
-                type="ADJUST",
-                event_key=f"refund-adjust:{order.id}:{desired}",
-                created_at=timezone.now(),
-            )
-            account.balance -= delta
-            account.save(update_fields=["balance"])
+        account.balance += delta
+        account.save(update_fields=["balance"])
 
 
 class DjangoDeliveryRepository:
@@ -492,15 +598,18 @@ class DjangoOutboxRepository:
 
 
 class DjangoCartRepository:
-    def set_item(self, customer_id, product_id, quantity):
+    def set_item(self, customer_id, product_id, quantity, allow_unavailable=False):
         m.Users.objects.select_for_update().get(id=customer_id)
-        get_row(m.Products.objects, id=product_id, is_active=True)
         cart, _ = m.Carts.objects.get_or_create(
             customer_id=customer_id, defaults={"updated_at": timezone.now()}
         )
         if quantity == 0:
             m.CartItems.objects.filter(cart=cart, product_id=product_id).delete()
         else:
+            if allow_unavailable:
+                get_row(m.Products.objects, id=product_id)
+            else:
+                get_row(m.Products.objects, id=product_id, is_active=True)
             m.CartItems.objects.update_or_create(
                 cart=cart, product_id=product_id, defaults={"quantity": quantity}
             )

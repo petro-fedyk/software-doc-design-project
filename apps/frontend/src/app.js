@@ -12,6 +12,12 @@ let catalogPageNumber = 1;
 let adminSections = [];
 let pendingOrder = null;
 let renderGeneration = 0;
+let headerBonusBalance = null;
+let selectedPharmacyId = localStorage.getItem("pharmacy.selectedBranch") || "";
+let branchAssetsPromise;
+let productAssetsPromise;
+let addToCartQueue = Promise.resolve();
+let addToCartNavigationTimer;
 const href = (route) => `#${route}`;
 
 const translations = {
@@ -24,9 +30,9 @@ const translations = {
   "PRODUCT DETAILS": "ІНФОРМАЦІЯ ПРО ТОВАР", "Back to shop": "Назад до каталогу", "PRESCRIPTION REQUIRED": "ПОТРІБЕН РЕЦЕПТ", "PHARMACY ESSENTIAL": "АПТЕЧНИЙ ТОВАР", "Available at": "Наявність в аптеках", "No availability listed": "Немає даних про наявність", "Check with a local pharmacy for current stock.": "Уточніть залишки у вибраній аптеці.", "Watch availability": "Стежити за наявністю", "Add to bag": "До кошика", "Find a pharmacy": "Знайти аптеку", "HERE FOR YOU": "МИ ПОРУЧ", "View listed stock": "Переглянути залишки", "No locations available": "Аптек не знайдено", "Please check back later.": "Спробуйте пізніше.",
   "A good choice.": "Вдалий вибір.", "Your pharmacy confirms the final price and stock before your order is placed.": "Аптека підтвердить ціну та наявність перед замовленням.", "Choose your pharmacy": "Оберіть аптеку", "Pharmacy": "Аптека", "Fulfillment": "Спосіб отримання", "Payment": "Оплата", "Pickup": "Самовивіз", "Courier delivery": "Кур’єрська доставка", "Postal delivery": "Поштова доставка", "Recipient name": "Ім’я отримувача", "Phone": "Телефон", "Destination": "Адреса доставки", "Request quote": "Розрахувати замовлення", "Your bag is waiting": "Кошик порожній", "Add something you need and it will appear here.": "Додайте товари з каталогу.", "Update quantities": "Оновити кількість", "Continue shopping": "Продовжити покупки", "Remove": "Видалити", "CHECKOUT": "ОФОРМЛЕННЯ", "Payments are simulated. No card details are collected here.": "Оплата навчальна та імітована. Дані банківських карток не запитуються.",
   "WELCOME BACK": "ВІТАЄМО", "Your account": "Ваш обліковий запис", "Account type:": "Тип облікового запису:", "Continue to your dashboard": "Перейти до кабінету", "GOODWELL PHARMACY": "ІНТЕРНЕТ-АПТЕКА", "Care starts<br>with a <em>hello.</em>": "Турбота починається<br>зі <em>знайомства.</em>", "Sign in to manage your orders and make everyday care a little simpler.": "Увійдіть, щоб керувати замовленнями та профілем.", "YOUR ACCOUNT": "МІЙ КАБІНЕТ", "Welcome back": "З поверненням", "Sign in with your pharmacy account.": "Введіть дані облікового запису.", "Username": "Ім’я користувача", "Password": "Пароль", "New to Goodwell?": "Ще не маєте облікового запису?", "JOIN GOODWELL": "РЕЄСТРАЦІЯ", "Start with the essentials.": "Заповніть основні дані.", "Full name": "Повне ім’я", "Create my account": "Створити обліковий запис", "Already have an account?": "Вже зареєстровані?",
-  "PROFILE": "ПРОФІЛЬ", "Your details": "Ваші дані", "Preferred pharmacy": "Бажана аптека", "Save details": "Зберегти дані", "YOUR CARE": "ВАШІ ДАНІ", "Saved prescriptions": "Збережені рецептурні позначки", "Nothing saved": "Немає збережених записів", "Add a demo label to help identify your prescription record.": "Додайте назву для позначення запису рецепта.", "Display label": "Назва позначки", "Add label": "Додати позначку", "This demo stores a masked reference only, not a prescription image or medical document.": "Зберігається лише замасковане посилання, без зображення чи медичного документа.", "LOYALTY": "ЛОЯЛЬНІСТЬ", "member": "учасник програми", "points": "балів", "View orders": "Переглянути замовлення", "PREFERENCES": "НАЛАШТУВАННЯ", "Keep in touch": "Сповіщення", "Pharmacy offers": "Пропозиції аптеки", "Order reminders": "Нагадування про замовлення", "Save preferences": "Зберегти налаштування", "NOTIFICATIONS": "СПОВІЩЕННЯ", "Recent updates": "Останні оновлення", "All caught up": "Нових сповіщень немає", "New account notifications will appear here.": "Тут відображатимуться нові сповіщення.", "Mark read": "Позначити прочитаним", "Overview": "Огляд", "Orders": "Замовлення", "No orders yet": "Замовлень поки немає", "Track an order, pay for a simulated purchase or request a reorder.": "Переглядайте замовлення, імітовану оплату та повторне замовлення.", "Order history": "Історія замовлень", "Pay now": "Оплатити (імітація)", "Cancel order": "Скасувати замовлення", "Reorder": "Замовити знову", "Fulfillment": "Доставка",
+  "PROFILE": "ПРОФІЛЬ", "Your details": "Ваші дані", "Preferred pharmacy": "Бажана аптека", "Save details": "Зберегти дані", "YOUR CARE": "ВАШІ ДАНІ", "Saved prescriptions": "Збережені рецептурні позначки", "Nothing saved": "Немає збережених записів", "Add a label to help identify your prescription record.": "Додайте назву для позначення запису рецепта.", "Display label": "Назва позначки", "Add label": "Додати позначку", "Only a masked reference is stored here, not a prescription image or medical document.": "Зберігається лише замасковане посилання, без зображення чи медичного документа.", "LOYALTY": "ЛОЯЛЬНІСТЬ", "member": "учасник програми", "points": "балів", "View orders": "Переглянути замовлення", "PREFERENCES": "НАЛАШТУВАННЯ", "Keep in touch": "Сповіщення", "Pharmacy offers": "Пропозиції аптеки", "Order reminders": "Нагадування про замовлення", "Save preferences": "Зберегти налаштування", "NOTIFICATIONS": "СПОВІЩЕННЯ", "Recent updates": "Останні оновлення", "All caught up": "Нових сповіщень немає", "New account notifications will appear here.": "Тут відображатимуться нові сповіщення.", "Mark read": "Позначити прочитаним", "Overview": "Огляд", "Orders": "Замовлення", "No orders yet": "Замовлень поки немає", "Track an order, pay for a simulated purchase or request a reorder.": "Переглядайте замовлення, імітовану оплату та повторне замовлення.", "Order history": "Історія замовлень", "Pay now": "Оплатити (імітація)", "Cancel order": "Скасувати замовлення", "Reorder": "Замовити знову", "Fulfillment": "Доставка",
   "PHARMACY TEAM": "РОБОТА АПТЕКИ", "Branch workspace": "Робоче місце аптеки", "Inventory updates and order actions are checked by the API for your assigned branch.": "API перевіряє доступ до призначеної аптеки.", "Assigned pharmacy": "Призначена аптека", "Completed order total": "Сума виконаних замовлень", "Order states": "Стани замовлень", "STOCK CONTROL": "ОБЛІК ЗАПАСІВ", "Inventory": "Залишки", "PRODUCT": "ТОВАР", "AVAILABLE": "ДОСТУПНО", "PRICE": "ЦІНА", "ADJUST": "ЗМІНА", "Save": "Зберегти", "ORDER DESK": "ЗАМОВЛЕННЯ", "Branch orders": "Замовлення аптеки", "No branch orders": "Замовлень немає", "New orders for this pharmacy appear here.": "Тут з’являтимуться замовлення аптеки.", "AUDIT": "ЖУРНАЛ ДІЙ", "Recent branch activity": "Останні дії", "Load activity": "Завантажити журнал", "No assigned pharmacy": "Аптеку не призначено", "Ask a network administrator to assign an active pharmacy to your account.": "Зверніться до адміністратора для призначення аптеки.",
-  "NETWORK ADMINISTRATION": "АДМІНІСТРУВАННЯ МЕРЕЖІ", "Network overview": "Огляд мережі", "All privileged changes are sent to the API and checked against your ADMIN role.": "API перевіряє права адміністратора для кожної зміни.", "COMPLETED ORDER TOTAL": "СУМА ВИКОНАНИХ ЗАМОВЛЕНЬ", "ORDER STATUSES": "СТАНИ ЗАМОВЛЕНЬ", "ACCESS": "ДОСТУП", "Administrator": "Адміністратор", "Users": "Користувачі", "Pharmacies": "Аптеки", "Products": "Товари", "Categories": "Категорії", "Manufacturers": "Виробники", "Assignments": "Призначення персоналу", "Promotions": "Акції", "Loyalty tiers": "Рівні лояльності", "Delivery rules": "Правила доставки", "Promotion products": "Товари акцій", "Edit": "Редагувати", "New record": "Новий запис", "No records": "Записів немає", "Create the first record with the form below.": "Створіть перший запис за допомогою форми.", "Create": "Створити", "records": "записів", "Retry": "Повторити", "This page could not load": "Не вдалося завантажити сторінку", "Try again once the API is available.": "Перевірте API та спробуйте ще раз.", "WE HIT A SNAG": "СТАЛАСЯ ПОМИЛКА", "This area is for customers": "Цей розділ доступний клієнтам", "Sign in to continue": "Увійдіть, щоб продовжити", "Manage orders, profile details and loyalty information.": "Керуйте замовленнями, профілем і бонусами.", "Delete": "Видалити", "Submit": "Підтвердити", "Confirm order": "Підтвердити замовлення", "Review server quote": "Перевірте розрахунок аптеки", "Server total": "Сума за розрахунком аптеки", "Subtotal": "Сума товарів", "Discount": "Знижка", "Delivery": "Доставка", "Back to cart": "Повернутися до кошика", "Paid": "Оплачено", "Pending": "Очікує", "Payment status": "Стан оплати", "Status": "Стан", "Product": "Товар", "Quantity": "Кількість", "Unit price": "Ціна за одиницю", "There are no records to show.": "Немає записів для відображення.", "API response": "Відповідь API", "Cancel": "Скасувати", "Close": "Закрити", "Create promotion-product link": "Прив’язати товар до акції", "Goodwell pharmacy network": "МЕРЕЖА АПТЕК GOODWELL", "care that fits your day": "турбота щодня", "Our pharmacies": "Наші аптеки", "Customer care": "Підтримка клієнтів", "Educational demo · simulated services": "Навчальний проєкт · імітовані сервіси", "Toggle navigation": "Відкрити меню", "Everyday care": "Щоденний догляд", "No preference": "Без побажань", "Item": "Товар", "Quantity": "Кількість", "Active": "Активний", "Hidden": "Прихований", "Listed": "У продажу", "Order desk": "Замовлення", "Password (12+ characters)": "Пароль (не менше 12 символів)", "Email": "Електронна пошта", "Role": "Роль", "Code": "Код", "Address": "Адреса", "City": "Місто", "Phone": "Телефон", "Description": "Опис", "Category": "Категорія", "Manufacturer": "Виробник", "Prescription required": "Потрібен рецепт", "Storage minimum °C": "Мінімальна температура зберігання, °C", "Storage maximum °C": "Максимальна температура зберігання, °C", "Discount rate": "Розмір знижки", "Bonus rate": "Бонусна ставка", "Starts at": "Початок дії", "Ends at": "Кінець дії", "Method": "Спосіб", "Enabled": "Увімкнено", "Requires cold chain": "Потрібен холодовий ланцюг", "Cold chain supported": "Холодовий ланцюг доступний", "Promotion ID": "ID акції", "Product ID": "ID товару", "User ID": "ID користувача", "Staff user ID": "ID працівника", "Pharmacy ID": "ID аптеки", "Code": "Код", "TOGGLE": "Змінити", "Create user": "Створити користувача", "Create pharmacy": "Створити аптеку", "Create product": "Створити товар", "Create category": "Створити категорію", "Create manufacturer": "Створити виробника", "Create assignments": "Створити призначення персоналу", "Create promotions": "Створити акцію", "Create loyalty tiers": "Створити рівень лояльності", "Create delivery rules": "Створити правило доставки", "Create promotion products": "Прив’язати товар до акції"
+  "NETWORK ADMINISTRATION": "АДМІНІСТРУВАННЯ МЕРЕЖІ", "Network overview": "Огляд мережі", "All privileged changes are sent to the API and checked against your ADMIN role.": "API перевіряє права адміністратора для кожної зміни.", "COMPLETED ORDER TOTAL": "СУМА ВИКОНАНИХ ЗАМОВЛЕНЬ", "ORDER STATUSES": "СТАНИ ЗАМОВЛЕНЬ", "ACCESS": "ДОСТУП", "Administrator": "Адміністратор", "Users": "Користувачі", "Pharmacies": "Аптеки", "Products": "Товари", "Categories": "Категорії", "Manufacturers": "Виробники", "Assignments": "Призначення персоналу", "Promotions": "Акції", "Loyalty tiers": "Рівні лояльності", "Delivery rules": "Правила доставки", "Promotion products": "Товари акцій", "Edit": "Редагувати", "New record": "Новий запис", "No records": "Записів немає", "Create the first record with the form below.": "Створіть перший запис за допомогою форми.", "Create": "Створити", "records": "записів", "Retry": "Повторити", "This page could not load": "Не вдалося завантажити сторінку", "Try again once the API is available.": "Перевірте API та спробуйте ще раз.", "WE HIT A SNAG": "СТАЛАСЯ ПОМИЛКА", "This area is for customers": "Цей розділ доступний клієнтам", "Sign in to continue": "Увійдіть, щоб продовжити", "Manage orders, profile details and loyalty information.": "Керуйте замовленнями, профілем і бонусами.", "Delete": "Видалити", "Submit": "Підтвердити", "Confirm order": "Підтвердити замовлення", "Review server quote": "Перевірте розрахунок аптеки", "Server total": "Сума за розрахунком аптеки", "Subtotal": "Сума товарів", "Discount": "Знижка", "Delivery": "Доставка", "Back to cart": "Повернутися до кошика", "Paid": "Оплачено", "Pending": "Очікує", "Payment status": "Стан оплати", "Status": "Стан", "Product": "Товар", "Quantity": "Кількість", "Unit price": "Ціна за одиницю", "There are no records to show.": "Немає записів для відображення.", "API response": "Відповідь API", "Cancel": "Скасувати", "Close": "Закрити", "Create promotion-product link": "Прив’язати товар до акції", "Goodwell pharmacy network": "МЕРЕЖА АПТЕК GOODWELL", "care that fits your day": "турбота щодня", "Our pharmacies": "Наші аптеки", "Customer care": "Підтримка клієнтів", "Educational demo · simulated services": "Резервування онлайн · актуальність підтверджує аптека", "Toggle navigation": "Відкрити меню", "Everyday care": "Щоденний догляд", "No preference": "Без побажань", "Item": "Товар", "Quantity": "Кількість", "Active": "Активний", "Hidden": "Прихований", "Listed": "У продажу", "Order desk": "Замовлення", "Password (12+ characters)": "Пароль (не менше 12 символів)", "Email": "Електронна пошта", "Role": "Роль", "Code": "Код", "Address": "Адреса", "City": "Місто", "Phone": "Телефон", "Description": "Опис", "Category": "Категорія", "Manufacturer": "Виробник", "Prescription required": "Потрібен рецепт", "Storage minimum °C": "Мінімальна температура зберігання, °C", "Storage maximum °C": "Максимальна температура зберігання, °C", "Discount rate": "Розмір знижки", "Bonus rate": "Бонусна ставка", "Starts at": "Початок дії", "Ends at": "Кінець дії", "Method": "Спосіб", "Enabled": "Увімкнено", "Requires cold chain": "Потрібен холодовий ланцюг", "Cold chain supported": "Холодовий ланцюг доступний", "Promotion ID": "ID акції", "Product ID": "ID товару", "User ID": "ID користувача", "Staff user ID": "ID працівника", "Pharmacy ID": "ID аптеки", "Code": "Код", "TOGGLE": "Змінити", "Create user": "Створити користувача", "Create pharmacy": "Створити аптеку", "Create product": "Створити товар", "Create category": "Створити категорію", "Create manufacturer": "Створити виробника", "Create assignments": "Створити призначення персоналу", "Create promotions": "Створити акцію", "Create loyalty tiers": "Створити рівень лояльності", "Create delivery rules": "Створити правило доставки", "Create promotion products": "Прив’язати товар до акції"
 };
 function localizeMarkup(markup) {
   const template = document.createElement("template");
@@ -60,15 +66,83 @@ window.addEventListener("DOMContentLoaded", () => {});
 function flash(text, type = "success") { message = text; messageType = type; }
 function page() { return (location.hash.replace(/^#/, "").split("?")[0]) || "home"; }
 function navLink(name, route, active) { return `<a class="nav-link ${active ? "active" : ""}" href="${href(route)}">${name}</a>`; }
-function addCartControl(productId, productName, style = "round-action") {
+async function branchAssets() {
+  if (!branchAssetsPromise) branchAssetsPromise = fetch("/data/anc_branches.json").then((r) => r.ok ? r.json() : []).catch(() => []);
+  return new Map((await branchAssetsPromise).map((branch) => [branch.code, branch]));
+}
+async function productAssets() {
+  if (!productAssetsPromise) productAssetsPromise = fetch("/data/product_images.json").then((r) => r.ok ? r.json() : {}).catch(() => ({}));
+  return productAssetsPromise;
+}
+function productImage(product, assets) {
+  const source = assets[product.sku] || {};
+  return { url: product.image_url || source.image_url || "", source: product.image_source_url || source.source_url || "" };
+}
+async function choosePharmacy(pharmacyId) {
+  const next = String(pharmacyId || "");
+  if (!next || next === String(selectedPharmacyId)) return;
+  selectedPharmacyId = next;
+  localStorage.setItem("pharmacy.selectedBranch", next);
+}
+function cartBranchStorageKey() { return `pharmacy.cartBranches.${currentUser?.username || "guest"}`; }
+function readCartBranches() {
+  try {
+    const value = JSON.parse(localStorage.getItem(cartBranchStorageKey()) || "{}");
+    return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  } catch { return {}; }
+}
+function writeCartBranches(value) { localStorage.setItem(cartBranchStorageKey(), JSON.stringify(value)); }
+async function captureGuestCart() {
+  try {
+    const response = await api.request("/guest-cart/", { auth: false });
+    const rawItems = response.items || {};
+    const items = Array.isArray(rawItems)
+      ? rawItems.map((item) => [Number(item.product_id), Number(item.quantity)])
+      : Object.entries(rawItems).map(([id, quantity]) => [Number(id), Number(quantity)]);
+    let branchMap = {};
+    try { branchMap = JSON.parse(localStorage.getItem("pharmacy.cartBranches.guest") || "{}"); } catch { /* Use the selected pharmacy if there is no guest mapping. */ }
+    return { items: items.filter(([id, quantity]) => Number.isInteger(id) && id > 0 && Number.isInteger(quantity) && quantity > 0), branchMap };
+  } catch {
+    return null;
+  }
+}
+async function mergeGuestCart(snapshot) {
+  if (currentUser?.role !== "CUSTOMER") return 0;
+  const pendingKey = `pharmacy.pendingGuestCartMerge.${currentUser.username}`;
+  let pending;
+  try { pending = JSON.parse(localStorage.getItem(pendingKey) || "null"); } catch { pending = null; }
+  if (!pending) {
+    if (!snapshot?.items?.length) return 0;
+    const cart = await api.request("/cart/");
+    const existingItems = Array.isArray(cart.items) ? cart.items : Object.entries(cart.items || {}).map(([id, quantity]) => ({ product_id: Number(id), quantity }));
+    const existing = new Map(existingItems.map((item) => [Number(item.product_id), Number(item.quantity)]));
+    const plan = snapshot.items.map(([productId, quantity]) => [productId, Math.min(10000, (existing.get(productId) || 0) + quantity)]);
+    pending = { plan, guestIds: snapshot.items.map(([productId]) => productId), accountIds: [...existing.keys()], branchMap: snapshot.branchMap || {} };
+    localStorage.setItem(pendingKey, JSON.stringify(pending));
+  }
+  for (const [productId, quantity] of pending.plan) {
+    await api.request("/cart/", { method: "PUT", body: { product_id: productId, quantity, allow_unavailable: true } });
+  }
+  await api.request("/guest-cart/", { method: "DELETE", auth: false });
+  const accountBranches = readCartBranches();
+  for (const productId of pending.guestIds) {
+    if (!pending.accountIds.includes(productId) && pending.branchMap[String(productId)]) {
+      accountBranches[productId] = String(pending.branchMap[String(productId)]);
+    }
+  }
+  writeCartBranches(accountBranches);
+  localStorage.removeItem(pendingKey);
+  return pending.plan.length;
+}
+function addCartControl(productId, productName, style = "button primary add-to-cart", pharmacyId = "") {
   if (currentUser && currentUser.role !== "CUSTOMER") return `<span class="muted" aria-label="Покупки доступні клієнтам">Кошик для клієнтів</span>`;
-  return `<button class="${style}" data-action="add" data-id="${productId}" aria-label="Додати до кошика: ${e(productName)}">${style === "round-action" ? "＋" : "До кошика"}</button>`;
+  return `<button class="${style}" data-action="add" data-id="${productId}" data-pharmacy="${e(pharmacyId)}" aria-label="Додати до кошика: ${e(productName)}">До кошика <span aria-hidden="true">→</span></button>`;
 }
 function shell(content) {
   const route = page().split(":")[0];
   const user = currentUser;
   const roleLink = user?.role === "STAFF" ? navLink("Staff", "staff", route === "staff") : user?.role === "ADMIN" ? navLink("Administration", "admin", route === "admin") : "";
-  return `<header class="topbar"><a class="brand" href="#home"><span class="brand-icon">+</span><span>goodwell<span class="brand-sub">МЕРЕЖА АПТЕК</span></span></a><nav class="main-nav">${navLink("Shop", "home", ["home", "product"].includes(route))}${navLink("Locations", "pharmacies", route === "pharmacies")}${user?.role === "CUSTOMER" ? navLink("My account", "account", route === "account" || route === "orders") : ""}${roleLink}</nav><div class="nav-actions">${user ? `<span class="user-chip">${e(user.username)} <small>${e(user.role)}</small></span><button class="text-button" data-action="logout">Sign out</button>` : navLink("Sign in", "login", route === "login")}${navLink("Bag", "cart", route === "cart")}<span class="bag-dot">+</span></div><button class="menu-toggle" data-action="menu" aria-label="Відкрити меню">☰</button></header><main id="home">${message ? `<div class="notice ${messageType}" role="status">${e(message)}<button data-action="dismiss" aria-label="Закрити повідомлення">×</button></div>` : ""}${busy ? `<div class="loading-bar"><span></span></div>` : ""}${content}</main><footer><div class="footer-brand">goodwell<span>турбота щодня</span></div><div class="footer-links"><a href="#pharmacies">Наші аптеки</a><a href="#account">Підтримка клієнтів</a><span>Навчальний проєкт · імітовані сервіси</span></div></footer>`;
+  return `<header class="topbar"><a class="brand" href="#home"><span class="brand-icon">+</span><span>goodwell<span class="brand-sub">МЕРЕЖА АПТЕК</span></span></a><nav class="main-nav">${navLink("Shop", "home", ["home", "product"].includes(route))}${navLink("Locations", "pharmacies", route === "pharmacies")}${user?.role === "CUSTOMER" ? navLink("My account", "account", route === "account" || route === "orders") : ""}${roleLink}</nav><div class="nav-actions">${user ? `<span class="user-chip">${e(user.username)} <small>${e(user.role)}</small>${user.role === "CUSTOMER" && headerBonusBalance !== null ? `<small class="user-bonus">${e(headerBonusBalance)} бонусів</small>` : ""}</span><button class="text-button" data-action="logout">Sign out</button>` : navLink("Sign in", "login", route === "login")}${navLink("Bag", "cart", route === "cart")}<span class="bag-dot">+</span></div><button class="menu-toggle" data-action="menu" aria-label="Відкрити меню">☰</button></header><main id="home">${message ? `<div class="notice ${messageType}" role="status">${e(message)}<button data-action="dismiss" aria-label="Закрити повідомлення">×</button></div>` : ""}${busy ? `<div class="loading-bar"><span></span></div>` : ""}${content}</main><footer><div class="footer-brand">goodwell<span>турбота щодня</span></div><div class="footer-links"><a href="#pharmacies">Наші аптеки</a><a href="#account">Підтримка клієнтів</a><span>Резервування онлайн · актуальність підтверджує аптека</span></div></footer>`;
 }
 
 async function render({ scrollToTop = false } = {}) {
@@ -78,11 +152,20 @@ async function render({ scrollToTop = false } = {}) {
   root.innerHTML = shell(`<div class="page-loading">Loading…</div>`);
   try {
     if (auth.token && !currentUser) currentUser = await auth.loadUser();
+    if (currentUser?.role === "CUSTOMER" && localStorage.getItem(`pharmacy.pendingGuestCartMerge.${currentUser.username}`)) {
+      try {
+        const count = await mergeGuestCart(await captureGuestCart());
+        flash(`Перенесення гостьового кошика завершено: ${count} позицій.`);
+      } catch (error) {
+        flash(`Гостьовий кошик збережений і буде повторно перенесений після виправлення помилки: ${error.message}`, "error");
+      }
+    }
     let content;
     if (route === "home") content = await catalogPage({ showHero: true });
     else if (route === "catalog") content = await catalogPage({ showHero: false });
     else if (route.startsWith("product:")) content = await productPage(route.split(":")[1]);
     else if (route === "pharmacies") content = await pharmaciesPage();
+    else if (route.startsWith("pharmacy:")) content = await pharmacyPage(route.split(":")[1]);
     else if (route === "cart") content = await cartPage();
     else if (route === "login" || route === "register") content = authPage(route);
     else if (route === "account") content = await accountPage();
@@ -90,6 +173,15 @@ async function render({ scrollToTop = false } = {}) {
     else if (route === "staff") content = await staffPage();
     else if (route === "admin") content = await adminPage();
     else content = notFoundPage();
+    if (generation !== renderGeneration) return;
+    if (currentUser?.role === "CUSTOMER") {
+      try {
+        const loyalty = await api.request("/loyalty/");
+        headerBonusBalance = Number(loyalty.account?.balance ?? 0);
+      } catch { headerBonusBalance = null; }
+    } else {
+      headerBonusBalance = null;
+    }
     if (generation !== renderGeneration) return;
     busy = false;
     root.innerHTML = localizeMarkup(shell(content));
@@ -115,28 +207,48 @@ async function catalogPage({ showHero = false } = {}) {
     api.request("/categories/", { auth: false }), api.request("/manufacturers/", { auth: false }), api.request("/pharmacies/", { auth: false }),
   ]);
   const products = listOf(productData), categories = listOf(categoryData), manufacturers = listOf(manufacturerData), pharmacies = listOf(pharmacyData).filter((x) => x.is_active !== false);
+  const images = await productAssets();
   if (!pharmacies.some((x) => String(x.id) === String(catalogFilters.pharmacy))) catalogFilters.pharmacy = String(pharmacies[0]?.id || "");
+  if (!pharmacies.some((x) => String(x.id) === String(selectedPharmacyId))) selectedPharmacyId = catalogFilters.pharmacy;
+  if (!selectedPharmacyId && catalogFilters.pharmacy) selectedPharmacyId = catalogFilters.pharmacy;
+  if (selectedPharmacyId) { catalogFilters.pharmacy = String(selectedPharmacyId); localStorage.setItem("pharmacy.selectedBranch", String(selectedPharmacyId)); }
   const inventoryData = catalogFilters.pharmacy
     ? await api.request(`/pharmacies/${encodeURIComponent(catalogFilters.pharmacy)}/inventory/`, { auth: false })
     : [];
   const inventoryByProduct = new Map(listOf(inventoryData).map((x) => [Number(x.product_id), x]));
   const byId = (items, id) => items.find((item) => item.id === id)?.name || "—";
   const hero = showHero ? `<section class="hero"><div class="hero-copy"><p class="eyebrow">ТУРБОТА ПОРУЧ</p><h1>Турбота щодня,<br><em>для вашого здоров’я.</em></h1><p>Необхідні товари та турбота аптеки — поруч, коли вони потрібні.</p><a class="button primary" href="#catalog">Переглянути товари <span>↗</span></a><div class="hero-proof"><span>●</span> Мережа аптек <b>·</b> Зручне замовлення</div></div><div class="hero-art" aria-label="Ілюстрація рослини"><div class="sun"></div><div class="leaf leaf-one"></div><div class="leaf leaf-two"></div><div class="plant-stem"></div><div class="jar"><span>g</span></div><div class="art-label">турбота<br>щодня</div></div></section>` : "";
-  return `${hero}<section class="content" id="catalog"><div class="section-head"><div><p class="eyebrow">КАТАЛОГ АПТЕКИ</p><h2>Оберіть потрібне</h2><p class="muted">Каталог, ціни та залишки завантажені з підключеної бази аптеки.</p></div><div class="result-note">${productData.count ?? products.length} товарів</div></div><form class="filterbar" data-form="filters"><label class="search-field"><span>⌕</span><input name="search" value="${e(catalogFilters.search)}" placeholder="Пошук за назвою або SKU" aria-label="Пошук"></label><select name="category"><option value="">Усі категорії</option>${categories.map((x) => `<option value="${x.id}" ${String(catalogFilters.category) === String(x.id) ? "selected" : ""}>${e(x.name)}</option>`).join("")}</select><select name="manufacturer"><option value="">Усі виробники</option>${manufacturers.map((x) => `<option value="${x.id}" ${String(catalogFilters.manufacturer) === String(x.id) ? "selected" : ""}>${e(x.name)}</option>`).join("")}</select><select name="pharmacy" aria-label="Аптека">${pharmacies.map((x) => `<option value="${x.id}" ${String(catalogFilters.pharmacy) === String(x.id) ? "selected" : ""}>${e(x.name)} · ${e(x.city)}</option>`).join("")}</select><button class="button secondary" type="submit">Застосувати фільтри</button></form><div class="product-grid">${products.length ? products.map((p, i) => { const stock = inventoryByProduct.get(Number(p.id)); const available = Number(stock?.available || 0); return `<article class="product-card"><a class="product-image tone-${i % 4}" href="#product:${p.id}"><span class="product-number">${String(i + 1).padStart(2, "0")}</span><span class="bottle"></span><span class="product-tag">${p.prescription_required ? "ПОТРІБЕН РЕЦЕПТ" : "ЩОДЕННИЙ ДОГЛЯД"}</span></a><div class="product-info"><p class="product-meta">${e(byId(categories, p.category))} · ${e(byId(manufacturers, p.manufacturer))}</p><h3><a href="#product:${p.id}">${e(p.name)}</a></h3><p class="product-description">${e(p.description || "Фармацевтичні товари для повсякденних потреб.")}</p><div class="product-foot"><span class="catalog-stock">${stock ? `${money(stock.unit_price)} · ${available > 0 ? `у наявності: ${available}` : "немає в наявності"}` : "немає даних про наявність"}</span>${stock && available > 0 ? addCartControl(p.id, p.name) : `<span class="muted" aria-label="Товар недоступний">Недоступно</span>`}</div></div></article>`; }).join("") : empty("Товарів не знайдено", "Змініть пошук або приберіть фільтр.")}</div><div class="catalog-foot"><span>Сторінка ${catalogPageNumber} · показано ${products.length} із ${productData.count ?? products.length}</span><span>${catalogPageNumber > 1 ? `<button class="text-button" data-action="previous-page">← Назад</button>` : ""}${productData.next ? `<button class="text-button" data-action="next-page">Наступна сторінка →</button>` : ""}</span></div></section><section class="service-strip"><span>✳ Перевірені товари</span><span>⌂ Аптека поруч</span><span>♡ Турбота про здоров’я</span></section>`;
+  return `${hero}<section class="content" id="catalog"><div class="section-head"><div><p class="eyebrow">КАТАЛОГ АПТЕКИ</p><h2>Оберіть потрібне</h2><p class="muted">Торгові назви препаратів справжні. Ціни й залишки нижче — навчальна симуляція.</p></div><div class="result-note">${productData.count ?? products.length} товарів</div></div><form class="filterbar" data-form="filters"><label class="search-field"><span>⌕</span><input name="search" value="${e(catalogFilters.search)}" placeholder="Пошук за назвою або SKU" aria-label="Пошук"></label><select name="category"><option value="">Усі категорії</option>${categories.map((x) => `<option value="${x.id}" ${String(catalogFilters.category) === String(x.id) ? "selected" : ""}>${e(x.name)}</option>`).join("")}</select><select name="manufacturer"><option value="">Усі виробники</option>${manufacturers.map((x) => `<option value="${x.id}" ${String(catalogFilters.manufacturer) === String(x.id) ? "selected" : ""}>${e(x.name)}</option>`).join("")}</select><select name="pharmacy" aria-label="Аптека">${pharmacies.map((x) => `<option value="${x.id}" ${String(catalogFilters.pharmacy) === String(x.id) ? "selected" : ""}>${e(x.name)} · ${e(x.city)}</option>`).join("")}</select><button class="button secondary" type="submit">Застосувати фільтри</button></form><div class="product-grid">${products.length ? products.map((p, i) => { const stock = inventoryByProduct.get(Number(p.id)); const image = productImage(p, images); const available = Number(stock?.available || 0); return `<article class="product-card" data-product-card data-route="product:${p.id}" role="link" tabindex="0" aria-label="Переглянути ${e(p.name)}"><a class="product-image tone-${i % 4}" href="#product:${p.id}"><span class="product-number">${String(i + 1).padStart(2, "0")}</span>${image.url ? `<img class="product-photo" src="${e(image.url)}" alt="${e(p.name)}" loading="lazy" onerror="this.hidden=true">` : `<span class="bottle"></span>`}<span class="product-tag">${p.prescription_required ? "ПОТРІБЕН РЕЦЕПТ" : "АПТЕЧНИЙ ТОВАР"}</span></a><div class="product-info"><p class="product-meta">${e(byId(categories, p.category))} · ${e(byId(manufacturers, p.manufacturer))}</p><h3><a href="#product:${p.id}">${e(p.name)}</a></h3><p class="product-description">${e(p.description || "Фармацевтичний препарат або товар для здоров’я.")}</p><div class="product-foot"><span class="catalog-stock">${stock ? `${money(stock.unit_price)} · ${available > 0 ? `у наявності: ${available}` : "немає в наявності"}` : "немає в наявності"}</span>${stock && available > 0 ? addCartControl(p.id, p.name, "button primary add-to-cart", catalogFilters.pharmacy) : `<span class="muted" aria-label="Товар недоступний">Немає в наявності</span>`}</div></div></article>`; }).join("") : empty("Товарів не знайдено", "Змініть пошук або приберіть фільтр.")}</div><div class="catalog-foot"><span>Сторінка ${catalogPageNumber} · показано ${products.length} із ${productData.count ?? products.length}</span><span>${catalogPageNumber > 1 ? `<button class="text-button" data-action="previous-page">← Назад</button>` : ""}${productData.next ? `<button class="text-button" data-action="next-page">Наступна сторінка →</button>` : ""}</span></div></section><section class="service-strip"><span>✳ Ціни й залишки за вибраною аптекою</span><span>⌂ Самовивіз та доставка</span><span>♡ Одне замовлення — одна аптека</span></section>`;
 }
 
 async function productPage(id) {
   const p = await api.request(`/products/${encodeURIComponent(id)}/`, { auth: false });
-  const [availableResult, categories, manufacturers] = await Promise.allSettled([api.request(`/products/${p.id}/availability/`, { auth: false }), api.request("/categories/", { auth: false }), api.request("/manufacturers/", { auth: false })]);
-  if (categories.status === "rejected" || manufacturers.status === "rejected") throw (categories.reason || manufacturers.reason);
+  const [availableResult, categories, manufacturers, pharmacyData] = await Promise.allSettled([api.request(`/products/${p.id}/availability/`, { auth: false }), api.request("/categories/", { auth: false }), api.request("/manufacturers/", { auth: false }), api.request("/pharmacies/", { auth: false })]);
+  if (categories.status === "rejected" || manufacturers.status === "rejected" || pharmacyData.status === "rejected") throw (categories.reason || manufacturers.reason || pharmacyData.reason);
+  const image = productImage(p, await productAssets());
   const availabilityError = availableResult.status === "rejected" ? availableResult.reason : null;
-  const available = availableResult.status === "fulfilled" ? availableResult.value : [];
-  return `<section class="content product-detail"><a class="back-link" href="#home">← Назад до каталогу</a><div class="detail-grid"><div class="detail-art tone-1"><span class="bottle large"></span><span class="product-tag">${p.prescription_required ? "ПОТРІБЕН РЕЦЕПТ" : "АПТЕЧНИЙ ТОВАР"}</span></div><div>${sectionHead("ІНФОРМАЦІЯ ПРО ТОВАР", e(p.name))}<p class="lead">${e(p.description || "Фармацевтичні товари для повсякденних потреб.")}</p><p class="muted">${e(listOf(categories.value).find((x) => x.id === p.category)?.name || "")} · ${e(listOf(manufacturers.value).find((x) => x.id === p.manufacturer)?.name || "")}</p><p class="muted">Артикул: ${e(p.sku)}</p>${p.storage_min_c !== null || p.storage_max_c !== null ? `<p class="muted">Умови зберігання з каталогу: ${e(p.storage_min_c ?? "—")}°C – ${e(p.storage_max_c ?? "—")}°C</p>` : ""}${p.prescription_required ? `<div class="notice info inline">Для цього товару потрібен рецепт. Наявність і правила оформлення перевірить API аптеки.</div>` : ""}<h3>Наявність в аптеках</h3><div class="availability-list">${availabilityError ? `<div class="notice error inline">${e(availabilityError.message)}</div>` : listOf(available).length ? listOf(available).map((a) => `<div><span><b>${e(a.pharmacy__name)}</b><small>доступно: ${a.available}</small></span><strong>${money(a.unit_price)}</strong>${addCartControl(p.id, p.name, "button secondary small")}</div>`).join("") : empty("Немає даних про наявність", "Уточніть залишки у вибраній аптеці.")}</div>${currentUser?.role === "CUSTOMER" ? `<label class="field"><span>Аптека для сповіщення</span><select id="watch-pharmacy">${listOf(available).map((a) => `<option value="${a.pharmacy_id}">${e(a.pharmacy__name)}</option>`).join("")}</select></label>${button("Стежити за наявністю", "watch-product", "secondary", `data-id="${p.id}"`)}` : `<p class="fine-print">Щоб стежити за наявністю, увійдіть як клієнт.</p>`}<p class="fine-print">Ціну й залишок підтверджує аптека для конкретного замовлення.</p></div></div></section>`;
+  const pharmacies = listOf(pharmacyData.value);
+  const pharmacyById = new Map(pharmacies.map((x) => [Number(x.id), x]));
+  const available = availableResult.status === "fulfilled" ? listOf(availableResult.value).filter((x) => Number(x.available) > 0) : [];
+  const chosen = available.find((x) => String(x.pharmacy_id) === String(selectedPharmacyId)) || available[0];
+  const branch = chosen && pharmacyById.get(Number(chosen.pharmacy_id));
+  const stockCard = chosen ? `<div class="product-stock-card"><div><span class="eyebrow">${e(branch?.name || chosen.pharmacy__name || "Аптека")}</span><h3>${money(chosen.unit_price)}</h3><p>Доступно: <b>${Number(chosen.available)}</b> шт.</p><p class="muted">${e(branch ? `${branch.address}, ${branch.city}` : "Самовивіз або доставка з цієї аптеки")}</p></div>${addCartControl(p.id, p.name, "button primary add-to-cart product-add", chosen.pharmacy_id)}</div>` : empty("Немає в наявності", "Перегляньте інші позиції каталогу або перевірте аптеки пізніше.");
+  return `<section class="content product-detail"><a class="back-link" href="#home">← Назад до каталогу</a><div class="detail-grid"><div class="detail-art tone-1">${image.url ? `<img class="detail-photo" src="${e(image.url)}" alt="${e(p.name)}" onerror="this.hidden=true">` : `<span class="bottle large"></span>`}<span class="product-tag">${p.prescription_required ? "ПОТРІБЕН РЕЦЕПТ" : "АПТЕЧНИЙ ТОВАР"}</span></div><div>${sectionHead("ІНФОРМАЦІЯ ПРО ТОВАР", e(p.name))}<p class="lead">${e(p.description || "Фармацевтичний препарат або товар для здоров’я.")}</p><p class="muted">${e(listOf(categories.value).find((x) => x.id === p.category)?.name || "")} · ${e(listOf(manufacturers.value).find((x) => x.id === p.manufacturer)?.name || "")}</p><p class="muted">Артикул: ${e(p.sku)}</p>${image.source ? `<p class="fine-print">Зображення товару: <a href="${e(image.source)}" target="_blank" rel="noopener noreferrer">джерело</a></p>` : ""}${p.storage_min_c !== null || p.storage_max_c !== null ? `<p class="muted">Умови зберігання з каталогу: ${e(p.storage_min_c ?? "—")}°C – ${e(p.storage_max_c ?? "—")}°C</p>` : ""}${p.prescription_required ? `<div class="notice info inline">Для цього товару потрібен рецепт. Наявність і правила оформлення перевірить API аптеки.</div>` : ""}<div class="availability-heading" id="availability"><div><p class="eyebrow">ЦІНА ТА НАЯВНІСТЬ</p><h2>Знайти в аптеках</h2></div><a class="button secondary" href="#pharmacies">Усі аптеки</a></div>${availabilityError ? `<div class="notice error inline">${e(availabilityError.message)}</div>` : available.length ? `<label class="field pharmacy-choice"><span>Оберіть аптеку</span><select data-action="product-pharmacy">${available.map((x) => { const item = pharmacyById.get(Number(x.pharmacy_id)); return `<option value="${x.pharmacy_id}" ${String(x.pharmacy_id) === String(chosen.pharmacy_id) ? "selected" : ""}>${e(item?.name || x.pharmacy__name)} — ${e(item?.address || "")}, ${e(item?.city || "")}</option>`; }).join("")}</select></label>${stockCard}` : stockCard}${currentUser?.role === "CUSTOMER" && available.length ? `<label class="field"><span>Аптека для сповіщення</span><select id="watch-pharmacy">${available.map((a) => `<option value="${a.pharmacy_id}">${e(pharmacyById.get(Number(a.pharmacy_id))?.name || a.pharmacy__name)}</option>`).join("")}</select></label>${button("Стежити за наявністю", "watch-product", "secondary", `data-id="${p.id}"`)}` : currentUser?.role !== "CUSTOMER" ? `<p class="fine-print">Увійдіть як клієнт, щоб стежити за наявністю.</p>` : ""}<p class="fine-print">Показані ціни й залишки належать вибраній аптеці. Для заявки обираються товари лише з однієї аптеки.</p></div></div></section>`;
 }
 
 async function pharmaciesPage() {
-  const data = await api.request("/pharmacies/", { auth: false });
-  return `<section class="content">${sectionHead("МИ ПОРУЧ", "Знайти аптеку", "Перелік філій, які повернув API аптеки.")}<div class="location-grid">${listOf(data).map((p, i) => `<article class="location-card"><div class="location-art art-${i % 3}"><span>⌂</span><small>${e(p.city)}</small></div><div class="location-body"><p class="eyebrow">${e(p.code)}</p><h2>${e(p.name)}</h2><p>${e(p.address)}, ${e(p.city)}</p><p>${e(p.phone || "Контакти можна уточнити у філії")}</p><button class="button secondary" data-action="inventory" data-id="${p.id}">Переглянути залишки</button><div class="stock-preview" id="stock-${p.id}"></div></div></article>`).join("") || empty("Аптек не знайдено", "Перевірте пізніше.")}</div></section>`;
+  const [data, assets] = await Promise.all([api.request("/pharmacies/", { auth: false }), branchAssets()]);
+  return `<section class="content">${sectionHead("АПТЕКИ ПОРУЧ", "Оберіть аптеку", "Перейдіть у картку філії, щоб переглянути наявні препарати й оформити одне замовлення з неї.")}<div class="location-grid">${listOf(data).map((p, i) => { const asset = assets.get(p.code); return `<article class="location-card pharmacy-card" data-pharmacy-card data-route="pharmacy:${p.id}" role="link" tabindex="0" aria-label="Відкрити ${e(p.name)}, ${e(p.address)}"><div class="location-art art-${i % 3}">${asset?.image_url ? `<img src="${e(asset.image_url)}" alt="Філія ${e(p.name)}" loading="lazy" onerror="this.hidden=true">` : `<span>⌂</span>`}<small>${e(p.city)}</small></div><div class="location-body"><p class="eyebrow">${e(p.code)}</p><h2><a href="#pharmacy:${p.id}">${e(p.name)}</a></h2><p>${e(p.address)}, ${e(p.city)}</p><p>Довідкова мережі: ${e(p.phone || "уточніть на сторінці філії")}</p>${asset?.source_url ? `<a class="fine-print source-link" href="${e(asset.source_url)}" target="_blank" rel="noopener noreferrer">Фото й адресу звірити з офіційною сторінкою ↗</a>` : ""}<button class="button primary full" data-action="select-pharmacy" data-id="${p.id}">Обрати аптеку й товари →</button></div></article>`; }).join("") || empty("Аптек не знайдено", "Перевірте пізніше.")}</div></section>`;
+}
+
+async function pharmacyPage(id) {
+  await choosePharmacy(id);
+  const [pharmacy, inventoryData, productData, assets, images] = await Promise.all([api.request(`/pharmacies/${encodeURIComponent(id)}/`, { auth: false }), api.request(`/pharmacies/${encodeURIComponent(id)}/inventory/`, { auth: false }), api.request("/products/", { auth: false }), branchAssets(), productAssets()]);
+  const inventory = listOf(inventoryData).filter((x) => Number(x.available) > 0);
+  const products = new Map(listOf(productData).map((x) => [Number(x.id), x]));
+  const asset = assets.get(pharmacy.code);
+  const rows = inventory.map((item) => { const product = products.get(Number(item.product_id)); if (!product) return ""; const image = productImage(product, images); return `<article class="product-card" data-product-card data-route="product:${product.id}" role="link" tabindex="0" aria-label="Переглянути ${e(product.name)}"><a class="product-image tone-${Number(product.id) % 4}" href="#product:${product.id}">${image.url ? `<img class="product-photo" src="${e(image.url)}" alt="${e(product.name)}" loading="lazy" onerror="this.hidden=true">` : `<span class="bottle"></span>`}<span class="product-tag">${product.prescription_required ? "ПОТРІБЕН РЕЦЕПТ" : "У НАЯВНОСТІ"}</span></a><div class="product-info"><p class="product-meta">Доступно ${Number(item.available)} шт.</p><h3><a href="#product:${product.id}">${e(product.name)}</a></h3><p class="product-description">${e(product.description || "Зарезервуйте товар у вибраній філії.")}</p><div class="product-foot"><strong class="branch-price">${money(item.unit_price)}</strong>${addCartControl(product.id, product.name, "button primary add-to-cart", pharmacy.id)}</div></div></article>`; }).filter(Boolean);
+  return `<section class="content pharmacy-detail"><a class="back-link" href="#pharmacies">← До списку аптек</a><div class="branch-hero">${asset?.image_url ? `<img src="${e(asset.image_url)}" alt="Філія ${e(pharmacy.name)}" onerror="this.hidden=true">` : `<span class="branch-icon">⌂</span>`}<div><p class="eyebrow">КАРТКА АПТЕКИ</p><h1>${e(pharmacy.name)}</h1><p>${e(pharmacy.address)}, ${e(pharmacy.city)}</p><p>Довідкова мережі: ${e(pharmacy.phone || "—")}</p>${asset?.source_url ? `<a class="button secondary" href="${e(asset.source_url)}" target="_blank" rel="noopener noreferrer">Офіційна сторінка філії ↗</a>` : ""}</div></div><div class="section-head branch-products-head"><div><p class="eyebrow">НАЯВНІСТЬ У ЦІЙ ФІЛІЇ</p><h2>Обирайте товари для одного замовлення</h2><p class="muted">Кошик прив’язується до цієї аптеки. Ціна показана для цієї філії.</p></div><strong class="result-note">${rows.length} товарів у наявності</strong></div><div class="product-grid">${rows.length ? rows.join("") : empty("Немає товарів у наявності", "Перевірте іншу аптеку зі списку.")}</div><p class="fine-print data-disclosure">Навчальна система бронювання. Адреси та фото філій наведені з відкритих сторінок мережі; ціни, залишки й підтвердження замовлень у системі є імітованими.</p></section>`;
 }
 
 async function cartPage() {
@@ -145,10 +257,39 @@ async function cartPage() {
   const cart = await api.request(guest ? "/guest-cart/" : "/cart/", { auth: !guest });
   let items = cart.items || [];
   if (!Array.isArray(items)) items = Object.entries(items).map(([product_id, quantity]) => ({ product_id: Number(product_id), quantity }));
-  const [productsData, pharmaciesData, payments] = await Promise.all([api.request("/products/", { auth: currentUser?.role === "ADMIN" }), api.request("/pharmacies/", { auth: false }), api.request("/payment-methods/", { auth: false })]);
+  const [productsData, pharmaciesData, payments, loyalty] = await Promise.all([api.request("/products/", { auth: currentUser?.role === "ADMIN" }), api.request("/pharmacies/", { auth: false }), api.request("/payment-methods/", { auth: false }), currentUser ? api.request("/loyalty/").catch(() => ({ account: null })) : Promise.resolve({ account: null })]);
+  const loyaltyBalance = Number(loyalty.account?.balance || 0);
   const products = listOf(productsData), pharmacies = listOf(pharmaciesData);
-  const rows = items.map((i) => { const p = products.find((x) => x.id === i.product_id); return p ? `<tr><td><b>${e(p.name)}</b><small>${e(p.sku)}</small></td><td><input class="quantity-input" type="number" min="0" max="10000" value="${i.quantity}" data-quantity="${p.id}" aria-label="Кількість: ${e(p.name)}"></td><td><button class="text-button danger-text" data-action="remove" data-id="${p.id}">Видалити</button></td></tr>` : ""; });
-  return `<section class="content">${sectionHead("ВАШ КОШИК", "Вдалий вибір.", "Аптека підтвердить актуальну ціну та наявність перед оформленням.")}<div class="cart-layout"><div>${card(items.length ? `${table(["ТОВАР", "КІЛЬКІСТЬ", ""], rows)}<div class="cart-actions"><button class="button secondary" data-action="update-cart">Оновити кількість</button><a class="text-button" href="#home">Продовжити покупки →</a></div>` : empty("Кошик порожній", "Додайте товари з каталогу."))}<p class="fine-print">${guest ? "Гостьовий кошик зберігається API в cookie браузера." : "Кошик пов’язаний з обліковим записом клієнта."}</p></div><aside class="checkout-card"><p class="eyebrow">ОФОРМЛЕННЯ</p><h2>Оберіть аптеку</h2>${items.length ? `<form data-form="checkout">${selectField("Аптека", "pharmacy_id", pharmacies.map((p) => [p.id, `${p.name} — ${p.city}`]), true)}${selectField("Спосіб отримання", "fulfillment_method", [["PICKUP", "Самовивіз"], ["COURIER", "Кур’єрська доставка"], ["POSTAL", "Поштова доставка"]], true)}${selectField("Оплата", "payment_method", (payments.methods || []).map((x) => [x, paymentMethod(x)]), true)}<div class="form-group recipient-fields hidden">${field("Ім’я отримувача", "recipient_name", "text", false)}${field("Телефон отримувача", "recipient_phone", "tel", false)}${field("Адреса доставки", "recipient_destination", "text", false)}</div><button class="button primary full" type="submit">${guest ? "Увійдіть, щоб оформити" : "Розрахувати замовлення"} <span>→</span></button></form>` : `<a class="button primary full" href="#home">До каталогу</a>`}<p class="fine-print">Оплата імітована. Дані карток не запитуються.</p></aside></div></section>`;
+  if (!pharmacies.some((x) => String(x.id) === String(selectedPharmacyId))) selectedPharmacyId = String(pharmacies[0]?.id || "");
+  const branchMap = readCartBranches();
+  const itemsByPharmacy = new Map();
+  for (const item of items) {
+    const branchId = String(branchMap[item.product_id] || selectedPharmacyId || "");
+    if (!branchId) continue;
+    if (!branchMap[item.product_id]) branchMap[item.product_id] = branchId;
+    if (!itemsByPharmacy.has(branchId)) itemsByPharmacy.set(branchId, []);
+    itemsByPharmacy.get(branchId).push(item);
+  }
+  writeCartBranches(branchMap);
+  const batches = await Promise.all([...itemsByPharmacy].map(async ([branchId, branchItems]) => {
+    const branch = pharmacies.find((x) => String(x.id) === branchId);
+    if (!branch) return null;
+    let stockRows = [];
+    try { stockRows = listOf(await api.request(`/pharmacies/${encodeURIComponent(branchId)}/inventory/`, { auth: false })); }
+    catch { /* Keep the cart visible; the API remains authoritative at quote time. */ }
+    const stock = new Map(stockRows.map((row) => [Number(row.product_id), row]));
+    const availableItems = branchItems.filter((item) => Number(stock.get(Number(item.product_id))?.available || 0) > 0);
+    const unavailableItems = branchItems.filter((item) => !availableItems.includes(item));
+    const makeRows = (entries, available) => entries.map((item) => {
+      const product = products.find((x) => Number(x.id) === Number(item.product_id));
+      const itemName = product?.name || `Товар №${item.product_id}`;
+      return `<tr class="${available ? "" : "cart-item-unavailable"}"><td><b>${e(itemName)}</b><small>${e(product?.sku || "")}</small>${available ? "" : `<small class="unavailable-note">Немає підтвердженої наявності у цій філії. Видаліть позицію або оберіть іншу аптеку.</small>`}</td><td><div class="quantity-control"><button class="quantity-step" type="button" data-action="quantity-minus" data-id="${item.product_id}" aria-label="Зменшити кількість: ${e(itemName)}">−</button><input class="quantity-input" type="number" min="0" max="10000" value="${item.quantity}" data-quantity="${item.product_id}" aria-label="Кількість: ${e(itemName)}"><button class="quantity-step" type="button" data-action="quantity-plus" data-id="${item.product_id}" aria-label="Збільшити кількість: ${e(itemName)}">+</button></div></td><td><button class="text-button danger-text" data-action="remove" data-id="${item.product_id}">Видалити</button></td></tr>`;
+    });
+    const form = availableItems.length ? `<form class="batch-checkout" data-form="checkout"><input type="hidden" name="pharmacy_id" value="${e(branch.id)}"><input type="hidden" name="product_ids" value="${availableItems.map((x) => Number(x.product_id)).join(",")}"><label class="field bonus-redemption"><span>Використати бонуси (1 бонус = 1 грн)</span><input name="redeem_points" type="number" min="0" max="${loyaltyBalance}" value="0" step="1" ${currentUser ? "" : "disabled"}></label><p class="fine-print bonus-balance-note">Доступно: ${loyaltyBalance} бонусів. Ними можна покрити до половини вартості товарів після знижок; доставка оплачується окремо.</p>${selectField("Спосіб отримання", "fulfillment_method", [["PICKUP", "Самовивіз у цій аптеці"], ["COURIER", "Кур’єрська доставка"], ["POSTAL", "Поштова доставка"]], true)}${selectField("Спосіб оплати", "payment_method", (payments.methods || []).map((x) => [x, paymentMethod(x)]), true)}<div class="form-group recipient-fields hidden">${field("Ім’я отримувача", "recipient_name", "text", false)}${field("Телефон отримувача", "recipient_phone", "tel", false)}${field("Адреса доставки", "recipient_destination", "text", false)}</div><button class="button primary checkout-cta" type="submit">${guest ? "Увійдіть, щоб оформити це замовлення" : `Оформити замовлення з аптеки ${e(branch.name)}`} <span>→</span></button><p class="fine-print">Це замовлення оформлюється окремо від інших аптек.</p></form>` : `<p class="notice error inline">У цій групі немає товарів із підтвердженою наявністю для оформлення.</p>`;
+    const allRows = [...makeRows(availableItems, true), ...makeRows(unavailableItems, false)];
+    return `<section class="cart-batch"><div class="cart-batch-heading"><div><p class="eyebrow">ОКРЕМЕ ЗАМОВЛЕННЯ · ${availableItems.length} ДОСТУПНО</p><h2>${e(branch.name)}</h2><p>${e(branch.address)}, ${e(branch.city)}</p></div><a class="text-button" href="#pharmacy:${branch.id}">Переглянути аптеку ↗</a></div>${card(`${table(["ТОВАР", "КІЛЬКІСТЬ", ""], allRows)}<div class="cart-actions"><button class="button secondary" data-action="update-cart">Оновити кількість</button><a class="text-button" href="#home">Продовжити покупки →</a></div>`)}${form}</section>`;
+  }));
+  return `<section class="content">${sectionHead("ВАШ КОШИК", "Вдалий вибір.", "Товари з різних аптек згруповані в окремі замовлення. Кожне має власний шлях оформлення.")}${batches.filter(Boolean).length ? `<div class="cart-batches">${batches.filter(Boolean).join("")}</div>` : card(empty("Кошик порожній", "Додайте товари з каталогу."))}<p class="fine-print">${guest ? "Гостьовий кошик зберігається API в cookie браузера." : "Кошик пов’язаний з обліковим записом клієнта."} Оплата та доставка імітовані.</p></section>`;
 }
 
 function authPage(route) {
@@ -171,9 +312,9 @@ async function accountPage() {
   const profileCard = card(`<p class="eyebrow">PROFILE</p><h2>Your details</h2><form data-form="profile">${field("Full name", "full_name", "text", true, profile.full_name)}${field("Phone", "phone", "tel", false, profile.phone || "")}${selectField("Preferred pharmacy", "preferred_pharmacy_id", pharmacyOptions)}<button class="button secondary" type="submit">Save details</button></form>`);
   const prescriptionsTable = listOf(prescriptions).length
     ? table(["LABEL", "REFERENCE", ""], listOf(prescriptions).map((x) => `<tr><td>${e(x.display_label)}</td><td>${e(x.masked_reference)}</td><td><button class="text-button danger-text" data-action="delete-prescription" data-id="${x.id}">Remove</button></td></tr>`))
-    : empty("Nothing saved", "Add a demo label to help identify your prescription record.");
-  const careCard = card(`<p class="eyebrow">YOUR CARE</p><h2>Saved prescriptions</h2>${prescriptionsTable}<form class="inline-form" data-form="prescription">${field("Display label", "display_label", "text", true)}<button class="button secondary" type="submit">Add label</button></form><p class="fine-print">This demo stores a masked reference only, not a prescription image or medical document.</p>`);
-  const loyaltyCard = card(`<p class="eyebrow">LOYALTY</p><h2>${e(loyalty.account?.tier__code || "STANDARD")} member</h2><p class="points">${e(loyalty.account?.balance ?? 0)} <small>points</small></p>${listOf(loyalty.transactions).length ? `<details><summary>Останні операції бонусного рахунку</summary><ul>${listOf(loyalty.transactions).slice(0, 5).map((x) => `<li>${e(x.type || x.transaction_type || "Операція")}: ${e(x.points ?? x.amount ?? "—")}</li>`).join("")}</ul></details>` : ""}<a href="#orders" class="text-button">View orders →</a>`);
+    : empty("Nothing saved", "Add a label to help identify your prescription record.");
+  const careCard = card(`<p class="eyebrow">YOUR CARE</p><h2>Saved prescriptions</h2>${prescriptionsTable}<form class="inline-form" data-form="prescription">${field("Display label", "display_label", "text", true)}<button class="button secondary" type="submit">Add label</button></form><p class="fine-print">Only a masked reference is stored here, not a prescription image or medical document.</p>`);
+  const loyaltyCard = card(`<p class="eyebrow">LOYALTY</p><h2>${e(loyalty.account?.tier__code || "STANDARD")} member</h2><p class="points">${e(loyalty.account?.balance ?? 0)} <small>бонусів · 1 бонус = 1 грн</small></p><p class="fine-print">Бонусний рахунок використовується для часткової оплати замовлення.</p>${listOf(loyalty.transactions).length ? `<details><summary>Останні операції бонусного рахунку</summary><ul>${listOf(loyalty.transactions).slice(0, 5).map((x) => { const delta = Number(x.points_delta ?? x.points ?? x.amount); return `<li>${e(x.type || x.transaction_type || "Операція")}: ${Number.isFinite(delta) ? `${delta > 0 ? "+" : ""}${e(delta)}` : "—"} бонусів</li>`; }).join("")}</ul></details>` : ""}<a href="#orders" class="text-button">View orders →</a>`);
   const preferencesCard = card(`<p class="eyebrow">PREFERENCES</p><h2>Keep in touch</h2><form data-form="preferences"><label class="check-row"><input type="checkbox" name="promotions_enabled" ${prefs.promotions_enabled ? "checked" : ""}> Pharmacy offers</label><label class="check-row"><input type="checkbox" name="reminders_enabled" ${prefs.reminders_enabled ? "checked" : ""}> Order reminders</label><button class="button secondary" type="submit">Save preferences</button></form>`);
   const notificationRows = listOf(notifications).slice(0, 6).map((x) => `<li><b>${e(x.title || x.kind || "Update")}</b><small>${e(x.body || x.message || "Pharmacy update")}</small>${!x.read_at ? `<button class="text-button" data-action="read-notification" data-id="${x.id}">Mark read</button>` : ""}</li>`).join("");
   const notificationCard = card(`<p class="eyebrow">NOTIFICATIONS</p><h2>Recent updates</h2>${notificationRows ? `<ul class="feed-list">${notificationRows}</ul>` : empty("All caught up", "New account notifications will appear here.")}`);
@@ -278,10 +419,23 @@ function adminFieldLabel(label) {
 
 function authRequired() { return "Please sign in before continuing."; }
 
+root.addEventListener("click", (event) => {
+  const card = event.target.closest("[data-product-card], [data-pharmacy-card]");
+  if (!card || event.target.closest("a,button,select,input")) return;
+  location.hash = card.dataset.route;
+});
+root.addEventListener("keydown", (event) => {
+  if (!["Enter", " "].includes(event.key)) return;
+  const card = event.target.closest("[data-product-card], [data-pharmacy-card]");
+  if (!card || event.target !== card) return;
+  event.preventDefault();
+  location.hash = card.dataset.route;
+});
+
 root.addEventListener("click", async (event) => {
   const target = event.target.closest("[data-action]"); if (!target) return;
   const action = target.dataset.action;
-  if (["logout", "add", "remove", "update-cart", "cancel-order", "reorder", "pay", "transition", "ship", "verify-prescription", "refund", "read-notification", "delete-prescription", "watch-product", "toggle-watch", "edit-row", "confirm-order"].includes(action)) target.disabled = true;
+  if (["logout", "remove", "update-cart", "quantity-minus", "quantity-plus", "cancel-order", "reorder", "pay", "transition", "ship", "verify-prescription", "refund", "read-notification", "delete-prescription", "watch-product", "toggle-watch", "edit-row", "confirm-order"].includes(action)) target.disabled = true;
   try {
     if (action === "dismiss") { message = ""; render(); }
     if (action === "confirm-order") { await confirmOrder(); }
@@ -291,9 +445,24 @@ root.addEventListener("click", async (event) => {
     if (action === "previous-page") { catalogPageNumber = Math.max(1, catalogPageNumber - 1); render(); }
     if (action === "logout") { auth.clear(); currentUser = null; flash("You have signed out."); location.hash = "home"; render(); }
     if (action === "menu") document.querySelector(".main-nav")?.classList.toggle("open");
-    if (action === "add") await changeCart(Number(target.dataset.id), 1);
+    if (action === "add") {
+      await addOneToCart(Number(target.dataset.id), target.dataset.pharmacy);
+      clearTimeout(addToCartNavigationTimer);
+      addToCartNavigationTimer = setTimeout(() => {
+        location.hash = "cart";
+        render();
+      }, 650);
+    }
+    if (action === "select-pharmacy") { await choosePharmacy(target.dataset.id); location.hash = `pharmacy:${target.dataset.id}`; }
     if (action === "remove") await changeCart(Number(target.dataset.id), 0);
-    if (action === "update-cart") { for (const input of document.querySelectorAll("[data-quantity]")) await changeCart(Number(input.dataset.quantity), Number(input.value)); flash("Bag updated from the pharmacy API."); render(); }
+    if (action === "quantity-minus" || action === "quantity-plus") {
+      const input = target.closest(".quantity-control")?.querySelector("[data-quantity]");
+      if (!input) throw new Error("Не вдалося знайти поле кількості товару.");
+      const delta = action === "quantity-plus" ? 1 : -1;
+      const quantity = Math.max(1, Math.min(10000, Number(input.value || 1) + delta));
+      await changeCart(Number(target.dataset.id), quantity);
+    }
+    if (action === "update-cart") { for (const input of document.querySelectorAll("[data-quantity]")) await changeCart(Number(input.dataset.quantity), Number(input.value), "", false); flash("Кількість збережена в API."); render(); }
     if (action === "inventory") { const data = await api.request(`/pharmacies/${target.dataset.id}/inventory/`, { auth: false }); document.querySelector(`#stock-${target.dataset.id}`).innerHTML = listOf(data).map((x) => `<p>${e(x.product__name)} · ${x.available} available · ${money(x.unit_price)}</p>`).join("") || "No listed stock"; }
     if (action === "cancel-order") { if (!window.confirm("Скасувати замовлення? API може автоматично звільнити резерв товару та запустити повернення платежу.")) { target.disabled = false; return; } await api.request(`/orders/${target.dataset.id}/transition/`, { method: "POST", body: { status: "CANCELLED" } }); flash("Запит на скасування підтверджено сервером."); render(); }
     if (action === "reorder") { await api.request(`/orders/${target.dataset.id}/reorder/`, { method: "POST", body: {} }); flash("Items copied to your cart. Request a fresh quote before ordering."); location.hash = "cart"; render(); }
@@ -317,7 +486,15 @@ root.addEventListener("click", async (event) => {
   } catch (error) { flash(error.message, "error"); render(); }
 });
 
-root.addEventListener("change", (event) => {
+root.addEventListener("change", async (event) => {
+  if (event.target.matches("select[name='pharmacy']")) {
+    try { await choosePharmacy(event.target.value); catalogFilters.pharmacy = String(event.target.value); render(); }
+    catch (error) { flash(error.message, "error"); render(); }
+  }
+  if (event.target.matches("select[data-action='product-pharmacy']")) {
+    try { await choosePharmacy(event.target.value); render(); }
+    catch (error) { flash(error.message, "error"); render(); }
+  }
   if (event.target.matches("[data-action='branch-select']")) { location.hash = `staff?pharmacy=${event.target.value}`; }
   if (event.target.name === "fulfillment_method") { const group = document.querySelector(".recipient-fields"); group?.classList.toggle("hidden", event.target.value === "PICKUP"); for (const input of group?.querySelectorAll("input") || []) input.required = event.target.value !== "PICKUP"; }
 });
@@ -331,12 +508,30 @@ root.addEventListener("submit", async (event) => {
   const formData = new FormData(form);
   const raw = Object.fromEntries(formData.entries());
   try {
-    if (kind === "filters") { catalogFilters = { search: raw.search.trim(), category: raw.category, manufacturer: raw.manufacturer, pharmacy: raw.pharmacy || catalogFilters.pharmacy }; catalogPageNumber = 1; render(); }
-    if (kind === "login") { currentUser = await auth.signIn(raw.username, raw.password); flash("Welcome back."); location.hash = currentUser.role === "ADMIN" ? "admin" : currentUser.role === "STAFF" ? "staff" : "account"; render(); }
-    if (kind === "register") { currentUser = await auth.register(raw); flash("Your customer account is ready."); location.hash = "account"; render(); }
+    if (kind === "filters") { await choosePharmacy(raw.pharmacy); catalogFilters = { search: raw.search.trim(), category: raw.category, manufacturer: raw.manufacturer, pharmacy: raw.pharmacy || catalogFilters.pharmacy }; catalogPageNumber = 1; render(); }
+    if (kind === "login") {
+      const guestCart = await captureGuestCart();
+      currentUser = await auth.signIn(raw.username, raw.password);
+      if (currentUser.role === "CUSTOMER" && guestCart?.items.length) {
+        try { const count = await mergeGuestCart(guestCart); flash(`Вхід успішний. Перенесено ${count} позицій гостьового кошика; кількості додано до збереженого кошика.`); }
+        catch (error) { flash(`Ви увійшли, але кошик гостя перенесено не повністю. Товари гостя збережено для повторної спроби. ${error.message}`, "error"); }
+      } else flash("Welcome back.");
+      location.hash = currentUser.role === "ADMIN" ? "admin" : currentUser.role === "STAFF" ? "staff" : "account";
+      render();
+    }
+    if (kind === "register") {
+      const guestCart = await captureGuestCart();
+      currentUser = await auth.register(raw);
+      if (currentUser.role === "CUSTOMER" && guestCart?.items.length) {
+        try { const count = await mergeGuestCart(guestCart); flash(`Обліковий запис створено. Перенесено ${count} позицій гостьового кошика.`); }
+        catch (error) { flash(`Обліковий запис створено, але кошик гостя перенесено не повністю. Товари гостя збережено для повторної спроби. ${error.message}`, "error"); }
+      } else flash("Your customer account is ready.");
+      location.hash = "account";
+      render();
+    }
     if (kind === "profile") { await api.request("/profile/", { method: "PATCH", body: { full_name: raw.full_name, phone: raw.phone || null, preferred_pharmacy_id: raw.preferred_pharmacy_id ? Number(raw.preferred_pharmacy_id) : null } }); flash("Profile saved."); render(); }
     if (kind === "preferences") { await api.request("/preferences/", { method: "POST", body: { promotions_enabled: form.elements.promotions_enabled.checked, reminders_enabled: form.elements.reminders_enabled.checked } }); flash("Preferences saved."); render(); }
-    if (kind === "prescription") { await api.request("/prescriptions/", { method: "POST", body: { display_label: raw.display_label } }); flash("Demo label saved."); render(); }
+    if (kind === "prescription") { await api.request("/prescriptions/", { method: "POST", body: { display_label: raw.display_label } }); flash("Prescription label saved."); render(); }
     if (kind === "reminder") { const nextRun = new Date(raw.next_run_at); if (nextRun <= new Date()) throw new Error("Дата нагадування має бути в майбутньому."); await api.request("/reminders/", { method: "POST", body: { product_id: Number(raw.product_id), interval_days: Number(raw.interval_days), next_run_at: nextRun.toISOString(), is_active: true } }); flash("Нагадування збережено через API."); render(); }
     if (kind === "stock") { const body = {}; if (raw.adjustment) body.adjustment = Number(raw.adjustment); if (raw.unit_price) body.unit_price = raw.unit_price; const listed = form.elements.is_listed.checked; if (String(listed) !== form.dataset.listed) body.is_listed = listed; if (!Object.keys(body).length) throw new Error("Вкажіть зміну залишку, ціни або доступності товару."); await api.request(`/pharmacies/${form.dataset.pharmacy}/inventory/${form.dataset.product}/`, { method: "PATCH", body }); flash("Зміни залишку підтверджено сервером."); render(); }
     if (kind === "admin-create") { const body = Object.fromEntries(Object.entries(raw).filter(([key, v]) => form.elements[key]?.type === "checkbox" || v !== "")); for (const box of form.querySelectorAll('input[type="checkbox"]')) body[box.name] = box.checked; for (const key of ["category", "manufacturer", "user", "pharmacy", "promotion", "product"]) if (body[key]) body[key] = Number(body[key]); for (const key of ["discount_rate", "bonus_rate", "storage_min_c", "storage_max_c", "max_storage_min_c", "min_storage_max_c"]) if (body[key] !== "") body[key] = Number(body[key]); if (body.starts_at) body.starts_at = new Date(body.starts_at).toISOString(); if (body.ends_at) body.ends_at = new Date(body.ends_at).toISOString(); const path = form.dataset.path; if (["/admin/users/", "/pharmacies/", "/admin/assignments/", "/admin/promotions/"].includes(path)) body.is_active = true; if (path === "/products/") body.is_active = true; await api.request(path, { method: "POST", body }); flash("Запис створено на сервері."); render(); }
@@ -345,38 +540,77 @@ root.addEventListener("submit", async (event) => {
   } catch (error) { flash(error.message, "error"); render(); }
 });
 
-async function changeCart(productId, quantity) {
+async function changeCart(productId, quantity, pharmacyId = "", refresh = true) {
   if (currentUser && currentUser.role !== "CUSTOMER") throw new Error("Кошик доступний лише гостям і клієнтам.");
+  if (quantity > 0 && pharmacyId) await choosePharmacy(pharmacyId);
   const guest = !auth.token;
   await api.request(guest ? "/guest-cart/" : "/cart/", { method: "PUT", auth: !guest, body: { product_id: productId, quantity } });
+  const branches = readCartBranches();
+  if (quantity <= 0) delete branches[productId];
+  else if (pharmacyId) branches[productId] = String(pharmacyId);
+  writeCartBranches(branches);
   flash(quantity ? "Added to your bag." : "Removed from your bag.");
-  if (page() === "cart") render(); else root.querySelector(".notice")?.remove();
+  if (refresh && page() === "cart") render(); else if (page() !== "cart") root.querySelector(".notice")?.remove();
+}
+
+function addOneToCart(productId, pharmacyId) {
+  const operation = addToCartQueue.catch(() => {}).then(async () => {
+    if (currentUser && currentUser.role !== "CUSTOMER") throw new Error("Кошик доступний лише гостям і клієнтам.");
+    const branchId = String(pharmacyId || selectedPharmacyId || "");
+    if (branchId) await choosePharmacy(branchId);
+    const guest = !auth.token;
+    const path = guest ? "/guest-cart/" : "/cart/";
+    const cart = await api.request(path, { auth: !guest });
+    const items = Array.isArray(cart.items)
+      ? cart.items
+      : Object.entries(cart.items || {}).map(([id, quantity]) => ({ product_id: Number(id), quantity }));
+    const currentQuantity = Number(items.find((item) => Number(item.product_id) === productId)?.quantity || 0);
+    const branches = readCartBranches();
+    if (currentQuantity > 0 && branches[productId] && String(branches[productId]) !== branchId) {
+      throw new Error("Цей товар уже додано з іншої аптеки. Видаліть його з кошика, щоб додати товар з цієї філії.");
+    }
+    await api.request(path, { method: "PUT", auth: !guest, body: { product_id: productId, quantity: currentQuantity + 1 } });
+    branches[productId] = branchId;
+    writeCartBranches(branches);
+    flash(`Додано до кошика. Кількість: ${currentQuantity + 1}.`);
+  });
+  addToCartQueue = operation.catch(() => {});
+  return operation;
 }
 
 async function checkout(raw) {
   if (!currentUser) { flash("Sign in to request a live quote and place an order.", "info"); location.hash = "login"; render(); return; }
   if (currentUser.role !== "CUSTOMER") throw new Error("Оформити замовлення може лише клієнтський обліковий запис.");
   const cart = await api.request("/cart/");
-  const lines = cart.items || [];
+  const requestedIds = String(raw.product_ids || "").split(",").filter(Boolean).map(Number);
+  const lines = (cart.items || []).filter((item) => requestedIds.includes(Number(item.product_id)));
   if (!lines.length) throw new Error("Your customer cart is empty. Add items and update your bag first.");
-  const quoteBody = { pharmacy_id: Number(raw.pharmacy_id), fulfillment_method: raw.fulfillment_method, items: lines };
+  if (lines.length !== new Set(requestedIds).size) throw new Error("Кошик змінився. Оновіть сторінку й перевірте товари цієї аптеки.");
+  const quoteBody = { pharmacy_id: Number(raw.pharmacy_id), fulfillment_method: raw.fulfillment_method, items: lines, redeem_points: Number(raw.redeem_points || 0) };
   const quote = await api.request("/checkout/quote/", { method: "POST", body: quoteBody });
   const quoteItems = quote.lines || [];
   pendingOrder = {
     body: { ...quoteBody, payment_method: raw.payment_method, expected_total: quote.grand_total, items: quoteItems.map((item) => ({ product_id: item.product_id, quantity: item.quantity, expected_unit_price: item.price })), ...(raw.fulfillment_method !== "PICKUP" ? { recipient: { name: raw.recipient_name, phone: raw.recipient_phone, destination: raw.recipient_destination } } : {}) },
     quote,
+    productIds: quoteItems.map((item) => Number(item.product_id)),
   };
   const quoteRows = quoteItems.map((item) => `<tr><td>${e(item.name)}</td><td>${item.quantity}</td><td>${money(item.price)}</td><td>${money(Number(item.price) * item.quantity)}</td></tr>`);
-  const content = `<section class="content narrow">${sectionHead("CHECKOUT", "Перевірте розрахунок аптеки", "Підсумкову суму розрахував сервер за актуальними цінами та залишками.")}${card(`${table(["ТОВАР", "КІЛЬКІСТЬ", "ЦІНА", "РАЗОМ"], quoteRows)}<dl class="quote-totals"><div><dt>Сума товарів</dt><dd>${money(quote.subtotal)}</dd></div><div><dt>Знижка</dt><dd>− ${money(quote.discount)}</dd></div><div><dt>Доставка</dt><dd>${money(quote.shipping)}</dd></div><div class="quote-grand"><dt>Разом до сплати</dt><dd>${money(quote.grand_total)}</dd></div></dl><p class="fine-print">Спосіб оплати: ${e(raw.payment_method)} · Після підтвердження API повторно перевірить ціну та залишки.</p><div class="button-row"><button class="button secondary" data-action="back-to-cart">Повернутися до кошика</button><button class="button primary" data-action="confirm-order">Підтвердити замовлення</button></div>`)}</section>`;
+  const content = `<section class="content narrow">${sectionHead("CHECKOUT", "Перевірте розрахунок аптеки", "Підсумкову суму розрахував сервер за актуальними цінами та залишками.")}${card(`${table(["ТОВАР", "КІЛЬКІСТЬ", "ЦІНА", "РАЗОМ"], quoteRows)}<dl class="quote-totals"><div><dt>Сума товарів</dt><dd>${money(quote.subtotal)}</dd></div><div><dt>Знижка програми/акції</dt><dd>− ${money(quote.discount)}</dd></div>${quote.points_redeemed ? `<div><dt>Оплата бонусами (${quote.points_redeemed})</dt><dd>− ${money(quote.bonus_discount)}</dd></div>` : ""}<div><dt>Доставка</dt><dd>${money(quote.shipping)}</dd></div><div class="quote-grand"><dt>Разом до сплати</dt><dd>${money(quote.grand_total)}</dd></div></dl><p class="fine-print">Спосіб оплати: ${e(raw.payment_method)} · Після підтвердження API повторно перевірить ціну та залишки.</p><div class="button-row"><button class="button secondary" data-action="back-to-cart">Повернутися до кошика</button><button class="button primary" data-action="confirm-order">Підтвердити замовлення</button></div>`)}</section>`;
   root.innerHTML = localizeMarkup(shell(content));
 }
 
 async function confirmOrder() {
   if (!pendingOrder) throw new Error("Спочатку отримайте актуальний розрахунок замовлення.");
-  const order = await api.request("/orders/", { method: "POST", body: pendingOrder.body });
+  const completedBatch = pendingOrder;
+  const order = await api.request("/orders/", { method: "POST", body: completedBatch.body });
+  const cleanup = await Promise.allSettled(completedBatch.productIds.map((productId) => api.request("/cart/", { method: "PUT", body: { product_id: productId, quantity: 0 } })));
+  const branches = readCartBranches();
+  for (const productId of completedBatch.productIds) delete branches[productId];
+  writeCartBranches(branches);
   pendingOrder = null;
-  flash(`Замовлення ${order.order_number || order.id} створено зі станом ${order.status}.`);
-  location.hash = "orders";
+  const cleanupFailed = cleanup.some((result) => result.status === "rejected");
+  flash(`Замовлення ${order.order_number || order.id} оформлено${cleanupFailed ? ". Перевірте кошик: не всі позиції вдалося синхронізувати." : ". Інші аптечні замовлення залишилися в кошику."}`);
+  location.hash = "cart";
   render();
 }
 

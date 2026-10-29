@@ -172,11 +172,13 @@ class OrderDraft:
     method: str
     subtotal: Decimal
     discount: Decimal
+    bonus_discount: Decimal
+    points_redeemed: int
     shipping: Decimal
 
     @property
     def total(self):
-        return money(self.subtotal - self.discount + self.shipping)
+        return money(self.subtotal - self.discount - self.bonus_discount + self.shipping)
 
 
 class OrderDraftBuilder:
@@ -202,8 +204,16 @@ class OrderDraftBuilder:
         self.fields["method"] = method
         return self
 
-    def with_total(self, subtotal, discount, shipping):
-        self.fields.update(subtotal=subtotal, discount=discount, shipping=shipping)
+    def with_total(self, subtotal, discount, shipping, points_redeemed=0):
+        if type(points_redeemed) is not int or points_redeemed < 0:
+            raise DomainError("INVALID_BONUS_REDEMPTION", status=400)
+        self.fields.update(
+            subtotal=subtotal,
+            discount=discount,
+            bonus_discount=Decimal(points_redeemed),
+            points_redeemed=points_redeemed,
+            shipping=shipping,
+        )
         return self
 
     def build(self):
@@ -215,6 +225,8 @@ class OrderDraftBuilder:
             "method",
             "subtotal",
             "discount",
+            "bonus_discount",
+            "points_redeemed",
             "shipping",
         }:
             raise DomainError("INCOMPLETE_DRAFT", status=400)

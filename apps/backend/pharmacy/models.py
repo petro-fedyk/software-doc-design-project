@@ -345,6 +345,8 @@ class Products(models.Model):
     sku = models.CharField(unique=True, max_length=64)
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
+    image_url = models.URLField(max_length=2048, blank=True, null=True)
+    image_source_url = models.URLField(max_length=2048, blank=True, null=True)
     category = models.ForeignKey(Categories, models.DO_NOTHING)
     manufacturer = models.ForeignKey(Manufacturers, models.DO_NOTHING)
     prescription_required = models.BooleanField()

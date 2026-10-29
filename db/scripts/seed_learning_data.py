@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Replace business rows with synthetic fixtures and registered Ukrainian medicines."""
+"""Deprecated destructive seed entry point. Use the append-only coursework seeder."""
 from __future__ import annotations
 
 import json
@@ -106,21 +106,6 @@ def ins(cur, table: str, columns: tuple[str, ...], values: tuple):
 
 def insert_rows(cur, table: str, columns: tuple[str, ...], rows: list[tuple]):
     return [ins(cur, table, columns, row) for row in rows]
-
-
-def clear_learning_tables(cur) -> None:
-    # Child-first deletion; schema_migrations is intentionally preserved.
-    order = [
-        'audit_entries', 'outbox_events', 'notifications', 'availability_subscriptions',
-        'reminders', 'notification_preferences', 'loyalty_transactions', 'refunds',
-        'payments', 'deliveries', 'prescription_verifications', 'prescription_records',
-        'reservations', 'order_items', 'cart_items', 'inventory_movements',
-        'loyalty_accounts', 'carts', 'orders', 'employee_assignments', 'customer_profiles',
-        'pharmacy_inventory', 'promotion_products', 'products', 'promotions',
-        'delivery_rules', 'categories', 'manufacturers', 'loyalty_tiers', 'pharmacies', 'users',
-    ]
-    for table in order:
-        cur.execute(f'DELETE FROM `{table}`')
 
 
 def populate(cur) -> dict[str, int]:
@@ -268,23 +253,12 @@ def populate(cur) -> dict[str, int]:
 
 
 def main() -> int:
-    load_env_file(ROOT / '.env')
-    conn = connect()
-    cur = conn.cursor()
-    try:
-        conn.start_transaction()
-        clear_learning_tables(cur)
-        counts = populate(cur)
-        conn.commit()
-    except Exception:
-        conn.rollback()
-        raise
-    finally:
-        cur.close(); conn.close()
-    for table in sorted(counts):
-        print(f'{table}: {counts[table]}')
-    print('Learning dataset committed. All personal and prescription references are fictional; seeded accounts have unusable passwords.')
-    return 0
+    print(
+        'This legacy seeder is disabled because its 25-row fixture set was not '
+        'idempotent and could overwrite the learning database. No database changes were made. '
+        'Use db/scripts/seed_coursework_data.py after it is prepared.'
+    )
+    return 2
 
 
 if __name__ == '__main__':

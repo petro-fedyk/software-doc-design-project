@@ -478,7 +478,10 @@ class CartView(APIView):
         data = validated(s.CartChangeSerializer, request)
         return Response(
             Services().customers.cart(
-                actor(request.user), data["product_id"], data["quantity"]
+                actor(request.user),
+                data["product_id"],
+                data["quantity"],
+                allow_unavailable=data.get("allow_unavailable", False),
             )
         )
 
@@ -726,6 +729,12 @@ class GuestCartView(APIView):
             samesite="Lax",
             secure=request.is_secure(),
         )
+        return response
+
+    @extend_schema(request=None, responses={204: None}, auth=[])
+    def delete(self, request):
+        response = Response(status=204)
+        response.delete_cookie("guest_cart", samesite="Lax")
         return response
 
 

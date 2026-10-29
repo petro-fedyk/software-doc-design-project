@@ -13,12 +13,18 @@ from mysql.connector import DatabaseError, IntegrityError
 
 
 def connect():
+    database = os.environ.get('MYSQL_DATABASE', 'internet_pharmacy')
+    if database == 'internet_pharmacy':
+        raise RuntimeError(
+            'Integration tests insert and remove fixture rows; refusing to connect '
+            'to the coursework database. Configure a dedicated test schema.'
+        )
     db = mysql.connector.connect(
         host=os.environ.get('MYSQL_HOST', '127.0.0.1'),
         port=int(os.environ.get('MYSQL_PORT', '3306')),
         user=os.environ.get('MYSQL_USER', 'internet_pharmacy'),
         password=os.environ.get('MYSQL_PASSWORD', ''),
-        database=os.environ.get('MYSQL_DATABASE', 'internet_pharmacy'),
+        database=database,
         connection_timeout=10,
         autocommit=False,
     )
@@ -59,20 +65,9 @@ class MySQLSchemaIntegrationTests(unittest.TestCase):
         return cur.lastrowid
 
     def tearDown(self):
-        cur = self.conn.cursor()
-        cur.execute('DELETE FROM reservations WHERE order_item_id IN (SELECT id FROM order_items WHERE order_id IN (%s))' % ','.join(['%s'] * len(self.order_ids)), tuple(self.order_ids))
-        cur.execute('DELETE FROM outbox_events WHERE event_type=%s', (f'test.{self.tag}',))
-        cur.execute('DELETE FROM order_items WHERE order_id IN (%s)' % ','.join(['%s'] * len(self.order_ids)), tuple(self.order_ids))
-        cur.execute('DELETE FROM orders WHERE id IN (%s)' % ','.join(['%s'] * len(self.order_ids)), tuple(self.order_ids))
-        cur.execute('DELETE FROM inventory_movements WHERE inventory_id=%s', (self.inventory_id,))
-        cur.execute('DELETE FROM pharmacy_inventory WHERE id=%s', (self.inventory_id,))
-        cur.execute('DELETE FROM products WHERE id=%s', (self.product_id,))
-        cur.execute('DELETE FROM categories WHERE id=%s', (self.category_id,))
-        cur.execute('DELETE FROM manufacturers WHERE id=%s', (self.manufacturer_id,))
-        cur.execute('DELETE FROM pharmacies WHERE id=%s', (self.pharmacy_id,))
-        cur.execute('DELETE FROM users WHERE id=%s', (self.user_id,))
-        self.conn.commit()
-        cur.close()
+        # Fixtures remain in the isolated test schema; cleanup must never issue
+        # DELETE against application data, even if a test is misconfigured.
+        self.conn.rollback()
         self.conn.close()
 
     def test_tables_are_innodb_utf8mb4(self):

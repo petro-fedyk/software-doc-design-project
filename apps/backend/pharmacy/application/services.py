@@ -2,6 +2,7 @@ from pharmacy.application.subscribers import NotificationSubscriber, LoyaltySubs
 from typing import Callable
 from pharmacy.application.ports import UnitOfWork, PaymentGateway, ShipmentProvider
 from dataclasses import asdict
+from decimal import Decimal
 from uuid import uuid5, NAMESPACE_URL
 from pharmacy.domain.core import (
     DomainError,
@@ -97,7 +98,21 @@ class OrderApplicationService:
         subtotal, discount = self.pricing.calculate(
             lines, uow.loyalty.policies(actor.id, command.get("promotion"))
         )
-        return builder.with_total(subtotal, discount, handler.fee).build()
+        redeem_points = command.get("redeem_points", 0)
+        if type(redeem_points) is not int or redeem_points < 0:
+            raise DomainError("INVALID_BONUS_REDEMPTION", status=400)
+        if redeem_points:
+            balance = uow.loyalty.balance(actor.id, lock=lock)
+            if redeem_points > balance:
+                raise DomainError("INSUFFICIENT_BONUS_BALANCE", status=400)
+            # One point offsets one UAH. Points can cover up to half of the
+            # discounted product subtotal; delivery is never paid with points.
+            max_redeemable = int(max(Decimal("0.00"), subtotal - discount) / 2)
+            if redeem_points > max_redeemable:
+                raise DomainError("BONUS_LIMIT_EXCEEDED", status=400)
+        return builder.with_total(
+            subtotal, discount, handler.fee, redeem_points
+        ).build()
 
     def quote(self, actor, command):
         with self.uow_factory() as uow:
@@ -118,6 +133,7 @@ class OrderApplicationService:
             if money(command["expected_total"]) != draft.total:
                 raise DomainError("PRICE_CHANGED")
             order = uow.orders.create(draft, command["payment_method"], recipient)
+            uow.loyalty.redeem(order, draft.points_redeemed)
             uow.inventory.reserve(order.id)
             order.transition("CONFIRMED")
             uow.orders.save(order)
@@ -150,6 +166,7 @@ class OrderApplicationService:
                 raise DomainError("USE_SHIPMENT_ACTION", status=400)
             order.transition(target)
             if target == "CANCELLED":
+                uow.loyalty.restore_redeemed(order)
                 uow.inventory.release(order.id)
                 uow.payments.cancel_pending(order.id)
                 for payment in uow.payments.captured(order.id):
@@ -314,12 +331,15 @@ class CustomerApplicationService:
         self.uow_factory = uow_factory
 
     @retry_mysql_deadlock()
-    def cart(self, actor, product_id, count):
+    def cart(self, actor, product_id, count, allow_unavailable=False):
         actor.customer()
         if count != 0:
             quantity(count)
         with self.uow_factory() as uow:
-            result = uow.carts.set_item(actor.id, product_id, count)
+            if allow_unavailable:
+                result = uow.carts.set_item(actor.id, product_id, count, allow_unavailable=True)
+            else:
+                result = uow.carts.set_item(actor.id, product_id, count)
             uow.commit()
             return result
 

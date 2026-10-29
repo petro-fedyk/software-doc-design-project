@@ -1,0 +1,502 @@
+[
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Тулузи, 3б",
+    "city": "Київ",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/521-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1082",
+    "source_map": "https://anc.ua/map/kiyiv/anc",
+    "code": "ANC-KIYIV-001"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Гусовського, 8/10 (м.Печерська)",
+    "city": "Київ",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/913-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1083",
+    "source_map": "https://anc.ua/map/kiyiv/anc",
+    "code": "ANC-KIYIV-002"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "проспект Червоної Калини, 60/10 (Маяковського)",
+    "city": "Київ",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/914-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1104",
+    "source_map": "https://anc.ua/map/kiyiv/anc",
+    "code": "ANC-KIYIV-003"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Вишгородська, 56/2",
+    "city": "Київ",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/915-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1109",
+    "source_map": "https://anc.ua/map/kiyiv/anc",
+    "code": "ANC-KIYIV-004"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Костянтинівська, 25 (м.Контрактова площа)",
+    "city": "Київ",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/301-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-112",
+    "source_map": "https://anc.ua/map/kiyiv/anc",
+    "code": "ANC-KIYIV-005"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "бульвар Гавела Вацлава, 54/26 (Івана Лепсе)",
+    "city": "Київ",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/302-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-113",
+    "source_map": "https://anc.ua/map/kiyiv/anc",
+    "code": "ANC-KIYIV-006"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "проспект Валерія Лобановського, 196 (Червонозоряний, м.Деміївська)",
+    "city": "Київ",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/303-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-114",
+    "source_map": "https://anc.ua/map/kiyiv/anc",
+    "code": "ANC-KIYIV-007"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "проспект Берестейський, 125 (Перемоги, АС Дачна)",
+    "city": "Київ",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/304-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-115",
+    "source_map": "https://anc.ua/map/kiyiv/anc",
+    "code": "ANC-KIYIV-008"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Срібнокільська, 22 (м.Осокорки)",
+    "city": "Київ",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/305-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-116",
+    "source_map": "https://anc.ua/map/kiyiv/anc",
+    "code": "ANC-KIYIV-009"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Басейна, 10 (Дворець Спорту)",
+    "city": "Київ",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/306-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-117",
+    "source_map": "https://anc.ua/map/kiyiv/anc",
+    "code": "ANC-KIYIV-010"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Юрія Іллєнка, 32 (Мельнікова)",
+    "city": "Київ",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/308-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-119",
+    "source_map": "https://anc.ua/map/kiyiv/anc",
+    "code": "ANC-KIYIV-011"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "проспект Мира, 2/3",
+    "city": "Київ",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/309-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-126",
+    "source_map": "https://anc.ua/map/kiyiv/anc",
+    "code": "ANC-KIYIV-012"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "набережна Дніпровська, 21",
+    "city": "Київ",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/326-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1266",
+    "source_map": "https://anc.ua/map/kiyiv/anc",
+    "code": "ANC-KIYIV-013"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Стрийська, 57",
+    "city": "Львів",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/2537-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1000",
+    "source_map": "https://anc.ua/map/lviv/anc",
+    "code": "ANC-LVIV-001"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Княгині Ольги, 69а",
+    "city": "Львів",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/2555-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1119",
+    "source_map": "https://anc.ua/map/lviv/anc",
+    "code": "ANC-LVIV-002"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Гайдамацька, 18/1",
+    "city": "Львів",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/2556-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1138",
+    "source_map": "https://anc.ua/map/lviv/anc",
+    "code": "ANC-LVIV-003"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Левицького К., 41",
+    "city": "Львів",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/2944-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1911",
+    "source_map": "https://anc.ua/map/lviv/anc",
+    "code": "ANC-LVIV-004"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Виговського І., 29а",
+    "city": "Львів",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/2584-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-2342",
+    "source_map": "https://anc.ua/map/lviv/anc",
+    "code": "ANC-LVIV-005"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Федьковича Ю., 21",
+    "city": "Львів",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/3045-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-2481",
+    "source_map": "https://anc.ua/map/lviv/anc",
+    "code": "ANC-LVIV-006"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Князя Романа, 26",
+    "city": "Львів",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/3048-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-2488",
+    "source_map": "https://anc.ua/map/lviv/anc",
+    "code": "ANC-LVIV-007"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Володимира Великого, 51",
+    "city": "Львів",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/3049-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-2491",
+    "source_map": "https://anc.ua/map/lviv/anc",
+    "code": "ANC-LVIV-008"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Личаківська, 58, прим.11а",
+    "city": "Львів",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/3068-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-2593",
+    "source_map": "https://anc.ua/map/lviv/anc",
+    "code": "ANC-LVIV-009"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "проспект Червоної Калини, 121",
+    "city": "Львів",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/3082-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-2643",
+    "source_map": "https://anc.ua/map/lviv/anc",
+    "code": "ANC-LVIV-010"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Сихівська, 8",
+    "city": "Львів",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/3716-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-2809",
+    "source_map": "https://anc.ua/map/lviv/anc",
+    "code": "ANC-LVIV-011"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Симона Петлюри, 2а",
+    "city": "Львів",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/2501-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-507",
+    "source_map": "https://anc.ua/map/lviv/anc",
+    "code": "ANC-LVIV-012"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Низинна, 2",
+    "city": "Львів",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/2504-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-520",
+    "source_map": "https://anc.ua/map/lviv/anc",
+    "code": "ANC-LVIV-013"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "проспект Князя Володимира Великого, 159 (Добровольського, зуп.комплекс)",
+    "city": "Одеса",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/1130-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1059",
+    "source_map": "https://anc.ua/map/odesa/anc",
+    "code": "ANC-ODESA-001"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "проспект Князя Ярослава Мудрого, 22 (Глушка)",
+    "city": "Одеса",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/1131-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1092",
+    "source_map": "https://anc.ua/map/odesa/anc",
+    "code": "ANC-ODESA-002"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Олексія Вадатурського, 57 (Малиновського)",
+    "city": "Одеса",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/1135-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1147",
+    "source_map": "https://anc.ua/map/odesa/anc",
+    "code": "ANC-ODESA-003"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Космонавтів, 28/1",
+    "city": "Одеса",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/2707-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1482",
+    "source_map": "https://anc.ua/map/odesa/anc",
+    "code": "ANC-ODESA-004"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Незалежності, 4, прим.2 (Армійська, перетин з вул. Маршла Говорова, 10а)",
+    "city": "Одеса",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/2708-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1483",
+    "source_map": "https://anc.ua/map/odesa/anc",
+    "code": "ANC-ODESA-005"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Садова, 2",
+    "city": "Одеса",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/2709-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1499",
+    "source_map": "https://anc.ua/map/odesa/anc",
+    "code": "ANC-ODESA-006"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Артура Савельєва, 1 (Черняховського)",
+    "city": "Одеса",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/2710-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1503",
+    "source_map": "https://anc.ua/map/odesa/anc",
+    "code": "ANC-ODESA-007"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Філатова академіка, 47/1, прим.3",
+    "city": "Одеса",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/2716-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1703",
+    "source_map": "https://anc.ua/map/odesa/anc",
+    "code": "ANC-ODESA-008"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Добровольців, 10/2 (Говорова Маршала)",
+    "city": "Одеса",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/2725-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1815",
+    "source_map": "https://anc.ua/map/odesa/anc",
+    "code": "ANC-ODESA-009"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Героїв оборони Одеси, 52а",
+    "city": "Одеса",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/2726-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1827",
+    "source_map": "https://anc.ua/map/odesa/anc",
+    "code": "ANC-ODESA-010"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця М`ясоєдовська, 25",
+    "city": "Одеса",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/2728-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1882",
+    "source_map": "https://anc.ua/map/odesa/anc",
+    "code": "ANC-ODESA-011"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Філатова академіка, 2, прим. 56, 57, 58, 59, 60",
+    "city": "Одеса",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/2731-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1904",
+    "source_map": "https://anc.ua/map/odesa/anc",
+    "code": "ANC-ODESA-012"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "проспект Петра Калнишевського, 33 (Косіора)",
+    "city": "Дніпро",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/1325-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1121",
+    "source_map": "https://anc.ua/map/dnipro/anc",
+    "code": "ANC-DNIPRO-001"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "провулок Вільний, 2а",
+    "city": "Дніпро",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/1833-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1496",
+    "source_map": "https://anc.ua/map/dnipro/anc",
+    "code": "ANC-DNIPRO-002"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "проспект Слобожанський, 46",
+    "city": "Дніпро",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/1344-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1688",
+    "source_map": "https://anc.ua/map/dnipro/anc",
+    "code": "ANC-DNIPRO-003"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "Донецьке шосе, 121-М",
+    "city": "Дніпро",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/1843-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1795",
+    "source_map": "https://anc.ua/map/dnipro/anc",
+    "code": "ANC-DNIPRO-004"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "провулок Парусний, 10к",
+    "city": "Дніпро",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/602-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-180",
+    "source_map": "https://anc.ua/map/dnipro/anc",
+    "code": "ANC-DNIPRO-005"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Робоча, 67",
+    "city": "Дніпро",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/1846-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1819",
+    "source_map": "https://anc.ua/map/dnipro/anc",
+    "code": "ANC-DNIPRO-006"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Кирила Осьмака, 43Д (20-річчя Перемоги)",
+    "city": "Дніпро",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/1847-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1829",
+    "source_map": "https://anc.ua/map/dnipro/anc",
+    "code": "ANC-DNIPRO-007"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Старочумацька, 80 (Байкальська)",
+    "city": "Дніпро",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/1848-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1845",
+    "source_map": "https://anc.ua/map/dnipro/anc",
+    "code": "ANC-DNIPRO-008"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "бульвар Слави, 6",
+    "city": "Дніпро",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/1850-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1853",
+    "source_map": "https://anc.ua/map/dnipro/anc",
+    "code": "ANC-DNIPRO-009"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Тимчасова, 2",
+    "city": "Дніпро",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/867-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1931",
+    "source_map": "https://anc.ua/map/dnipro/anc",
+    "code": "ANC-DNIPRO-010"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "вулиця Метробудівська, 19",
+    "city": "Дніпро",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/1853-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-1932",
+    "source_map": "https://anc.ua/map/dnipro/anc",
+    "code": "ANC-DNIPRO-011"
+  },
+  {
+    "branch_name": "АНЦ",
+    "address": "площа Вокзальна, 1, прим. 69, 70",
+    "city": "Дніпро",
+    "phone": "5900",
+    "image_url": "https://storage.googleapis.com/static-storage/pharmacies/images/reduced/872-0.jpg",
+    "source_url": "https://anc.ua/pharmacies/anc-2002",
+    "source_map": "https://anc.ua/map/dnipro/anc",
+    "code": "ANC-DNIPRO-012"
+  }
+]

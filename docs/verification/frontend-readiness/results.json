@@ -1,0 +1,211 @@
+{
+  "date": "2026-10-29T05:32:52.605012+00:00",
+  "isolated_database": "pharmacy_gate_20261029_053240_test",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "database": "internet_pharmacy",
+      "exit": 0,
+      "output": "d77d454290aed331a6c67824672de8fae0b188ff\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--exit-code",
+        "HEAD",
+        "--",
+        "apps/backend",
+        "db/migrations"
+      ],
+      "database": "internet_pharmacy",
+      "exit": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "-f",
+        "compose.yaml",
+        "-f",
+        "compose.backend.yaml",
+        "ps",
+        "-a"
+      ],
+      "database": "internet_pharmacy",
+      "exit": 1,
+      "output": "permission denied while trying to connect to the docker API at unix:///var/run/docker.sock\n"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "10",
+        "-sS",
+        "-o",
+        "/dev/null",
+        "-w",
+        "health/ HTTP %{http_code}\n",
+        "http://127.0.0.1:8000/api/health/"
+      ],
+      "database": "internet_pharmacy",
+      "exit": 0,
+      "output": "health/ HTTP 200\n"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "10",
+        "-sS",
+        "-o",
+        "/dev/null",
+        "-w",
+        "docs/ HTTP %{http_code}\n",
+        "http://127.0.0.1:8000/api/docs/"
+      ],
+      "database": "internet_pharmacy",
+      "exit": 0,
+      "output": "docs/ HTTP 200\n"
+    },
+    {
+      "command": [
+        "curl",
+        "--max-time",
+        "10",
+        "-sS",
+        "-o",
+        "/dev/null",
+        "-w",
+        "schema/ HTTP %{http_code}\n",
+        "http://127.0.0.1:8000/api/schema/"
+      ],
+      "database": "internet_pharmacy",
+      "exit": 0,
+      "output": "schema/ HTTP 200\n"
+    },
+    {
+      "command": [
+        "/home/petro/Documents/ChatGPT/online-pharmacy/.venv/bin/python",
+        "db/scripts/migrate.py"
+      ],
+      "database": "pharmacy_gate_20261029_053240_test",
+      "exit": 0,
+      "output": "APPLY 0001_initial.sql\nAPPLY 0002_neutral_payment_providers.sql\nMigration check complete.\n"
+    },
+    {
+      "command": [
+        "/home/petro/Documents/ChatGPT/online-pharmacy/.venv/bin/python",
+        "db/scripts/verify_schema.py"
+      ],
+      "database": "pharmacy_gate_20261029_053240_test",
+      "exit": 0,
+      "output": "MySQL: 8.0.42; engine: InnoDB; charset/collation: utf8mb4/utf8mb4_0900_ai_ci; time_zone(global/session)=+00:00/+00:00 (system UTC)\nDomain tables: 31/31; migration ledger: present\nColumns: 205; FKs: 39 (expected 39); CHECKs: 36 (expected 36); indexes: 58; migrations: 2\nSCHEMA VERIFICATION: PASS\n"
+    },
+    {
+      "command": [
+        "/home/petro/Documents/ChatGPT/online-pharmacy/.venv/bin/python",
+        "apps/backend/manage.py",
+        "check"
+      ],
+      "database": "pharmacy_gate_20261029_053240_test",
+      "exit": 0,
+      "output": "System check identified no issues (0 silenced).\n"
+    },
+    {
+      "command": [
+        "/home/petro/Documents/ChatGPT/online-pharmacy/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "--tb=short",
+        "--junitxml=/home/petro/Documents/ChatGPT/online-pharmacy/docs/verification/frontend-readiness/pytest.xml"
+      ],
+      "database": "pharmacy_gate_20261029_053240_test",
+      "exit": 0,
+      "output": "...........................................                              [100%]\n43 passed in 8.29s\n"
+    },
+    {
+      "command": [
+        "/home/petro/Documents/ChatGPT/online-pharmacy/.venv/bin/python",
+        "db/scripts/test_mysql.py"
+      ],
+      "database": "pharmacy_gate_20261029_053240_test",
+      "exit": 0,
+      "output": "test_check_constraints_reject_invalid_rows (test_mysql_integration.MySQLSchemaIntegrationTests.test_check_constraints_reject_invalid_rows) ... ok\ntest_commit_and_rollback (test_mysql_integration.MySQLSchemaIntegrationTests.test_commit_and_rollback) ... ok\ntest_concurrent_reservations_do_not_oversell (test_mysql_integration.MySQLSchemaIntegrationTests.test_concurrent_reservations_do_not_oversell) ... ok\ntest_foreign_key_and_unique_constraints (test_mysql_integration.MySQLSchemaIntegrationTests.test_foreign_key_and_unique_constraints) ... ok\ntest_outbox_row_persists (test_mysql_integration.MySQLSchemaIntegrationTests.test_outbox_row_persists) ... ok\ntest_tables_are_innodb_utf8mb4 (test_mysql_integration.MySQLSchemaIntegrationTests.test_tables_are_innodb_utf8mb4) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.244s\n\nOK\n"
+    }
+  ],
+  "checks": [
+    {
+      "name": "Live migration readiness",
+      "expected": [
+        "0001_initial.sql",
+        "0002_neutral_payment_providers.sql"
+      ],
+      "actual": [
+        "0001_initial.sql"
+      ],
+      "result": "FAIL",
+      "query": "SELECT version FROM schema_migrations ORDER BY version"
+    },
+    {
+      "name": "Malformed JSON array must return 400",
+      "expected": 400,
+      "actual": {
+        "method": "PUT",
+        "url": "http://127.0.0.1:18001/api/cart/",
+        "request": [
+          {}
+        ],
+        "status": 500,
+        "response": "\n<!doctype html>\n<html lang=\"en\">\n<head>\n  <title>Server Error (500)</title>\n</head>\n<body>\n  <h1>Server Error (500)</h1><p></p>\n</body>\n</html>\n"
+      },
+      "before_cart_items": 0,
+      "after_cart_items": 0,
+      "result": "FAIL"
+    },
+    {
+      "name": "Inventory response matches OpenAPI type",
+      "expected": "object",
+      "actual": {
+        "method": "GET",
+        "url": "http://127.0.0.1:18001/api/pharmacies/52/inventory/",
+        "request": null,
+        "status": 200,
+        "response": [
+          {
+            "product_id": 52,
+            "product__name": "Catalogue fixture",
+            "unit_price": "100.00",
+            "available": 10
+          },
+          {
+            "product_id": 53,
+            "product__name": "Prescription fixture",
+            "unit_price": "100.00",
+            "available": 10
+          }
+        ]
+      },
+      "result": "FAIL"
+    },
+    {
+      "name": "Completed event replay has no duplicate effects",
+      "expected": "Notification and loyalty counts unchanged",
+      "before": {
+        "notifications": 4,
+        "loyalty_rows": 1
+      },
+      "after": {
+        "notifications": 5,
+        "loyalty_rows": 1
+      },
+      "result": "FAIL"
+    }
+  ]
+}

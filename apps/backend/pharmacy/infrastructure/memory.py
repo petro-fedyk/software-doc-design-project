@@ -89,6 +89,16 @@ class MemoryOutboxRepository:
 
 
 class MemoryLoyaltyRepository:
+    def balance(self, customer_id, lock=False):
+        return 0
+
+    def redeem(self, order, points):
+        if points:
+            raise DomainError("INSUFFICIENT_BONUS_BALANCE", status=409)
+
+    def restore_redeemed(self, order):
+        return None
+
     def policies(self, customer_id, promotion):
         if promotion:
             raise DomainError("INVALID_PROMOTION")

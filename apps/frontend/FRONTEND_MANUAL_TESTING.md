@@ -54,6 +54,8 @@ Observed result: all commands exited successfully after the implementation fixes
 
 ### Read-only live API and browser checks
 
+The checks below were recorded before the storefront data refresh on 2026-10-29. Their catalog counts and limitations are historical and do not describe the current seeded catalog. The refresh used the existing database and is documented in `FRONTEND_COMPLETION_REPORT.md`; no post-refresh browser acceptance run is recorded here.
+
 Observed against the currently running local API on 2026-10-29:
 
 | Check | Result |
@@ -71,13 +73,13 @@ Observed against the currently running local API on 2026-10-29:
 | Browser `/#pharmacies` | PASS, branch card rendered from API data |
 | Browser `/#login` and `/#register` | PASS, Ukrainian forms rendered; no credentials submitted |
 
-The live API currently returns three `DEMO-*` rows, including `Demo Vitamin Tablets` and a synthetic development-seed description. The single branch is named `Demo Central Pharmacy`. These are the actual rows returned by the connected database; they are not presented as real medicine records in this report. No catalog or database rows were inserted, updated, or deleted during these checks.
+At the time of this earlier audit, the live API returned three `DEMO-*` rows and the single branch `Demo Central Pharmacy`. No catalog or database rows were inserted, updated, or deleted during those checks. The later storefront refresh is documented separately above and in `FRONTEND_COMPLETION_REPORT.md`.
 
-The latest storefront now reads branch stock using `GET /api/pharmacies/{id}/inventory/`, displays its `unit_price` and `available` values on each product card, and disables adding unavailable items. The connected database still contains only the three demo products. Read-only count checks found 0 users, assignments, and orders, so authenticated customer/staff/admin flows have no existing records to demonstrate. Do not run `db/scripts/seed_learning_data.py` as a shortcut: it deletes and replaces the business-table data.
+The previous version of this paragraph described the earlier three-product database and is superseded by the storefront refresh recorded above. The current UI reads each selected branch's inventory endpoint and displays its branch-specific price and availability. Customer, staff, and administrator workflows were not tested after the refresh; use only authorized accounts and avoid destructive actions during a demonstration.
 
 ### Existing schema status
 
-The read-only command `.venv/bin/python db/scripts/verify_schema.py` returned `SCHEMA VERIFICATION: FAIL`. It reports migrations `0002_neutral_payment_providers.sql` and `0003_notification_outbox_idempotency.sql` pending, with the notifications `source_event_id` column and its unique index missing. No migration was applied by this frontend task. Outbox-backed write workflows must not be claimed as verified until the database owner applies/reviews the already documented migrations and the schema verifier passes.
+The read-only command `.venv/bin/python db/scripts/verify_schema.py` returned `SCHEMA VERIFICATION: FAIL` during the earlier audit, when migrations `0002_neutral_payment_providers.sql` and `0003_notification_outbox_idempotency.sql` were pending. The later storefront refresh did not apply migrations. Re-run the schema verifier before making a current claim about outbox-backed workflows.
 
 ## Guided manual workflows
 
@@ -159,7 +161,7 @@ The last four queries will show changes only after an authorized user performs t
 | API client JSON, auth header, 401, 403, network failure | PASS | Four isolated Node tests |
 | Syntax checks | PASS | Node parser commands above |
 | Guest public navigation/catalog/detail/pharmacy page | PASS | Exercised in browser with live API GETs |
-| Actual non-demo pharmaceutical catalog | BLOCKED | API currently returns only three synthetic `DEMO-*` seed records |
+| Actual non-demo pharmaceutical catalog | BLOCKED at audit time | API then returned only three synthetic `DEMO-*` seed records; see the later storefront refresh report |
 | Register/login/logout and token expiration | NOT TESTED | The form views render, but no designated account was created or submitted in this read-only verification; token expiration behavior is covered only by an isolated frontend unit test |
 | Guest/customer cart writes | NOT TESTED | Would modify the current browser guest cookie or customer cart |
 | Quote and order placement/reservation/cancellation | NOT TESTED | Persistent business-row changes require the instructor's explicit test account/record workflow; DB also has pending migrations |

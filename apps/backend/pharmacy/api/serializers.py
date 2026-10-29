@@ -56,6 +56,7 @@ class QuoteSerializer(StrictSerializer):
     fulfillment_method = s.ChoiceField(choices=["PICKUP", "COURIER", "POSTAL"])
     items = LineSerializer(many=True, allow_empty=False, max_length=100)
     promotion = s.CharField(max_length=50, required=False)
+    redeem_points = s.IntegerField(min_value=0, max_value=100000000, required=False, default=0)
 
 
 class PlaceSerializer(QuoteSerializer):
@@ -117,6 +118,7 @@ class InventoryChangeSerializer(StrictSerializer):
 class CartChangeSerializer(StrictSerializer):
     product_id = s.IntegerField(min_value=1)
     quantity = s.IntegerField(min_value=0, max_value=10000)
+    allow_unavailable = s.BooleanField(required=False, default=False)
 
 
 class PreferencesSerializer(StrictSerializer):
@@ -227,6 +229,8 @@ class ProductSerializer(s.ModelSerializer):
             "sku",
             "name",
             "description",
+            "image_url",
+            "image_source_url",
             "category",
             "manufacturer",
             "prescription_required",
