@@ -15,6 +15,27 @@ from pharmacy.domain.core import (
     quantity,
     EventPublisher,
 )
+from functools import wraps
+import time
+
+
+def retry_mysql_deadlock(max_retries=3, delay=0.05, sleep=time.sleep):
+    """Retry the complete application operation after a MySQL deadlock rollback."""
+    def decorate(operation):
+        @wraps(operation)
+        def wrapped(*args, **kwargs):
+            attempts = 0
+            while True:
+                try:
+                    return operation(*args, **kwargs)
+                except Exception as exc:
+                    code = exc.args[0] if exc.args else None
+                    if code != 1213 or attempts >= max_retries:
+                        raise
+                    attempts += 1
+                    sleep(delay * attempts)
+        return wrapped
+    return decorate
 
 CREATORS = {
     "PICKUP": PickupCreator(),
@@ -83,6 +104,7 @@ class OrderApplicationService:
             draft = self._draft(uow, actor, command)
             return {**asdict(draft), "grand_total": draft.total}
 
+    @retry_mysql_deadlock()
     def place(self, actor, command):
         if command["payment_method"] not in self.enabled_methods:
             raise DomainError("INVALID_PAYMENT_METHOD", status=400)
@@ -106,6 +128,7 @@ class OrderApplicationService:
             uow.commit()
             return asdict(order)
 
+    @retry_mysql_deadlock()
     def transition(self, actor, order_id, target):
         with self.uow_factory() as uow:
             order = uow.orders.get(order_id, lock=True)
@@ -163,6 +186,7 @@ class OrderApplicationService:
             uow.commit()
             return asdict(order)
 
+    @retry_mysql_deadlock()
     def verify(self, actor, order_id, approved):
         with self.uow_factory() as uow:
             order = uow.orders.get(order_id, lock=True)
@@ -183,6 +207,7 @@ class OrderApplicationService:
             uow.commit()
             return {"status": "APPROVED" if approved else "REJECTED", "simulated": True}
 
+    @retry_mysql_deadlock()
     def ship(self, actor, order_id):
         with self.uow_factory() as uow:
             order = uow.orders.get(order_id, lock=True)
@@ -204,6 +229,7 @@ class PaymentApplicationService:
     def __init__(self, uow_factory: Callable[[], UnitOfWork]):
         self.uow_factory = uow_factory
 
+    @retry_mysql_deadlock()
     def request(self, actor, order_id, key):
         with self.uow_factory() as uow:
             order = uow.orders.get(order_id, lock=True)
@@ -223,6 +249,7 @@ class PaymentApplicationService:
             uow.commit()
             return payment
 
+    @retry_mysql_deadlock()
     def refund(self, actor, order_id, amount, reason, key):
         with self.uow_factory() as uow:
             order = uow.orders.get(order_id, lock=True)
@@ -252,6 +279,7 @@ class InventoryApplicationService:
     def __init__(self, uow_factory: Callable[[], UnitOfWork]):
         self.uow_factory = uow_factory
 
+    @retry_mysql_deadlock()
     def change(self, actor, pharmacy_id, product_id, changes):
         actor.branch(pharmacy_id)
         if "quantity" in changes:
@@ -285,6 +313,7 @@ class CustomerApplicationService:
     def __init__(self, uow_factory: Callable[[], UnitOfWork]):
         self.uow_factory = uow_factory
 
+    @retry_mysql_deadlock()
     def cart(self, actor, product_id, count):
         actor.customer()
         if count != 0:
@@ -294,8 +323,11 @@ class CustomerApplicationService:
             uow.commit()
             return result
 
+    @retry_mysql_deadlock()
     def personal(self, actor, kind, data):
         actor.customer()
+        # Repository adapters may consume optional fields; keep retry input immutable.
+        data = dict(data)
         with self.uow_factory() as uow:
             result = uow.engagement.save_personal(actor.id, kind, data)
             uow.commit()
@@ -334,10 +366,11 @@ class EventApplicationService:
         self.publisher.subscribe("inventory.received", self.availability)
         self.publisher.subscribe("promotion.published", self.promotion)
 
-    def handle(self, event_type, payload):
+    def handle(self, event_type, payload, event_id=None):
         if event_type not in self.publisher.subscribers:
             raise DomainError("UNKNOWN_EVENT_TYPE")
-        self.publisher.publish(event_type, payload)
+        event_payload = {**payload, "_outbox_event_id": event_id} if event_id else payload
+        self.publisher.publish(event_type, event_payload)
 
     def order_changed(self, payload):
         self.notification_subscriber.handle(payload)
@@ -398,11 +431,13 @@ class EventApplicationService:
     def availability(self, payload):
         with self.uow_factory() as uow:
             uow.engagement.notify_availability(
-                payload["product_id"], payload["pharmacy_id"]
+                payload["product_id"], payload["pharmacy_id"], payload.get("_outbox_event_id")
             )
             uow.commit()
 
     def promotion(self, payload):
         with self.uow_factory() as uow:
-            uow.engagement.notify_promotion(payload["promotion_id"])
+            uow.engagement.notify_promotion(
+                payload["promotion_id"], payload.get("_outbox_event_id")
+            )
             uow.commit()

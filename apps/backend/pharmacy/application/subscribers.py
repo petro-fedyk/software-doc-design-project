@@ -9,7 +9,7 @@ class NotificationSubscriber:
         with self.uow_factory() as uow:
             order = uow.orders.get(payload["order_id"])
             order.status = payload.get("status", order.status)
-            uow.engagement.notify_order(order)
+            uow.engagement.notify_order(order, payload.get("_outbox_event_id"))
             uow.commit()
 
 

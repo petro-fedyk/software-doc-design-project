@@ -31,7 +31,9 @@ class OutboxWorker:
                 return False
             try:
                 with transaction.atomic():
-                    self.services.events.handle(event.event_type, event.payload)
+                    self.services.events.handle(
+                        event.event_type, event.payload, event.event_id
+                    )
             except Exception as exc:
                 event.attempts += 1
                 event.status = "FAILED" if event.attempts >= 10 else "PENDING"

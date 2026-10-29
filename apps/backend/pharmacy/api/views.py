@@ -9,12 +9,21 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
-from drf_spectacular.utils import extend_schema, OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiTypes, OpenApiParameter
 from pharmacy import models as m
 from pharmacy.api import serializers as s
 from pharmacy.api.auth import actor, issue_token
 from pharmacy.composition import Services
 from pharmacy.domain.core import DomainError
+
+ERROR_RESPONSES = {
+    400: OpenApiTypes.OBJECT,
+    401: s.ErrorSerializer,
+    403: s.ErrorSerializer,
+    404: s.ErrorSerializer,
+    409: s.ErrorSerializer,
+    503: s.ErrorSerializer,
+}
 
 
 class LoginThrottle(AnonRateThrottle):
@@ -138,6 +147,22 @@ class PublicReadAdminWrite(viewsets.ModelViewSet):
 class ProductViewSet(PublicReadAdminWrite):
     serializer_class = s.ProductSerializer
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter("category", int, description="Filter by category ID."),
+            OpenApiParameter("manufacturer", int, description="Filter by manufacturer ID."),
+            OpenApiParameter("prescription_required", bool, description="Filter by prescription requirement."),
+            OpenApiParameter("search", str, description="Case-insensitive product name or SKU search."),
+        ],
+        responses={
+            200: s.ProductPageSerializer,
+            400: OpenApiTypes.OBJECT,
+            401: s.ErrorSerializer,
+        },
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
     def perform_update(self, serializer):
         with transaction.atomic():
             product = m.Products.objects.select_for_update().get(
@@ -186,8 +211,11 @@ class ProductViewSet(PublicReadAdminWrite):
             )
         return qs
 
-    @extend_schema(responses=OpenApiTypes.OBJECT)
-    @action(detail=True, methods=["get"])
+    @extend_schema(
+        responses={200: s.ProductAvailabilitySerializer(many=True), **ERROR_RESPONSES},
+        filters=False,
+    )
+    @action(detail=True, methods=["get"], pagination_class=None)
     def availability(self, request, pk=None):
         product = self.get_object()
         rows = m.PharmacyInventory.objects.filter(
@@ -382,7 +410,7 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
 class InventoryView(APIView):
     permission_classes = [permissions.AllowAny]
 
-    @extend_schema(responses=OpenApiTypes.OBJECT)
+    @extend_schema(responses={200: s.ObjectSerializer(many=True), **ERROR_RESPONSES})
     def get(self, request, pharmacy_id):
         if request.user and request.user.role in {"STAFF", "ADMIN"}:
             actor(request.user).branch(pharmacy_id)
@@ -459,7 +487,6 @@ class PersonalView(APIView):
     serializer_class = s.ObjectSerializer
     kind = None
 
-    @extend_schema(responses=OpenApiTypes.OBJECT)
     def get(self, request):
         actor(request.user).customer()
         if self.kind == "preferences":
@@ -484,25 +511,37 @@ class PreferencesView(PersonalView):
     kind = "preferences"
     serializer_class = s.PreferencesSerializer
 
+    @extend_schema(responses={200: s.PreferenceRowSerializer(many=True), **ERROR_RESPONSES})
+    def get(self, request):
+        return super().get(request)
+
 
 class WatchView(PersonalView):
     kind = "watch"
     serializer_class = s.WatchSerializer
+
+    @extend_schema(responses={200: s.WatchRowSerializer(many=True), **ERROR_RESPONSES})
+    def get(self, request):
+        return super().get(request)
 
 
 class ReminderView(PersonalView):
     kind = "reminder"
     serializer_class = s.ReminderSerializer
 
+    @extend_schema(responses={200: s.ReminderRowSerializer(many=True), **ERROR_RESPONSES})
+    def get(self, request):
+        return super().get(request)
+
 
 class NotificationsView(APIView):
-    @extend_schema(responses=OpenApiTypes.OBJECT)
+    @extend_schema(responses={200: s.NotificationRowSerializer(many=True), **ERROR_RESPONSES})
     def get(self, request):
         return Response(
             list(
                 m.Notifications.objects.filter(user=request.user)
                 .order_by("-id")
-                .values()[:100]
+                .values("id", "user_id", "type", "title", "body", "read_at", "created_at")[:100]
             )
         )
 
@@ -581,7 +620,7 @@ class ProfileView(APIView):
 
 
 class SavedPrescriptionView(APIView):
-    @extend_schema(responses=OpenApiTypes.OBJECT)
+    @extend_schema(responses={200: s.SavedPrescriptionRowSerializer(many=True), **ERROR_RESPONSES})
     def get(self, request):
         actor(request.user).customer()
         return Response(
@@ -715,7 +754,7 @@ class StatisticsView(APIView):
 
 
 class AuditView(APIView):
-    @extend_schema(responses=OpenApiTypes.OBJECT)
+    @extend_schema(responses={200: s.AuditRowSerializer(many=True), **ERROR_RESPONSES})
     def get(self, request, pharmacy_id=None):
         current = actor(request.user)
         rows = m.AuditEntries.objects.order_by("-id")

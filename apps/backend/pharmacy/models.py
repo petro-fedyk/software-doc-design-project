@@ -200,12 +200,14 @@ class Notifications(models.Model):
     type = models.CharField(max_length=32)
     title = models.CharField(max_length=160)
     body = models.TextField()
+    source_event_id = models.CharField(max_length=36, blank=True, null=True)
     read_at = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField()
 
     class Meta:
         managed = False
         db_table = "notifications"
+        unique_together = (("source_event_id", "user", "type"),)
 
 
 class OrderItems(models.Model):

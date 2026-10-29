@@ -8,7 +8,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-SQL_PATH = ROOT / 'db/migrations/0001_initial.sql'
+MIGRATIONS_PATH = ROOT / 'db/migrations'
 OUT_PATH = ROOT / 'docs/diagrams/database/Internet_Pharmacy_MySQL_ERD.drawio'
 GROUPS = [
     ('Foundation — Identity, Catalog & Inventory', ['users','employee_assignments','customer_profiles','pharmacies','categories','manufacturers','products','pharmacy_inventory','inventory_movements']),
@@ -26,37 +26,48 @@ def split_statements(text: str) -> list[str]:
 
 def parse_schema() -> dict[str, dict]:
     tables: dict[str, dict] = {}
-    for statement in split_statements(SQL_PATH.read_text()):
-        match = re.match(r'CREATE TABLE IF NOT EXISTS (\w+)\s*\((.*)\)\s*ENGINE=', statement, re.S)
-        if not match:
-            continue
-        name, body = match.groups()
-        table = {'columns': [], 'pk': set(), 'unique': set(), 'indexes': set(), 'fks': [], 'checks': []}
-        for line in body.splitlines():
-            line = line.strip().rstrip(',')
-            if not line:
+    paths = sorted(MIGRATIONS_PATH.glob('[0-9][0-9][0-9][0-9]_*.sql'))
+    for path in paths:
+        for statement in split_statements(path.read_text()):
+            match = re.match(r'CREATE TABLE IF NOT EXISTS (\w+)\s*\((.*)\)\s*ENGINE=', statement, re.S)
+            if match:
+                name, body = match.groups()
+                table = {'columns': [], 'pk': set(), 'unique': set(), 'indexes': set(), 'fks': [], 'checks': []}
+                for line in body.splitlines():
+                    line = line.strip().rstrip(',')
+                    if not line:
+                        continue
+                    if line.startswith('PRIMARY KEY'):
+                        table['pk'].update(re.findall(r'\w+', line[line.find('(')+1:line.rfind(')')]))
+                    elif line.startswith('UNIQUE KEY'):
+                        fields = line[line.find('(')+1:line.rfind(')')]
+                        table['unique'].update(re.findall(r'\w+', fields))
+                    elif line.startswith('KEY '):
+                        fields = line[line.find('(')+1:line.rfind(')')]
+                        table['indexes'].update(re.findall(r'\w+', fields))
+                    elif line.startswith('CONSTRAINT') and ' FOREIGN KEY ' in line:
+                        fk = re.search(r'FOREIGN KEY \((\w+)\) REFERENCES (\w+)\((\w+)\)', line)
+                        if fk:
+                            table['fks'].append(fk.groups())
+                    elif line.startswith('CONSTRAINT') and ' CHECK ' in line:
+                        ck = re.search(r'CONSTRAINT (\w+) CHECK \((.*)\)$', line)
+                        if ck:
+                            table['checks'].append((ck.group(1), ck.group(2)))
+                    elif not line.startswith(('CONSTRAINT ', 'PRIMARY KEY', 'UNIQUE KEY', 'KEY ')):
+                        col = re.match(r'(\w+)\s+(.+)', line)
+                        if col:
+                            table['columns'].append((col.group(1), col.group(2)))
+                tables[name] = table
                 continue
-            if line.startswith('PRIMARY KEY'):
-                table['pk'].update(re.findall(r'\w+', line[line.find('(')+1:line.rfind(')')]))
-            elif line.startswith('UNIQUE KEY'):
-                fields = line[line.find('(')+1:line.rfind(')')]
-                table['unique'].update(re.findall(r'\w+', fields))
-            elif line.startswith('KEY '):
-                fields = line[line.find('(')+1:line.rfind(')')]
-                table['indexes'].update(re.findall(r'\w+', fields))
-            elif line.startswith('CONSTRAINT') and ' FOREIGN KEY ' in line:
-                fk = re.search(r'FOREIGN KEY \((\w+)\) REFERENCES (\w+)\((\w+)\)', line)
-                if fk:
-                    table['fks'].append(fk.groups())
-            elif line.startswith('CONSTRAINT') and ' CHECK ' in line:
-                ck = re.search(r'CONSTRAINT (\w+) CHECK \((.*)\)$', line)
-                if ck:
-                    table['checks'].append((ck.group(1), ck.group(2)))
-            elif not line.startswith(('CONSTRAINT ', 'PRIMARY KEY', 'UNIQUE KEY', 'KEY ')):
-                col = re.match(r'(\w+)\s+(.+)', line)
-                if col:
-                    table['columns'].append((col.group(1), col.group(2)))
-        tables[name] = table
+            alter = re.match(r'ALTER TABLE (\w+)\s+(.*)', statement, re.S | re.I)
+            if alter and alter.group(1) in tables:
+                name, clauses = alter.groups()
+                table = tables[name]
+                for column, definition in re.findall(r'ADD COLUMN (\w+)\s+([^,]+)', clauses, re.I):
+                    definition = re.sub(r'\s+AFTER\s+\w+\s*$', '', definition, flags=re.I)
+                    table['columns'].append((column, definition.strip()))
+                for fields in re.findall(r'ADD UNIQUE KEY \w+\s*\(([^)]+)\)', clauses, re.I):
+                    table['unique'].update(re.findall(r'\w+', fields))
     tables['schema_migrations'] = {
         'columns': [('version','VARCHAR(120) NOT NULL'), ('checksum','CHAR(64) NOT NULL'), ('applied_at','DATETIME(6) NOT NULL')],
         'pk': {'version'}, 'unique': set(), 'indexes': set(), 'fks': [], 'checks': [],

@@ -515,30 +515,44 @@ class DjangoCartRepository:
 
 
 class DjangoEngagementRepository:
-    def notify_order(self, order):
-        m.Notifications.objects.create(
-            user_id=order.customer_id,
-            type="ORDER",
-            title="Order update",
-            body=f"Order {order.id}: {order.status}",
-            created_at=timezone.now(),
+    @staticmethod
+    def _notification(user_id, kind, title, body, event_id=None):
+        defaults = {"title": title, "body": body, "created_at": timezone.now()}
+        if event_id is None:
+            return m.Notifications.objects.create(
+                user_id=user_id, type=kind, source_event_id=None, **defaults
+            )
+        return m.Notifications.objects.get_or_create(
+            source_event_id=event_id,
+            user_id=user_id,
+            type=kind,
+            defaults=defaults,
         )
 
-    def notify_availability(self, product_id, pharmacy_id):
+    def notify_order(self, order, event_id=None):
+        self._notification(
+            order.customer_id,
+            "ORDER",
+            "Order update",
+            f"Order {order.id}: {order.status}",
+            event_id,
+        )
+
+    def notify_availability(self, product_id, pharmacy_id, event_id=None):
         for watch in m.AvailabilitySubscriptions.objects.select_for_update().filter(
             product_id=product_id, pharmacy_id=pharmacy_id, is_active=True
         ):
-            m.Notifications.objects.create(
-                user_id=watch.customer_id,
-                type="AVAILABILITY",
-                title="Product available",
-                body=f"Product {product_id} is available at pharmacy {pharmacy_id}.",
-                created_at=timezone.now(),
+            self._notification(
+                watch.customer_id,
+                "AVAILABILITY",
+                "Product available",
+                f"Product {product_id} is available at pharmacy {pharmacy_id}.",
+                event_id,
             )
             watch.is_active = False
             watch.save(update_fields=["is_active"])
 
-    def notify_promotion(self, promotion_id):
+    def notify_promotion(self, promotion_id, event_id=None):
         promotion = m.Promotions.objects.filter(
             id=promotion_id,
             is_active=True,
@@ -551,12 +565,12 @@ class DjangoEngagementRepository:
             promotions_enabled=True, user__is_active=True
         ).values_list("user_id", flat=True)
         for identifier in recipients:
-            m.Notifications.objects.create(
-                user_id=identifier,
-                type="PROMOTION",
-                title="Pharmacy promotion",
-                body=promotion.code,
-                created_at=timezone.now(),
+            self._notification(
+                identifier,
+                "PROMOTION",
+                "Pharmacy promotion",
+                promotion.code,
+                event_id,
             )
 
     def save_personal(self, customer_id, kind, data):

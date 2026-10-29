@@ -1,3 +1,4 @@
+from collections.abc import Mapping
 from decimal import Decimal
 from rest_framework import serializers as s
 from django.utils import timezone
@@ -6,6 +7,8 @@ from pharmacy import models as m
 
 class StrictSerializer(s.Serializer):
     def to_internal_value(self, data):
+        if not isinstance(data, Mapping):
+            raise s.ValidationError({"non_field_errors": ["Expected a JSON object."]})
         unknown = set(data) - set(self.fields)
         if unknown:
             raise s.ValidationError(
@@ -141,9 +144,79 @@ class ReminderSerializer(StrictSerializer):
 
 
 class ObjectSerializer(s.Serializer):
-    """Use endpoint-specific documented examples for variable response records."""
+    """Flexible row shape for permission-dependent inventory projections."""
 
-    pass
+    id = s.IntegerField(required=False)
+    product_id = s.IntegerField(required=False)
+    product__name = s.CharField(required=False)
+    unit_price = s.DecimalField(max_digits=12, decimal_places=2, required=False)
+    on_hand = s.IntegerField(required=False)
+    reserved = s.IntegerField(required=False)
+    is_listed = s.BooleanField(required=False)
+    available = s.IntegerField(required=False)
+class ProductAvailabilitySerializer(s.Serializer):
+    pharmacy_id = s.IntegerField()
+    pharmacy__name = s.CharField()
+    unit_price = s.DecimalField(max_digits=12, decimal_places=2)
+    available = s.IntegerField()
+
+
+class PreferenceRowSerializer(s.Serializer):
+    id = s.IntegerField()
+    user_id = s.IntegerField()
+    promotions_enabled = s.BooleanField()
+    reminders_enabled = s.BooleanField()
+
+
+class WatchRowSerializer(s.Serializer):
+    id = s.IntegerField()
+    customer_id = s.IntegerField()
+    product_id = s.IntegerField()
+    pharmacy_id = s.IntegerField()
+    is_active = s.BooleanField()
+
+
+class ReminderRowSerializer(s.Serializer):
+    id = s.IntegerField()
+    customer_id = s.IntegerField()
+    product_id = s.IntegerField()
+    interval_days = s.IntegerField()
+    next_run_at = s.DateTimeField()
+    is_active = s.BooleanField()
+
+
+class NotificationRowSerializer(s.Serializer):
+    id = s.IntegerField()
+    user_id = s.IntegerField()
+    type = s.CharField()
+    title = s.CharField()
+    body = s.CharField()
+    read_at = s.DateTimeField(allow_null=True)
+    created_at = s.DateTimeField()
+
+
+class SavedPrescriptionRowSerializer(s.Serializer):
+    id = s.IntegerField()
+    customer_id = s.IntegerField()
+    display_label = s.CharField()
+    masked_reference = s.CharField(allow_null=True)
+    is_demo = s.BooleanField()
+    created_at = s.DateTimeField()
+
+
+class AuditRowSerializer(s.Serializer):
+    id = s.IntegerField()
+    actor_id = s.IntegerField(allow_null=True)
+    action = s.CharField()
+    target_type = s.CharField()
+    target_id = s.IntegerField(allow_null=True)
+    occurred_at = s.DateTimeField()
+    details = s.JSONField(allow_null=True)
+
+
+class ErrorSerializer(s.Serializer):
+    code = s.CharField(required=False)
+    detail = s.CharField(required=False)
 
 
 class ProductSerializer(s.ModelSerializer):
@@ -168,6 +241,13 @@ class ProductSerializer(s.ModelSerializer):
         if low is not None and high is not None and low > high:
             raise s.ValidationError("Invalid storage range.")
         return data
+
+
+class ProductPageSerializer(s.Serializer):
+    count = s.IntegerField()
+    next = s.URLField(allow_null=True)
+    previous = s.URLField(allow_null=True)
+    results = ProductSerializer(many=True)
 
 
 class PharmacySerializer(s.ModelSerializer):

@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import re
+import hashlib
 from pathlib import Path
 
-from generate_erd import parse_schema
+from generate_erd import parse_schema, split_statements
 from migrate import connect, load_env_file, ROOT
 
 EXPECTED_DOMAIN_TABLES = {
@@ -21,6 +22,8 @@ def main() -> int:
     load_env_file(ROOT / '.env')
     migration_text = '\n'.join(p.read_text() for p in sorted((ROOT/'db/migrations').glob('[0-9][0-9][0-9][0-9]_*.sql')))
     expected_tables = parse_schema()
+    migration_paths = sorted((ROOT/'db/migrations').glob('[0-9][0-9][0-9][0-9]_*.sql'))
+    expected_migrations = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in migration_paths}
     expected_fk = set(re.findall(r'CONSTRAINT (\w+) FOREIGN KEY', migration_text))
     expected_checks = set(re.findall(r'CONSTRAINT (\w+) CHECK', migration_text))
     expected_indexes = {'PRIMARY'} | set(re.findall(r'(?:UNIQUE )?KEY (\w+) \(', migration_text))
@@ -38,6 +41,13 @@ def main() -> int:
         actual_columns: dict[str,set[str]] = {}
         for table,column in cur.fetchall(): actual_columns.setdefault(table,set()).add(column)
         expected_columns={name:{c[0] for c in data['columns']} for name,data in expected_tables.items()}
+        for statement in split_statements(migration_text):
+            alter = re.match(r'ALTER\s+TABLE\s+(\w+)\s+', statement, re.IGNORECASE)
+            if alter:
+                table = alter.group(1)
+                expected_columns.setdefault(table, set()).update(
+                    re.findall(r'ADD\s+COLUMN\s+(\w+)\s+', statement, re.IGNORECASE)
+                )
         column_diffs={name:{'missing':sorted(cols-actual_columns.get(name,set())), 'extra':sorted(actual_columns.get(name,set())-cols)} for name,cols in expected_columns.items() if cols!=actual_columns.get(name,set())}
         cur.execute("SELECT constraint_name FROM information_schema.table_constraints WHERE table_schema=DATABASE() AND constraint_type='FOREIGN KEY'")
         actual_fk={row[0] for row in cur.fetchall()}
@@ -47,9 +57,17 @@ def main() -> int:
         actual_indexes={row[0] for row in cur.fetchall()}
         cur.execute('SELECT version, checksum FROM schema_migrations ORDER BY version')
         migrations=cur.fetchall()
+        applied_migrations = dict(migrations)
+        pending_migrations = sorted(set(expected_migrations) - set(applied_migrations))
+        checksum_mismatches = sorted(
+            version for version, checksum in applied_migrations.items()
+            if version in expected_migrations and checksum != expected_migrations[version]
+        )
         print(f'MySQL: {version}; engine: {engine}; charset/collation: {charset}/{collation}; time_zone(global/session)={global_zone}/{session_zone} (system {system_zone})')
         print(f'Domain tables: {len(domain_actual)}/{len(EXPECTED_DOMAIN_TABLES)}; migration ledger: {"present" if "schema_migrations" in actual_tables else "missing"}')
         print(f'Columns: {sum(map(len,actual_columns.values()))}; FKs: {len(actual_fk)} (expected {len(expected_fk)}); CHECKs: {len(actual_checks)} (expected {len(expected_checks)}); indexes: {len(actual_indexes)}; migrations: {len(migrations)}')
+        if pending_migrations: print('Pending migrations:', ', '.join(pending_migrations))
+        if checksum_mismatches: print('Migration checksum mismatches:', ', '.join(checksum_mismatches))
         if missing: print('Missing tables:', ', '.join(sorted(missing)))
         if unexpected: print('Unexpected domain tables:', ', '.join(sorted(unexpected)))
         if bad_tables: print('Non-InnoDB/non-utf8mb4 tables:', bad_tables)
@@ -57,7 +75,7 @@ def main() -> int:
         if expected_fk-actual_fk: print('Missing foreign keys:', sorted(expected_fk-actual_fk))
         if expected_checks-actual_checks: print('Missing CHECK constraints:', sorted(expected_checks-actual_checks))
         if expected_indexes-actual_indexes: print('Missing indexes:', sorted(expected_indexes-actual_indexes))
-        passed=(version.startswith('8.') and global_zone in ('+00:00','UTC') and session_zone in ('+00:00','UTC') and not missing and not unexpected and not bad_tables and not column_diffs and expected_fk<=actual_fk and expected_checks<=actual_checks and expected_indexes<=actual_indexes and 'schema_migrations' in actual_tables and bool(migrations))
+        passed=(version.startswith('8.') and global_zone in ('+00:00','UTC') and session_zone in ('+00:00','UTC') and not missing and not unexpected and not bad_tables and not column_diffs and expected_fk<=actual_fk and expected_checks<=actual_checks and expected_indexes<=actual_indexes and 'schema_migrations' in actual_tables and not pending_migrations and not checksum_mismatches and bool(migrations))
         print('SCHEMA VERIFICATION: '+('PASS' if passed else 'FAIL'))
         return 0 if passed else 1
     finally:
