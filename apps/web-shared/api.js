@@ -19,6 +19,20 @@ function formatError(data, status) {
 }
 
 export const api = {
+  async listAll(path, options = {}) {
+    const rows = [];
+    let next = path;
+    while (next) {
+      const data = await this.request(next, options);
+      rows.push(...(Array.isArray(data) ? data : data.results || []));
+      if (!Array.isArray(data) && data.next) {
+        const url = new URL(data.next, "http://localhost");
+        if (!url.pathname.startsWith(`${API_ROOT}/`)) throw new Error("Invalid API pagination path");
+        next = url.pathname.slice(API_ROOT.length) + url.search;
+      } else next = null;
+    }
+    return rows;
+  },
   async request(path, { method = "GET", body, auth = true, timeout = 12000 } = {}) {
     const headers = { Accept: "application/json" };
     if (body !== undefined) headers["Content-Type"] = "application/json";

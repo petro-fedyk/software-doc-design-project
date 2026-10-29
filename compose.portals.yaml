@@ -1,0 +1,29 @@
+services:
+  customer-web:
+    image: node:22-alpine
+    working_dir: /workspace
+    command: ['node', 'apps/customer-web/server.mjs']
+    environment:
+      API_ORIGIN: http://backend:8000
+      FRONTEND_HOST: 0.0.0.0
+    volumes:
+      - ./apps:/workspace/apps:ro
+    ports:
+      - '127.0.0.1:4173:4173'
+    depends_on:
+      backend:
+        condition: service_healthy
+  management-web:
+    image: node:22-alpine
+    working_dir: /workspace
+    command: ['node', 'apps/management-web/server.mjs']
+    environment:
+      API_ORIGIN: http://backend:8000
+      FRONTEND_HOST: 0.0.0.0
+    volumes:
+      - ./apps:/workspace/apps:ro
+    ports:
+      - '127.0.0.1:4174:4174'
+    depends_on:
+      backend:
+        condition: service_healthy

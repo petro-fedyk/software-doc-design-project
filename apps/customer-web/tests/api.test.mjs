@@ -62,3 +62,25 @@ test("authentication expires the access token and notifies the application", asy
   assert.equal(auth.token, null);
   assert.ok(events.includes("auth-expired"));
 });
+
+test("listAll follows API pagination so assigned branches beyond page one remain visible", async () => {
+  const paths = [];
+  globalThis.fetch = async url => {
+    paths.push(url);
+    return new Response(JSON.stringify(paths.length === 1
+      ? { results: [{id: 1}], next: "http://127.0.0.1:8000/api/pharmacies/?page=2" }
+      : { results: [{id: 162}], next: null }), {status: 200});
+  };
+  assert.deepEqual(await api.listAll('/pharmacies/', {auth:false}), [{id:1}, {id:162}]);
+  assert.deepEqual(paths, ['/api/pharmacies/', '/api/pharmacies/?page=2']);
+});
+
+test("session storage uses a portal-specific key and logout removes it", () => {
+  const stored = new Map();
+  globalThis.sessionStorage = {setItem:(k,v)=>stored.set(k,v), removeItem:k=>stored.delete(k)};
+  auth.save({access:'synthetic-session',expires_in:60});
+  assert.equal(JSON.parse(stored.get('pharmacy.customer.session')).access,'synthetic-session');
+  auth.clear();
+  assert.equal(stored.size,0);
+  delete globalThis.sessionStorage;
+});
