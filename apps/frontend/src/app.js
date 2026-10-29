@@ -7,10 +7,11 @@ let currentUser = auth.user;
 let busy = false;
 let message = "";
 let messageType = "success";
-let catalogFilters = { search: "", category: "", manufacturer: "" };
+let catalogFilters = { search: "", category: "", manufacturer: "", pharmacy: "" };
 let catalogPageNumber = 1;
 let adminSections = [];
 let pendingOrder = null;
+let renderGeneration = 0;
 const href = (route) => `#${route}`;
 
 const translations = {
@@ -52,7 +53,7 @@ const paymentMethod = (method) => ({ CARD: "Картка (імітація)", BA
 const adminLabels = { Users: "Користувачі", Pharmacies: "Аптеки", Products: "Товари", Categories: "Категорії", Manufacturers: "Виробники", Assignments: "Призначення персоналу", Promotions: "Акції", "Promotion products": "Товари акцій", "Loyalty tiers": "Рівні лояльності", "Delivery rules": "Правила доставки" };
 const createLabels = { Users: "Створити користувача", Pharmacies: "Створити аптеку", Products: "Створити товар", Categories: "Створити категорію", Manufacturers: "Створити виробника", Assignments: "Створити призначення", Promotions: "Створити акцію", "Promotion products": "Прив’язати товар до акції", "Loyalty tiers": "Створити рівень лояльності", "Delivery rules": "Створити правило доставки" };
 
-window.addEventListener("hashchange", render);
+window.addEventListener("hashchange", () => render({ scrollToTop: true }));
 window.addEventListener("auth-expired", () => { auth.clear(); currentUser = null; flash("Сесію завершено. Увійдіть знову.", "error"); render(); });
 window.addEventListener("DOMContentLoaded", () => {});
 
@@ -67,18 +68,19 @@ function shell(content) {
   const route = page().split(":")[0];
   const user = currentUser;
   const roleLink = user?.role === "STAFF" ? navLink("Staff", "staff", route === "staff") : user?.role === "ADMIN" ? navLink("Administration", "admin", route === "admin") : "";
-  return `<header class="topbar"><a class="brand" href="#home"><span class="brand-icon">+</span><span>goodwell<span class="brand-sub">МЕРЕЖА АПТЕК</span></span></a><nav class="main-nav">${navLink("Shop", "home", ["home", "product"].includes(route))}${navLink("Locations", "pharmacies", route === "pharmacies")}${user?.role === "CUSTOMER" ? navLink("My account", "account", route === "account" || route === "orders") : ""}${roleLink}</nav><div class="nav-actions">${user ? `<span class="user-chip">${e(user.username)} <small>${e(user.role)}</small></span><button class="text-button" data-action="logout">Sign out</button>` : navLink("Sign in", "login", route === "login")}${navLink("Bag", "cart", route === "cart")}<span class="bag-dot">+</span></div><button class="menu-toggle" data-action="menu" aria-label="Відкрити меню">☰</button></header><main>${message ? `<div class="notice ${messageType}" role="status">${e(message)}<button data-action="dismiss" aria-label="Закрити повідомлення">×</button></div>` : ""}${busy ? `<div class="loading-bar"><span></span></div>` : ""}${content}</main><footer><div class="footer-brand">goodwell<span>турбота щодня</span></div><div class="footer-links"><a href="#pharmacies">Наші аптеки</a><a href="#account">Підтримка клієнтів</a><span>Навчальний проєкт · імітовані сервіси</span></div></footer>`;
+  return `<header class="topbar"><a class="brand" href="#home"><span class="brand-icon">+</span><span>goodwell<span class="brand-sub">МЕРЕЖА АПТЕК</span></span></a><nav class="main-nav">${navLink("Shop", "home", ["home", "product"].includes(route))}${navLink("Locations", "pharmacies", route === "pharmacies")}${user?.role === "CUSTOMER" ? navLink("My account", "account", route === "account" || route === "orders") : ""}${roleLink}</nav><div class="nav-actions">${user ? `<span class="user-chip">${e(user.username)} <small>${e(user.role)}</small></span><button class="text-button" data-action="logout">Sign out</button>` : navLink("Sign in", "login", route === "login")}${navLink("Bag", "cart", route === "cart")}<span class="bag-dot">+</span></div><button class="menu-toggle" data-action="menu" aria-label="Відкрити меню">☰</button></header><main id="home">${message ? `<div class="notice ${messageType}" role="status">${e(message)}<button data-action="dismiss" aria-label="Закрити повідомлення">×</button></div>` : ""}${busy ? `<div class="loading-bar"><span></span></div>` : ""}${content}</main><footer><div class="footer-brand">goodwell<span>турбота щодня</span></div><div class="footer-links"><a href="#pharmacies">Наші аптеки</a><a href="#account">Підтримка клієнтів</a><span>Навчальний проєкт · імітовані сервіси</span></div></footer>`;
 }
 
-async function render() {
+async function render({ scrollToTop = false } = {}) {
+  const generation = ++renderGeneration;
   const route = page();
   busy = true;
   root.innerHTML = shell(`<div class="page-loading">Loading…</div>`);
   try {
     if (auth.token && !currentUser) currentUser = await auth.loadUser();
     let content;
-    if (route === "home") content = await catalogPage();
-    else if (route === "catalog") content = await catalogPage();
+    if (route === "home") content = await catalogPage({ showHero: true });
+    else if (route === "catalog") content = await catalogPage({ showHero: false });
     else if (route.startsWith("product:")) content = await productPage(route.split(":")[1]);
     else if (route === "pharmacies") content = await pharmaciesPage();
     else if (route === "cart") content = await cartPage();
@@ -88,11 +90,15 @@ async function render() {
     else if (route === "staff") content = await staffPage();
     else if (route === "admin") content = await adminPage();
     else content = notFoundPage();
+    if (generation !== renderGeneration) return;
     busy = false;
     root.innerHTML = localizeMarkup(shell(content));
+    if (scrollToTop) window.scrollTo({ top: 0, behavior: "instant" });
   } catch (error) {
+    if (generation !== renderGeneration) return;
     busy = false;
     root.innerHTML = localizeMarkup(shell(`<section class="content narrow">${sectionHead("WE HIT A SNAG", "This page could not load")}${card(`<div class="error-panel"><strong>${e(error.message)}</strong><p>Try again once the API is available.</p>${button("Retry", "retry", "secondary")}</div>`)}</section>`));
+    if (scrollToTop) window.scrollTo({ top: 0, behavior: "instant" });
   }
 }
 
@@ -100,17 +106,23 @@ function notFoundPage() {
   return `<section class="content narrow">${sectionHead("404", "Сторінку не знайдено", "Перевірте адресу або поверніться до каталогу.")}${card(`<a class="button primary" href="#home">До каталогу</a>`)}</section>`;
 }
 
-async function catalogPage() {
+async function catalogPage({ showHero = false } = {}) {
   const query = new URLSearchParams();
-  for (const [key, value] of Object.entries(catalogFilters)) if (value) query.set(key, value);
+  for (const [key, value] of Object.entries(catalogFilters)) if (key !== "pharmacy" && value) query.set(key, value);
   if (catalogPageNumber > 1) query.set("page", String(catalogPageNumber));
   const [productData, categoryData, manufacturerData, pharmacyData] = await Promise.all([
     api.request(`/products/${query.size ? `?${query}` : ""}`, { auth: currentUser?.role === "ADMIN" }),
     api.request("/categories/", { auth: false }), api.request("/manufacturers/", { auth: false }), api.request("/pharmacies/", { auth: false }),
   ]);
-  const products = listOf(productData), categories = listOf(categoryData), manufacturers = listOf(manufacturerData), pharmacies = listOf(pharmacyData);
+  const products = listOf(productData), categories = listOf(categoryData), manufacturers = listOf(manufacturerData), pharmacies = listOf(pharmacyData).filter((x) => x.is_active !== false);
+  if (!pharmacies.some((x) => String(x.id) === String(catalogFilters.pharmacy))) catalogFilters.pharmacy = String(pharmacies[0]?.id || "");
+  const inventoryData = catalogFilters.pharmacy
+    ? await api.request(`/pharmacies/${encodeURIComponent(catalogFilters.pharmacy)}/inventory/`, { auth: false })
+    : [];
+  const inventoryByProduct = new Map(listOf(inventoryData).map((x) => [Number(x.product_id), x]));
   const byId = (items, id) => items.find((item) => item.id === id)?.name || "—";
-  return `<section class="hero"><div class="hero-copy"><p class="eyebrow">ТУРБОТА ПОРУЧ</p><h1>Турбота щодня,<br><em>для вашого здоров’я.</em></h1><p>Необхідні товари та турбота аптеки — поруч, коли вони потрібні.</p><a class="button primary" href="#catalog">Переглянути товари <span>↗</span></a><div class="hero-proof"><span>●</span> Мережа аптек <b>·</b> Зручне замовлення</div></div><div class="hero-art" aria-label="Ілюстрація рослини"><div class="sun"></div><div class="leaf leaf-one"></div><div class="leaf leaf-two"></div><div class="plant-stem"></div><div class="jar"><span>g</span></div><div class="art-label">турбота<br>щодня</div></div></section><section class="content" id="catalog"><div class="section-head"><div><p class="eyebrow">КАТАЛОГ АПТЕКИ</p><h2>Оберіть потрібне</h2><p class="muted">Каталог товарів, завантажений з API аптеки.</p></div><div class="result-note">${productData.count ?? products.length} товарів</div></div><form class="filterbar" data-form="filters"><label class="search-field"><span>⌕</span><input name="search" value="${e(catalogFilters.search)}" placeholder="Пошук за назвою або SKU" aria-label="Пошук"></label><select name="category"><option value="">Усі категорії</option>${categories.map((x) => `<option value="${x.id}" ${String(catalogFilters.category) === String(x.id) ? "selected" : ""}>${e(x.name)}</option>`).join("")}</select><select name="manufacturer"><option value="">Усі виробники</option>${manufacturers.map((x) => `<option value="${x.id}" ${String(catalogFilters.manufacturer) === String(x.id) ? "selected" : ""}>${e(x.name)}</option>`).join("")}</select><button class="button secondary" type="submit">Застосувати фільтри</button></form><div class="product-grid">${products.length ? products.map((p, i) => `<article class="product-card"><a class="product-image tone-${i % 4}" href="#product:${p.id}"><span class="product-number">${String(i + 1).padStart(2, "0")}</span><span class="bottle"></span><span class="product-tag">${p.prescription_required ? "ПОТРІБЕН РЕЦЕПТ" : "ЩОДЕННИЙ ДОГЛЯД"}</span></a><div class="product-info"><p class="product-meta">${e(byId(categories, p.category))} · ${e(byId(manufacturers, p.manufacturer))}</p><h3><a href="#product:${p.id}">${e(p.name)}</a></h3><p class="product-description">${e(p.description || "Фармацевтичні товари для повсякденних потреб.")}</p><div class="product-foot"><span class="muted">Ціну підтвердить аптека</span>${addCartControl(p.id, p.name)}</div></div></article>`).join("") : empty("Товарів не знайдено", "Змініть пошук або приберіть фільтр.")}</div><div class="catalog-foot"><span>Сторінка ${catalogPageNumber} · показано ${products.length} із ${productData.count ?? products.length}</span><span>${catalogPageNumber > 1 ? `<button class="text-button" data-action="previous-page">← Назад</button>` : ""}${productData.next ? `<button class="text-button" data-action="next-page">Наступна сторінка →</button>` : ""}</span></div></section><section class="service-strip"><span>✳ Перевірені товари</span><span>⌂ Аптека поруч</span><span>♡ Турбота про здоров’я</span></section>`;
+  const hero = showHero ? `<section class="hero"><div class="hero-copy"><p class="eyebrow">ТУРБОТА ПОРУЧ</p><h1>Турбота щодня,<br><em>для вашого здоров’я.</em></h1><p>Необхідні товари та турбота аптеки — поруч, коли вони потрібні.</p><a class="button primary" href="#catalog">Переглянути товари <span>↗</span></a><div class="hero-proof"><span>●</span> Мережа аптек <b>·</b> Зручне замовлення</div></div><div class="hero-art" aria-label="Ілюстрація рослини"><div class="sun"></div><div class="leaf leaf-one"></div><div class="leaf leaf-two"></div><div class="plant-stem"></div><div class="jar"><span>g</span></div><div class="art-label">турбота<br>щодня</div></div></section>` : "";
+  return `${hero}<section class="content" id="catalog"><div class="section-head"><div><p class="eyebrow">КАТАЛОГ АПТЕКИ</p><h2>Оберіть потрібне</h2><p class="muted">Каталог, ціни та залишки завантажені з підключеної бази аптеки.</p></div><div class="result-note">${productData.count ?? products.length} товарів</div></div><form class="filterbar" data-form="filters"><label class="search-field"><span>⌕</span><input name="search" value="${e(catalogFilters.search)}" placeholder="Пошук за назвою або SKU" aria-label="Пошук"></label><select name="category"><option value="">Усі категорії</option>${categories.map((x) => `<option value="${x.id}" ${String(catalogFilters.category) === String(x.id) ? "selected" : ""}>${e(x.name)}</option>`).join("")}</select><select name="manufacturer"><option value="">Усі виробники</option>${manufacturers.map((x) => `<option value="${x.id}" ${String(catalogFilters.manufacturer) === String(x.id) ? "selected" : ""}>${e(x.name)}</option>`).join("")}</select><select name="pharmacy" aria-label="Аптека">${pharmacies.map((x) => `<option value="${x.id}" ${String(catalogFilters.pharmacy) === String(x.id) ? "selected" : ""}>${e(x.name)} · ${e(x.city)}</option>`).join("")}</select><button class="button secondary" type="submit">Застосувати фільтри</button></form><div class="product-grid">${products.length ? products.map((p, i) => { const stock = inventoryByProduct.get(Number(p.id)); const available = Number(stock?.available || 0); return `<article class="product-card"><a class="product-image tone-${i % 4}" href="#product:${p.id}"><span class="product-number">${String(i + 1).padStart(2, "0")}</span><span class="bottle"></span><span class="product-tag">${p.prescription_required ? "ПОТРІБЕН РЕЦЕПТ" : "ЩОДЕННИЙ ДОГЛЯД"}</span></a><div class="product-info"><p class="product-meta">${e(byId(categories, p.category))} · ${e(byId(manufacturers, p.manufacturer))}</p><h3><a href="#product:${p.id}">${e(p.name)}</a></h3><p class="product-description">${e(p.description || "Фармацевтичні товари для повсякденних потреб.")}</p><div class="product-foot"><span class="catalog-stock">${stock ? `${money(stock.unit_price)} · ${available > 0 ? `у наявності: ${available}` : "немає в наявності"}` : "немає даних про наявність"}</span>${stock && available > 0 ? addCartControl(p.id, p.name) : `<span class="muted" aria-label="Товар недоступний">Недоступно</span>`}</div></div></article>`; }).join("") : empty("Товарів не знайдено", "Змініть пошук або приберіть фільтр.")}</div><div class="catalog-foot"><span>Сторінка ${catalogPageNumber} · показано ${products.length} із ${productData.count ?? products.length}</span><span>${catalogPageNumber > 1 ? `<button class="text-button" data-action="previous-page">← Назад</button>` : ""}${productData.next ? `<button class="text-button" data-action="next-page">Наступна сторінка →</button>` : ""}</span></div></section><section class="service-strip"><span>✳ Перевірені товари</span><span>⌂ Аптека поруч</span><span>♡ Турбота про здоров’я</span></section>`;
 }
 
 async function productPage(id) {
@@ -319,7 +331,7 @@ root.addEventListener("submit", async (event) => {
   const formData = new FormData(form);
   const raw = Object.fromEntries(formData.entries());
   try {
-    if (kind === "filters") { catalogFilters = { search: raw.search.trim(), category: raw.category, manufacturer: raw.manufacturer }; catalogPageNumber = 1; render(); }
+    if (kind === "filters") { catalogFilters = { search: raw.search.trim(), category: raw.category, manufacturer: raw.manufacturer, pharmacy: raw.pharmacy || catalogFilters.pharmacy }; catalogPageNumber = 1; render(); }
     if (kind === "login") { currentUser = await auth.signIn(raw.username, raw.password); flash("Welcome back."); location.hash = currentUser.role === "ADMIN" ? "admin" : currentUser.role === "STAFF" ? "staff" : "account"; render(); }
     if (kind === "register") { currentUser = await auth.register(raw); flash("Your customer account is ready."); location.hash = "account"; render(); }
     if (kind === "profile") { await api.request("/profile/", { method: "PATCH", body: { full_name: raw.full_name, phone: raw.phone || null, preferred_pharmacy_id: raw.preferred_pharmacy_id ? Number(raw.preferred_pharmacy_id) : null } }); flash("Profile saved."); render(); }
