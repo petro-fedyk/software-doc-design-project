@@ -24,10 +24,11 @@ All paths below are relative to `/api`. The running Django URL configuration is 
 | Customer account | Read notifications | `GET /notifications/` | — | Notification array; Customer only |
 | Customer account | Mark notification read | `POST /notifications/{id}/read/` | Empty object | Updated row; Customer only |
 | Customer account | Read/create availability watch | `GET /availability-watches/`; `POST /availability-watches/` | `product_id,pharmacy_id,is_active` | Watch rows; Customer only |
-| Customer account | Read reminders | `GET /reminders/` | — | Reminder rows; Customer only (no delete endpoint exposed) |
+| Customer account | Read/create reminders | `GET /reminders/`; `POST /reminders/` | `product_id,interval_days,next_run_at,is_active` | Reminder rows; next run must be in the future; no delete endpoint exposed |
 | Customer account | Saved prescription labels | `GET /prescriptions/`; `POST /prescriptions/`; `DELETE /prescriptions/{id}/` | Create: `display_label` | Masked/demo label rows; never uploads a medical document |
 | Customer orders | Read own orders | `GET /orders/` | — | Order objects and line snapshots; Customer queryset is owner-filtered |
 | Customer orders | Simulated payment request | `POST /orders/{id}/pay/` | `idempotency_key` | Queued payment request (202); inspect status through fulfillment endpoint |
+| Staff / assigned pharmacy | Request simulated refund | `POST /orders/{id}/refund/` | `amount,reason,idempotency_key` | Queued refund request; pharmacy assignment and refundable balance checked by backend |
 | Customer orders | Cancel | `POST /orders/{id}/transition/` | `{status:"CANCELLED"}` | Updated order or API state/permission error |
 | Customer orders | Reorder | `POST /orders/{id}/reorder/` | Empty object | Copies order items to the API cart; availability is rechecked at checkout |
 | Customer orders | Payment/delivery/refund details | `GET /orders/{id}/fulfillment/` | — | Payments, delivery and refunds; only accessible orders |
