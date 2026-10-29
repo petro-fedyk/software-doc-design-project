@@ -1,0 +1,10 @@
+export const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+export const money = (value, currency = "UAH") => `${Number(value || 0).toFixed(2)} ${currency}`;
+export const listOf = (payload) => Array.isArray(payload) ? payload : payload?.results || [];
+export const button = (label, action, kind = "primary", attrs = "") => `<button class="button ${kind}" data-action="${action}" ${attrs}>${label}</button>`;
+export const empty = (title, copy) => `<div class="empty-state"><span class="empty-mark">○</span><h3>${title}</h3><p>${copy}</p></div>`;
+export const field = (label, name, type = "text", required = false, value = "") => `<label class="field"><span>${label}</span><input name="${name}" type="${type}" value="${escapeHtml(value)}" ${required ? "required" : ""}></label>`;
+export const selectField = (label, name, options, required = false) => `<label class="field"><span>${label}</span><select name="${name}" ${required ? "required" : ""}>${options.map(([value, text]) => `<option value="${escapeHtml(value)}">${escapeHtml(text)}</option>`).join("")}</select></label>`;
+export const card = (content, extra = "") => `<section class="card ${extra}">${content}</section>`;
+export const sectionHead = (eyebrow, title, note = "") => `<div class="section-head"><div><p class="eyebrow">${eyebrow}</p><h1>${title}</h1>${note ? `<p class="muted">${note}</p>` : ""}</div></div>`;
+export const table = (headers, rows) => `<div class="table-wrap"><table><thead><tr>${headers.map((h) => `<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table></div>`;
