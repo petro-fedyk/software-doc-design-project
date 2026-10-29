@@ -28,4 +28,12 @@ All work is recorded in the existing repository and branch; no commits were fabr
 
 ## Documentation finalization
 
-The implementation milestone log above links to the three actual code commits. The separate final report/documentation commit contains this log and the completion report; it does not represent an additional implementation milestone.
+The implementation milestone log above links to the actual code commits. The separate final report/documentation commit contains this log and the completion report; it does not represent an additional implementation milestone.
+
+## 2026-10-29 — Live branch availability in catalog
+
+- **Goal:** Make the public catalog show current branch price and stock from the connected API, and prevent adding items without available stock.
+- **Implementation:** Added branch selection and inventory-backed product card details; made the catalog route open without the landing hero; reset scroll on route navigation and guarded against stale asynchronous renders. No database or backend changes.
+- **Main files:** `apps/frontend/src/app.js`, `apps/frontend/styles.css`.
+- **Commit:** `99baa4d` — `Show live branch stock in pharmacy catalog`.
+- **Validation:** Six API/auth tests passed; Node syntax and `git diff --check` passed. Browser GET-only checks confirmed the selected branch, prices, and quantities from the live API. No database writes were made.

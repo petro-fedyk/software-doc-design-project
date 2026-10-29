@@ -65,11 +65,15 @@ Observed against the currently running local API on 2026-10-29:
 | `GET /api/pharmacies/` | PASS, HTTP 200, one pharmacy row |
 | `GET /api/payment-methods/` | PASS, HTTP 200, four simulated payment methods |
 | Browser `/#home` | PASS, real API catalog rendered; no browser console error observed |
+| Browser catalog stock and price | PASS, selected branch dropdown, exact API `unit_price`, and `available` quantity rendered from that branch's inventory endpoint |
+| Browser `/#catalog` | PASS, opens the catalog directly without the landing hero; route change returns to the top of the page |
 | Browser `/#product:1` | PASS, product detail rendered with API-provided branch availability, `125.00 UAH`, and `25` available |
 | Browser `/#pharmacies` | PASS, branch card rendered from API data |
 | Browser `/#login` and `/#register` | PASS, Ukrainian forms rendered; no credentials submitted |
 
 The live API currently returns three `DEMO-*` rows, including `Demo Vitamin Tablets` and a synthetic development-seed description. The single branch is named `Demo Central Pharmacy`. These are the actual rows returned by the connected database; they are not presented as real medicine records in this report. No catalog or database rows were inserted, updated, or deleted during these checks.
+
+The latest storefront now reads branch stock using `GET /api/pharmacies/{id}/inventory/`, displays its `unit_price` and `available` values on each product card, and disables adding unavailable items. The connected database still contains only the three demo products. Read-only count checks found 0 users, assignments, and orders, so authenticated customer/staff/admin flows have no existing records to demonstrate. Do not run `db/scripts/seed_learning_data.py` as a shortcut: it deletes and replaces the business-table data.
 
 ### Existing schema status
 

@@ -15,7 +15,7 @@ The user interface is plain HTML5, CSS3, and native ES modules. `index.html` is 
 
 ## Data flow and security
 
-Page functions request current API data when rendered. Mutation handlers await the server response before showing success and re-render the affected page. Checkout first requests `/checkout/quote/`, displays the server-calculated lines and totals, then sends `/api/orders/` only after the customer confirms. The place-order request includes the quoted unit prices and total; the backend validates them again under its transaction rules.
+Page functions request current API data when rendered. The catalog reads listed stock and branch prices from `/pharmacies/{id}/inventory/`; the selected pharmacy can be changed, and items without positive listed stock cannot be added from a catalog card. Mutation handlers await the server response before showing success and re-render the affected page. Checkout first requests `/checkout/quote/`, displays the server-calculated lines and totals, then sends `/api/orders/` only after the customer confirms. The place-order request includes the quoted unit prices and total; the backend validates them again under its transaction rules.
 
 Customer, staff, and admin navigation follows the role and pharmacy assignments returned by `/api/me/`. UI restrictions improve usability only; the backend remains the authority and its 401 and 403 responses are presented distinctly. Username prefixes do not affect access. Payment and shipment are explicitly simulated; the UI does not request card numbers, security codes, or cryptocurrency secrets.
 
@@ -29,4 +29,4 @@ The application uses simple hash navigation and native anchors/forms. Shared she
 
 The current API does not provide a public promotions list, a staff qualification field in the assignment list, a cart merge operation, or delete operations for general admin resources. The frontend does not simulate these. Prescription verification is shown only when `/api/me/` reports pharmacist qualification; the server can still reject an order without a prescription with a validation/conflict response.
 
-The live catalogue currently returns three `DEMO-*` synthetic seed records. The frontend displays exactly what the API returns. This data state is not represented as a real pharmaceutical catalogue.
+The live catalogue currently returns three `DEMO-*` synthetic seed records. The frontend displays exactly what the API returns and does not represent those rows as a real pharmaceutical catalogue. Route rendering resets scroll for navigation and ignores stale responses from superseded route renders.
