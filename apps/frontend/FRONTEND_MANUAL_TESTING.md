@@ -67,6 +67,7 @@ Observed against the currently running local API on 2026-10-29:
 | Browser `/#home` | PASS, real API catalog rendered; no browser console error observed |
 | Browser `/#product:1` | PASS, product detail rendered with API-provided branch availability, `125.00 UAH`, and `25` available |
 | Browser `/#pharmacies` | PASS, branch card rendered from API data |
+| Browser `/#login` and `/#register` | PASS, Ukrainian forms rendered; no credentials submitted |
 
 The live API currently returns three `DEMO-*` rows, including `Demo Vitamin Tablets` and a synthetic development-seed description. The single branch is named `Demo Central Pharmacy`. These are the actual rows returned by the connected database; they are not presented as real medicine records in this report. No catalog or database rows were inserted, updated, or deleted during these checks.
 
@@ -155,7 +156,7 @@ The last four queries will show changes only after an authorized user performs t
 | Syntax checks | PASS | Node parser commands above |
 | Guest public navigation/catalog/detail/pharmacy page | PASS | Exercised in browser with live API GETs |
 | Actual non-demo pharmaceutical catalog | BLOCKED | API currently returns only three synthetic `DEMO-*` seed records |
-| Register/login/logout and token expiration | NOT TESTED | No designated account was created or used in this read-only verification |
+| Register/login/logout and token expiration | NOT TESTED | The form views render, but no designated account was created or submitted in this read-only verification; token expiration behavior is covered only by an isolated frontend unit test |
 | Guest/customer cart writes | NOT TESTED | Would modify the current browser guest cookie or customer cart |
 | Quote and order placement/reservation/cancellation | NOT TESTED | Persistent business-row changes require the instructor's explicit test account/record workflow; DB also has pending migrations |
 | Simulated payment/refund/shipment worker outcomes | NOT TESTED | No writes or external-effect simulation was triggered |
