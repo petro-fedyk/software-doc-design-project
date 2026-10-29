@@ -4,6 +4,7 @@ services:
       context: .
       dockerfile: apps/backend/Dockerfile
     restart: unless-stopped
+    command: ['sh', '-c', 'python manage.py bootstrap_admin && exec gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --access-logfile -']
     env_file: .env
     environment:
       MYSQL_HOST: db
