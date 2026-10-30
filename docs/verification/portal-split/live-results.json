@@ -1,0 +1,295 @@
+{
+  "date": "2026-10-29 15:28:54.609404+00:00",
+  "database": "internet_pharmacy",
+  "fixture": {
+    "staff_id": 317,
+    "pharmacy_id": 162,
+    "other_pharmacy_id": 163,
+    "product_id": 165,
+    "order_id": 123
+  },
+  "checks": [
+    {
+      "request": "POST /auth/token/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /me/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /pharmacies/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /pharmacies/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 201,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /pharmacies/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /pharmacies/?page=2",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /pharmacies/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 201,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /admin/users/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /admin/users/?page=2",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /admin/users/?page=3",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /admin/users/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 201,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /admin/assignments/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /admin/assignments/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 201,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /categories/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /categories/?page=2",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /categories/?page=3",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /manufacturers/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /manufacturers/?page=2",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /products/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /products/?page=2",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /products/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 201,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /auth/register/",
+      "origin": "http://127.0.0.1:4173/api",
+      "status": 201,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /auth/token/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /auth/token/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 403,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /auth/token/",
+      "origin": "http://127.0.0.1:4173/api",
+      "status": 403,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /auth/register/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 403,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /admin/users/",
+      "origin": "http://127.0.0.1:8000/api",
+      "status": 403,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /admin/statistics/",
+      "origin": "http://127.0.0.1:8000/api",
+      "status": 403,
+      "result": "PASS"
+    },
+    {
+      "request": "PATCH /pharmacies/163/inventory/165/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 403,
+      "result": "PASS"
+    },
+    {
+      "request": "PATCH /pharmacies/162/inventory/165/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /products/165/availability/",
+      "origin": "http://127.0.0.1:4173/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /products/165/",
+      "origin": "http://127.0.0.1:4173/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "PUT /cart/",
+      "origin": "http://127.0.0.1:4173/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /checkout/quote/",
+      "origin": "http://127.0.0.1:4173/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /orders/",
+      "origin": "http://127.0.0.1:4173/api",
+      "status": 201,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /orders/123/pay/",
+      "origin": "http://127.0.0.1:4173/api",
+      "status": 202,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /orders/123/fulfillment/",
+      "origin": "http://127.0.0.1:4173/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /orders/123/fulfillment/",
+      "origin": "http://127.0.0.1:4173/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /orders/123/verify-prescription/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 403,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /orders/123/transition/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /orders/123/transition/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "POST /orders/123/transition/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /orders/123/",
+      "origin": "http://127.0.0.1:4173/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "PUT /cart/",
+      "origin": "http://127.0.0.1:4173/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /admin/statistics/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /admin/audit/",
+      "origin": "http://127.0.0.1:4174/api",
+      "status": 200,
+      "result": "PASS"
+    },
+    {
+      "request": "GET /me/",
+      "origin": "http://127.0.0.1:8000/api",
+      "status": 401,
+      "result": "PASS"
+    }
+  ]
+}

@@ -29,7 +29,7 @@ def test_first_admin_has_requested_credentials_hashed():
     users, cursor = run_command()
     data = users.create.call_args.kwargs
     assert data['username'] == 'admin' and data['role'] == 'ADMIN'
-    assert data['password'] != 'admim' and check_password('admim', data['password'])
+    assert data['password'] != 'admin' and check_password('admin', data['password'])
     assert data['is_active'] and data['is_staff']
     assert 'RELEASE_LOCK' in cursor.execute.call_args.args[0]
 

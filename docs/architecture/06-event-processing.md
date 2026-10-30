@@ -28,3 +28,6 @@ An in-memory queue loses pending events when a container restarts. A durable out
 
 ## No unnecessary complexity
 Do not build a general distributed scheduler, Kafka protocol, pub/sub server, dynamic plugin loader, or multiple worker containers. If this lightweight queue proves beyond the time budget, synchronous local Observer may be used only after explicitly revising the asynchronous requirement and documenting its limitations.
+
+## Educational card-payment scenario
+The customer portal validates the single documented fictional credential set entirely in the browser (`DEMO USER`, `0000 0000 0000 0000`, `12/30`, `000`). It discards those fields before making a request. `POST /api/orders/{id}/pay/` receives only an idempotency key and an `APPROVED`, `DECLINED`, or `TIMEOUT` scenario. The application service writes one payment and one outbox event; the event contains the scenario but no card fields. `SimulatedPaymentGateway` maps the explicit scenario to `SUCCEEDED`, `FAILED`, or `UNKNOWN`; the repository persists the result in the existing MySQL `payments` table. Replays with the same idempotency key reuse the payment and outbox event. This is educational-only: no bank API, real credentials, or money movement.

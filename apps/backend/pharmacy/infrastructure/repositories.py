@@ -41,6 +41,7 @@ class DjangoOrderRepository:
             row.fulfillment_method,
             row.grand_total,
             row.payment_method,
+            row.cancellation_reason_code,
         )
 
     def get(self, order_id, lock=False):
@@ -87,7 +88,9 @@ class DjangoOrderRepository:
 
     def save(self, order):
         m.Orders.objects.filter(id=order.id).update(
-            status=order.status, updated_at=timezone.now()
+            status=order.status,
+            cancellation_reason_code=order.cancellation_reason,
+            updated_at=timezone.now(),
         )
 
     def product_ids(self, order_id):

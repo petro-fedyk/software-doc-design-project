@@ -1,32 +1,11 @@
-# 08 — Docker Deployment Plan (Django)
+# 08 — Deployment
 
-## Runtime
-Single Django application image, deployed as **two Compose services built from that same image**: `web` (Gunicorn WSGI) and `worker` (Django management command `process_outbox`). The worker is a process, not a microservice and not a separate codebase. This avoids fragile server-startup threads and double-dispatch across WSGI workers.
+Two independent Node static/proxy processes serve Customer Portal at 4173 and Management Portal at 4174. Django/Gunicorn at 8000 and the management-command outbox worker share one backend image, one configuration and the original MySQL volume. The worker is not a separate business service.
 
-## Data
-Initially SQLite stored in a named local Docker volume, shared between `web` and `worker`; both services must run on **the same Docker host**, not two independent machines. Configure SQLite WAL and busy timeout; short transactions. If write contention proves significant, migrate to PostgreSQL and introduce a `db` Compose service; domain code remains unchanged.
+Run the existing API/worker with `docker compose -f compose.yaml -f compose.backend.yaml up --build -d`, then `node apps/start-portals.mjs`. Each frontend may instead be started separately. Optional `compose.portals.yaml` adds the two frontend services to the same Compose deployment. Frontend containers use `API_ORIGIN=http://backend:8000`; host processes use `http://127.0.0.1:8000`.
 
-## Illustrative Compose design (not yet runnable)
-```yaml
-services:
-  web:
-    build: ./apps/backend
-    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 1 --threads 4
-    ports: ["${APP_PORT:-8000}:8000"]
-    env_file: .env
-    volumes: [pharmacy_data:/app/data]
-  worker:
-    build: ./apps/backend
-    command: python manage.py process_outbox
-    env_file: .env
-    volumes: [pharmacy_data:/app/data]
-    restart: unless-stopped
-volumes:
-  pharmacy_data:
-```
+Backend startup runs `bootstrap_admin` before Gunicorn. It uses the existing schema and skips creation if any ADMIN exists. Database migrations are explicit SQL migrations; no automatic migration, database cloning or reset is performed by frontend startup.
 
-## Setup and safety
-Apply Django migrations explicitly before serving traffic; do not run concurrently in both services. Keep `SECRET_KEY` in `.env`, `DEBUG=False`, explicit `ALLOWED_HOSTS` and CSRF configuration. Never commit `.env` or real patient data. `docker compose up --build` must start the stack after setup; verify volume persistence and restart processing. Gunicorn is Linux-specific; use Docker on Windows/macOS.
+The frontend proxies provide same-origin browser access, so Django CORS wildcard configuration is unnecessary. Loopback bindings are the coursework default. Port separation does not replace RBAC. TLS, VPN/private networks and deployment allowlists are future production options.
 
-## Portability claims
-Moving to another host preserves source and schema through Docker, but copying a live SQLite volume requires a proper SQLite backup or stopped service. PostgreSQL migration needs DB configuration, schema migrations, data export/import, and transaction/locking tests.
+See [exact start/stop commands](../portals/DEMONSTRATION.md) and the editable [portal diagrams](../diagrams/Internet_Pharmacy_Portals.drawio).

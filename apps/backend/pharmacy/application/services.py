@@ -44,12 +44,7 @@ CREATORS = {
     "POSTAL": PostalCreator(),
 }
 METHODS = {"CARD", "BANK_TRANSFER", "CASH_ON_DELIVERY", "ONLINE_GATEWAY"}
-PROVIDERS = {
-    "CARD": "CARD_PROCESSOR",
-    "BANK_TRANSFER": "BANK_TRANSFER",
-    "CASH_ON_DELIVERY": "CASH_ON_DELIVERY",
-    "ONLINE_GATEWAY": "PAYMENT_GATEWAY",
-}
+DEMO_PAYMENT_PROVIDER = "EDUCATIONAL_SIMULATOR"
 
 
 class OrderApplicationService:
@@ -135,20 +130,33 @@ class OrderApplicationService:
             order = uow.orders.create(draft, command["payment_method"], recipient)
             uow.loyalty.redeem(order, draft.points_redeemed)
             uow.inventory.reserve(order.id)
-            order.transition("CONFIRMED")
             uow.orders.save(order)
             uow.outbox.add(
-                "order.confirmed", {"order_id": order.id, "status": "CONFIRMED"}
+                "order.pending_confirmation",
+                {"order_id": order.id, "status": "PENDING_CONFIRMATION"},
             )
             uow.audit(actor.id, "ORDER_PLACED", order.id, {})
             uow.commit()
             return asdict(order)
 
     @retry_mysql_deadlock()
-    def transition(self, actor, order_id, target):
+    def transition(self, actor, order_id, target, cancellation_reason=None):
         with self.uow_factory() as uow:
             order = uow.orders.get(order_id, lock=True)
             actor.access(order)
+            if target == "CANCELLED":
+                allowed_reasons = {
+                    "OUT_OF_STOCK", "PRICE_CHANGED", "PRESCRIPTION_ISSUE",
+                    "DELIVERY_UNAVAILABLE", "OTHER",
+                }
+                if actor.role == "CUSTOMER":
+                    order.cancellation_reason = "CUSTOMER_REQUEST"
+                elif cancellation_reason not in allowed_reasons:
+                    raise DomainError("CANCELLATION_REASON_REQUIRED", status=400)
+                else:
+                    order.cancellation_reason = cancellation_reason
+            elif cancellation_reason:
+                raise DomainError("CANCELLATION_REASON_ONLY_FOR_CANCEL", status=400)
             if target != "CANCELLED":
                 actor.branch(order.pharmacy_id)
             if target == order.status:
@@ -196,10 +204,15 @@ class OrderApplicationService:
                 )
             uow.orders.save(order)
             payload = {"order_id": order.id, "status": target}
+            if order.cancellation_reason:
+                payload["cancellation_reason_code"] = order.cancellation_reason
             if target == "COMPLETED":
                 payload["loyalty_points"] = uow.loyalty.calculate_points(order)
             uow.outbox.add("order." + target.lower(), payload)
-            uow.audit(actor.id, "ORDER_" + target, order.id, {})
+            uow.audit(
+                actor.id, "ORDER_" + target, order.id,
+                {"cancellation_reason_code": order.cancellation_reason} if target == "CANCELLED" else {},
+            )
             uow.commit()
             return asdict(order)
 
@@ -247,7 +260,7 @@ class PaymentApplicationService:
         self.uow_factory = uow_factory
 
     @retry_mysql_deadlock()
-    def request(self, actor, order_id, key):
+    def request(self, actor, order_id, key, demo_scenario="APPROVED"):
         with self.uow_factory() as uow:
             order = uow.orders.get(order_id, lock=True)
             actor.access(order)
@@ -255,12 +268,16 @@ class PaymentApplicationService:
                 raise DomainError("ORDER_NOT_PAYABLE")
             if order.payment_method == "CASH_ON_DELIVERY":
                 raise DomainError("CASH_RECORDED_AT_HANDOVER")
-            payment = uow.payments.request(order, key, PROVIDERS[order.payment_method])
+            payment = uow.payments.request(order, key, DEMO_PAYMENT_PROVIDER)
             event_id = str(uuid5(NAMESPACE_URL, f"payment:{payment['id']}"))
             if not uow.outbox.find(event_id):
                 uow.outbox.add(
                     "payment.requested",
-                    {"payment_id": payment["id"], "order_id": order.id},
+                    {
+                        "payment_id": payment["id"],
+                        "order_id": order.id,
+                        "demo_scenario": demo_scenario,
+                    },
                     event_id,
                 )
             uow.commit()
@@ -370,6 +387,7 @@ class EventApplicationService:
         self.notification_subscriber = NotificationSubscriber(uow_factory)
         self.loyalty_subscriber = LoyaltySubscriber(uow_factory)
         for event in (
+            "order.pending_confirmation",
             "order.confirmed",
             "order.processing",
             "order.ready_for_pickup",
@@ -406,7 +424,10 @@ class EventApplicationService:
                 uow.payments.cancel_pending(order.id)
             else:
                 result = self.gateway.authorize(
-                    str(order.id), payment["amount"], payment["idempotency_key"]
+                    str(order.id),
+                    payment["amount"],
+                    payment["idempotency_key"],
+                    scenario=payload.get("demo_scenario"),
                 )
                 uow.payments.settle(payment["id"], result)
             uow.commit()

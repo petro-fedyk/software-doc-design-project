@@ -27,8 +27,8 @@ class RegisterSerializer(LoginSerializer):
     full_name = s.CharField(max_length=200)
 
     def validate_password(self, value):
-        if len(value) < 12:
-            raise s.ValidationError("Use at least 12 characters.")
+        if len(value) < 4:
+            raise s.ValidationError("Use at least 4 characters.")
         return value
 
 
@@ -75,6 +75,7 @@ class PlaceSerializer(QuoteSerializer):
 class TransitionSerializer(StrictSerializer):
     status = s.ChoiceField(
         choices=[
+            "CONFIRMED",
             "PROCESSING",
             "READY_FOR_PICKUP",
             "AWAITING_SHIPMENT",
@@ -82,10 +83,17 @@ class TransitionSerializer(StrictSerializer):
             "CANCELLED",
         ]
     )
+    cancellation_reason_code = s.ChoiceField(
+        choices=["OUT_OF_STOCK", "PRICE_CHANGED", "PRESCRIPTION_ISSUE", "DELIVERY_UNAVAILABLE", "OTHER"],
+        required=False,
+    )
 
 
 class PaymentSerializer(StrictSerializer):
     idempotency_key = s.CharField(max_length=80, min_length=8)
+    demo_scenario = s.ChoiceField(
+        choices=["APPROVED", "DECLINED", "TIMEOUT"], required=False, default="APPROVED"
+    )
 
 
 class RefundSerializer(PaymentSerializer):
@@ -257,7 +265,7 @@ class ProductPageSerializer(s.Serializer):
 class PharmacySerializer(s.ModelSerializer):
     class Meta:
         model = m.Pharmacies
-        fields = ["id", "code", "name", "address", "city", "phone", "is_active"]
+        fields = ["id", "code", "name", "address", "city", "phone", "image_url", "image_source_url", "is_active"]
 
 
 class OrderSerializer(s.ModelSerializer):
@@ -271,6 +279,7 @@ class OrderSerializer(s.ModelSerializer):
             "customer_id",
             "pharmacy_id",
             "status",
+            "cancellation_reason_code",
             "fulfillment_method",
             "payment_method",
             "subtotal",
@@ -379,7 +388,7 @@ class SavedPrescriptionSerializer(StrictSerializer):
 class UserAdminSerializer(s.ModelSerializer):
     password = s.CharField(
         write_only=True,
-        min_length=12,
+        min_length=4,
         max_length=128,
         required=False,
         trim_whitespace=False,

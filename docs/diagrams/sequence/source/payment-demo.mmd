@@ -1,0 +1,22 @@
+sequenceDiagram
+    actor Customer
+    participant Portal as Customer Portal
+    participant API as Django API
+    participant Service as PaymentApplicationService
+    participant DB as Existing MySQL
+    participant Worker as Outbox Worker
+    participant Gateway as SimulatedPaymentGateway
+
+    Customer->>Portal: Enter fictional credentials and choose scenario
+    Portal->>Portal: Validate exact test tuple; clear card fields
+    Portal->>API: POST order pay {idempotency_key, demo_scenario}
+    API->>Service: Verify order ownership and scenario
+    Service->>DB: Create/reuse Payment; add payment.requested outbox event
+    API-->>Portal: 202 Accepted, payment ID/status
+    Worker->>DB: Claim outbox event
+    Worker->>Gateway: authorize(order, amount, idempotency_key, scenario)
+    Gateway-->>Worker: SUCCEEDED / FAILED / UNKNOWN
+    Worker->>DB: Persist payment state; complete event
+    Portal->>API: GET order fulfillment
+    API-->>Portal: Payment state and provider=EDUCATIONAL_SIMULATOR
+    Portal-->>Customer: Show simulated result; no real transaction

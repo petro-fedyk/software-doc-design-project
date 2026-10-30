@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.conf import settings
 from django.contrib.auth.hashers import make_password, check_password
 from django.db import transaction, connection
@@ -325,11 +326,13 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
     @action(detail=True, methods=["post"])
     def transition(self, request, pk=None):
         self.get_object()
+        data = validated(s.TransitionSerializer, request)
         return Response(
             Services().orders.transition(
                 actor(request.user),
                 int(pk),
-                validated(s.TransitionSerializer, request)["status"],
+                data["status"],
+                data.get("cancellation_reason_code"),
             )
         )
 
@@ -337,11 +340,13 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
     @action(detail=True, methods=["post"])
     def pay(self, request, pk=None):
         self.get_object()
+        data = validated(s.PaymentSerializer, request)
         return Response(
             Services().payments.request(
                 actor(request.user),
                 int(pk),
-                validated(s.PaymentSerializer, request)["idempotency_key"],
+                data["idempotency_key"],
+                data["demo_scenario"],
             ),
             status=202,
         )
@@ -562,11 +567,22 @@ class LoyaltyView(APIView):
     @extend_schema(responses=OpenApiTypes.OBJECT)
     def get(self, request):
         actor(request.user).customer()
+        account = m.LoyaltyAccounts.objects.filter(customer=request.user).select_related("tier").first()
+        if account and account.tier.code == "PREMIUM" and account.premium_active_until and account.premium_active_until <= timezone.now() and account.premium_status == "ACTIVE":
+            account.premium_status = "EXPIRED"
+            account.tier = m.LoyaltyTiers.objects.get(code="STANDARD")
+            account.save(update_fields=["premium_status", "tier"])
         return Response(
             {
-                "account": m.LoyaltyAccounts.objects.filter(customer=request.user)
-                .values("balance", "tier__code")
-                .first(),
+                "account": ({
+                    "balance": account.balance,
+                    "tier__code": account.tier.code,
+                    "social_document_number": account.social_document_number,
+                    "premium_status": account.premium_status,
+                    "premium_active_until": account.premium_active_until,
+                    "premium_monthly_price": account.premium_monthly_price,
+                    "premium_payment_status": account.premium_payment_status,
+                } if account else None),
                 "transactions": list(
                     m.LoyaltyTransactions.objects.filter(account__customer=request.user)
                     .order_by("-id")
@@ -574,6 +590,60 @@ class LoyaltyView(APIView):
                 ),
             }
         )
+
+    @extend_schema(request=OpenApiTypes.OBJECT, responses=OpenApiTypes.OBJECT)
+    @transaction.atomic
+    def post(self, request):
+        actor(request.user).customer()
+        tier_code = str(request.data.get("tier", "")).upper()
+        if tier_code not in {"STANDARD", "SOCIAL", "PREMIUM"}:
+            raise serializers.ValidationError({"tier": "Оберіть STANDARD, SOCIAL або PREMIUM."})
+        account = m.LoyaltyAccounts.objects.select_for_update().select_related("tier").filter(customer=request.user).first()
+        if account is None:
+            raise serializers.ValidationError("Для облікового запису не знайдено бонусний рахунок.")
+        selected_tier = m.LoyaltyTiers.objects.filter(code=tier_code).first()
+        if selected_tier is None:
+            raise serializers.ValidationError("Обрану програму лояльності не налаштовано.")
+        if tier_code == "SOCIAL":
+            document_number = str(request.data.get("document_number", ""))
+            if not document_number.isdigit() or len(document_number) != 6:
+                raise serializers.ValidationError({"document_number": "Введіть рівно 6 цифр документа."})
+            account.social_document_number = document_number
+            account.tier = selected_tier
+            account.premium_status = "INACTIVE"
+            account.premium_active_until = None
+            account.save(update_fields=["social_document_number", "tier", "premium_status", "premium_active_until"])
+        elif tier_code == "PREMIUM":
+            if request.data.get("confirm_subscription") is not True:
+                raise serializers.ValidationError({"confirm_subscription": "Потрібне підтвердження підписки."})
+            key = str(request.data.get("idempotency_key", ""))
+            scenario = str(request.data.get("demo_scenario", ""))
+            if not key or len(key) > 100:
+                raise serializers.ValidationError({"idempotency_key": "Потрібен ключ запиту довжиною до 100 символів."})
+            if scenario not in {"APPROVED", "DECLINED", "TIMEOUT"}:
+                raise serializers.ValidationError({"demo_scenario": "Оберіть APPROVED, DECLINED або TIMEOUT."})
+            if account.premium_payment_key == key:
+                return Response({"tier": account.tier.code, "premium_status": account.premium_status, "premium_active_until": account.premium_active_until, "premium_monthly_price": account.premium_monthly_price, "payment_status": account.premium_payment_status, "payment_reference": account.premium_payment_reference, "idempotent_replay": True})
+            gateway_result = Services().events.gateway.authorize(
+                f"PREMIUM-{request.user.id}", account.premium_monthly_price, key, scenario
+            )
+            account.premium_payment_key = key
+            account.premium_payment_status = gateway_result["status"]
+            account.premium_payment_reference = gateway_result["reference"]
+            fields_to_save = ["premium_payment_key", "premium_payment_status", "premium_payment_reference"]
+            if gateway_result["status"] == "SUCCEEDED":
+                now = timezone.now()
+                account.premium_active_until = max(now, account.premium_active_until or now) + timedelta(days=30)
+                account.tier = selected_tier
+                account.premium_status = "ACTIVE"
+                fields_to_save.extend(["tier", "premium_status", "premium_active_until"])
+            account.save(update_fields=fields_to_save)
+        else:
+            account.tier = selected_tier
+            account.premium_status = "INACTIVE"
+            account.premium_active_until = None
+            account.save(update_fields=["tier", "premium_status", "premium_active_until"])
+        return Response({"tier": account.tier.code, "premium_status": account.premium_status, "premium_active_until": account.premium_active_until, "premium_monthly_price": account.premium_monthly_price, "payment_status": getattr(account, "premium_payment_status", "NOT_PAID"), "payment_reference": getattr(account, "premium_payment_reference", None)})
 
 
 class UserAdminViewSet(AdminViewSet):
@@ -712,9 +782,9 @@ class GuestCartView(APIView):
         from django.core import signing
 
         data = validated(s.CartChangeSerializer, request)
-        get_object_or_404(m.Products, id=data["product_id"], is_active=True)
         items = self.read(request)
         if data["quantity"]:
+            get_object_or_404(m.Products, id=data["product_id"], is_active=True)
             items[str(data["product_id"])] = data["quantity"]
         else:
             items.pop(str(data["product_id"]), None)

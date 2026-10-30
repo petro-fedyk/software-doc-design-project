@@ -5,10 +5,46 @@ from unittest.mock import patch
 import pytest
 from rest_framework.test import APIRequestFactory, force_authenticate
 
-from pharmacy.api.views import CartView
+from pharmacy.api.views import CartView, GuestCartView
+from pharmacy.api.serializers import CartChangeSerializer
 from pharmacy.application.services import CustomerApplicationService, EventApplicationService
 from pharmacy.infrastructure.repositories import DjangoEngagementRepository
 from pharmacy import models as m
+
+
+def test_guest_merge_accepts_unavailable_product_flag():
+    serializer = CartChangeSerializer(data={
+        "product_id": 2, "quantity": 1, "allow_unavailable": True,
+    })
+    assert serializer.is_valid(), serializer.errors
+    assert serializer.validated_data["allow_unavailable"] is True
+
+
+def test_guest_cart_removes_inactive_product_without_catalog_lookup():
+    from django.core import signing
+
+    request = APIRequestFactory().put(
+        "/api/guest-cart/", {"product_id": 2, "quantity": 0}, format="json"
+    )
+    request.COOKIES["guest_cart"] = signing.dumps({"2": 1, "90": 3}, salt="guest-cart")
+    with patch("pharmacy.api.views.get_object_or_404") as lookup:
+        response = GuestCartView.as_view()(request)
+    assert response.status_code == 200
+    assert response.data == {"items": {"90": 3}}
+    assert signing.loads(response.cookies["guest_cart"].value, salt="guest-cart") == {"90": 3}
+    lookup.assert_not_called()
+
+
+def test_guest_cart_still_rejects_adding_inactive_product():
+    from django.http import Http404
+
+    request = APIRequestFactory().put(
+        "/api/guest-cart/", {"product_id": 2, "quantity": 1}, format="json"
+    )
+    with patch("pharmacy.api.views.get_object_or_404", side_effect=Http404) as lookup:
+        response = GuestCartView.as_view()(request)
+    assert response.status_code == 404
+    lookup.assert_called_once_with(m.Products, id=2, is_active=True)
 
 
 @pytest.mark.parametrize("root", [[], ["unexpected"], None, "text", 7])

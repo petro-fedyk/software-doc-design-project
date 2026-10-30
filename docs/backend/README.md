@@ -25,11 +25,11 @@ The Compose overlay adds `backend` and `worker` and preserves the existing datab
 docker compose -f compose.yaml -f compose.backend.yaml stop backend worker
 ```
 
-No frontend or Django Admin UI is installed. Administrative functions are authenticated REST endpoints. This avoids creating Django auth, session, content-type, or admin-log tables in the approved schema.
+Two Vanilla JS portals now use these REST endpoints: customer on 4173 and management on 4174. Django Admin is not installed. No Django auth, session, content-type or admin-log tables are introduced. See [portal architecture](../portals/ARCHITECTURE.md).
 
 ## Accounts and authorization
 
-The Phase 1 seed accounts intentionally have unusable passwords. Register a customer through `POST /api/auth/register/`, or create an operator account with a private password prompt:
+The historical Phase 1 seed accounts have unusable passwords. The local coursework startup now runs `bootstrap_admin`: it creates `admin` with password `admin` only when no ADMIN exists and never resets existing credentials. For the already created local coursework admin, run `python manage.py set_coursework_admin_password` to set that password explicitly. Register a customer through `POST /api/auth/register/`, or create an operator account with a private password prompt:
 
 ```bash
 docker compose -f compose.yaml -f compose.backend.yaml exec backend \

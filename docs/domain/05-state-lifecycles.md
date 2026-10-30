@@ -18,13 +18,15 @@ Allowed cancellation from pending, confirmed, processing and ready (subject to p
 | SHIPPED | Delivery confirmed | COMPLETED | Finalize and loyalty event |
 | Eligible nonterminal state | Cancellation allowed | CANCELLED | Release reservations, initiate refund if necessary |
 
+Newly placed customer orders remain in `PENDING_CONFIRMATION` until pharmacy staff or an administrator confirms them. Staff cancellation requires one reason code: `OUT_OF_STOCK`, `PRICE_CHANGED`, `PRESCRIPTION_ISSUE`, `DELIVERY_UNAVAILABLE`, or `OTHER`. The code is retained on the order and returned in customer order history. Customer-initiated cancellation is recorded as `CUSTOMER_REQUEST`.
+
 **Payment condition:** For prepaid orders, fulfilment requires successful payment; configurable pay-at-pickup permits later settlement. In either case completion must respect the selected payment policy.
 
 ## Reservation
 `CREATED → ACTIVE → FULFILLED`; `ACTIVE → RELEASED` on cancellation; `ACTIVE → EXPIRED` if time runs out. All terminal paths decrement the reserved counter exactly once. Reservation expiry handling must not independently cancel already shipped orders.
 
 ## Payment
-`PENDING → PROCESSING → SUCCEEDED` or `FAILED`; a payment attempt may also be `CANCELLED`. Refunds have their own lifecycle and do not retroactively change the captured payment into an unpaid one. Only trusted sandbox confirmation changes `Payment.status` to `SUCCEEDED`.
+`PENDING → SUCCEEDED` (APPROVED), `FAILED` (DECLINED), or `UNKNOWN` (TIMEOUT) through the educational adapter. These are simulated outcomes, not bank authorizations. Refunds have their own lifecycle and do not retroactively change the captured payment into an unpaid one. Payment does not independently advance the order's fulfilment state; existing staff transitions remain subject to the payment gate.
 
 ## Shipment
 `CREATED → PREPARING → SHIPPED → DELIVERED`; exceptions may lead to `EXCEPTION` and subsequently resolution. No `Shipment` for pickup orders by default.

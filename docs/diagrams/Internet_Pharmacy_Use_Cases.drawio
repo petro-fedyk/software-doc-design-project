@@ -1268,4 +1268,55 @@
             </root>
         </mxGraphModel>
     </diagram>
+<diagram id="uc-portals-and-roles" name="UC portals and roles">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1400" pageHeight="1000">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="guest" value="Guest / Customer" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8f1eb;strokeColor=#3b7058;fontSize=15;shape=umlActor;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="120" width="180" height="80" />
+        </mxCell>
+        <mxCell id="staff" value="Assigned STAFF" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8f1eb;strokeColor=#3b7058;fontSize=15;shape=umlActor;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="440" width="180" height="80" />
+        </mxCell>
+        <mxCell id="admin" value="ADMIN" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8f1eb;strokeColor=#3b7058;fontSize=15;shape=umlActor;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="40" y="710" width="180" height="80" />
+        </mxCell>
+        <mxCell id="customer" value="Customer Portal :4173&lt;br&gt;Catalog · registration · cart&lt;br&gt;Checkout · orders · profile · loyalty" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8f1eb;strokeColor=#3b7058;fontSize=15;ellipse;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="340" y="90" width="450" height="150" />
+        </mxCell>
+        <mxCell id="work" value="Management Portal :4174&lt;br&gt;Inventory · local prices · order processing&lt;br&gt;Prescription decisions only with qualification" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8f1eb;strokeColor=#3b7058;fontSize=15;ellipse;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="340" y="400" width="450" height="150" />
+        </mxCell>
+        <mxCell id="network" value="Management Portal :4174&lt;br&gt;Users · assignments · catalog · promotions&lt;br&gt;Loyalty · delivery rules · network audit" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8f1eb;strokeColor=#3b7058;fontSize=15;ellipse;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="340" y="680" width="450" height="150" />
+        </mxCell>
+        <mxCell id="rbac" value="Django enforcement&lt;br&gt;Customer ownership&lt;br&gt;Active pharmacy assignment&lt;br&gt;Independent pharmacist qualification" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8f1eb;strokeColor=#3b7058;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="950" y="360" width="300" height="180" />
+        </mxCell>
+        <mxCell id="guestcustomer" value="customer functions" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=13;" edge="1" parent="1" source="guest" target="customer">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="staffwork" value="assigned pharmacy" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=13;" edge="1" parent="1" source="staff" target="work">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="adminnetwork" value="network administration" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=13;" edge="1" parent="1" source="admin" target="network">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="adminwork" value="operational access; no automatic pharmacist status" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=13;" edge="1" parent="1" source="admin" target="work">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="customerrbac" value="JWT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=13;" edge="1" parent="1" source="customer" target="rbac">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="workrbac" value="JWT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=13;" edge="1" parent="1" source="work" target="rbac">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="networkrbac" value="JWT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontSize=13;" edge="1" parent="1" source="network" target="rbac">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
 </mxfile>

@@ -11,7 +11,7 @@ All paths below are relative to `/api`. The running Django URL configuration is 
 | Product detail / any | Branch availability and price | `GET /products/{id}/availability/` | — | Array of active listed branch, price, available quantity |
 | Pharmacy list / any | Browse active branches | `GET /pharmacies/` | — | Pharmacy page/array |
 | Pharmacy list / any | Listed branch inventory | `GET /pharmacies/{pharmacy_id}/inventory/` | — | Public inventory array; Staff/Admin receives full projection only for an authorized branch |
-| Authentication / Guest | Register | `POST /auth/register/` | `username,email,full_name,password` (password 12+ chars) | `access,expires_in`; creates a Customer through the existing API |
+| Authentication / Guest | Register | `POST /auth/register/` | `username,email,full_name,password` (password 4+ chars) | `access,expires_in`; creates a Customer through the existing API |
 | Authentication / Guest | Sign in | `POST /auth/token/` | `username,password` | `access,expires_in`; invalid credentials return 401 |
 | Any signed-in role | Resolve identity/role | `GET /me/` | Bearer token | `id,username,email,role,pharmacy_ids,pharmacist` |
 | Guest cart / Guest | Read/update cart | `GET /guest-cart/`; `PUT /guest-cart/` | `product_id,quantity` | API-backed guest cart; quantity zero removes the line |
@@ -40,7 +40,7 @@ All paths below are relative to `/api`. The running Django URL configuration is 
 | Staff portal | Branch statistics/audit | `GET /pharmacies/{id}/statistics/`; `GET /pharmacies/{id}/audit/` | — | Branch-limited statistics/audit rows |
 | Admin portal / Admin | Network statistics/audit | `GET /admin/statistics/`; `GET /admin/audit/` | — | Aggregate totals/statuses and audit rows |
 | Admin portal / Admin | CRUD operations (create/read/update) | `GET,POST,PATCH /pharmacies/`, `/products/`, `/categories/`, `/manufacturers/` | Resource serializer fields; no delete method exists | API response; Admin required for writes |
-| Admin portal / Admin | User management | `GET,POST,PATCH /admin/users/` | `username,email,role,is_active`; create also requires password (12+ chars) | User rows; backend hashes passwords; no user delete operation |
+| Admin portal / Admin | User management | `GET,POST,PATCH /admin/users/` | `username,email,role,is_active`; create also requires password (4+ chars) | User rows; backend hashes passwords; no user delete operation |
 | Admin portal / Admin | Staff assignments | `GET,POST,PATCH /admin/assignments/` | `user,pharmacy,is_active` | Assignment rows; assigned user must be active Staff |
 | Admin portal / Admin | Promotions/products | `GET,POST,PATCH /admin/promotions/`; `GET,POST,PATCH /admin/promotion-products/` | Promotion serializer fields; link uses `promotion,product` | Promotion/link rows; write is Admin-only |
 | Admin portal / Admin | Loyalty tiers | `GET,POST,PATCH /admin/loyalty-tiers/` | `code,bonus_rate,discount_rate` | Standard/Social/Premium tier rows; backend validates rates and tier codes |

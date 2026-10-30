@@ -1,10 +1,8 @@
-flowchart TB
-  B[Browser HTML CSS JS] --> V[Django Views and JSON REST]
-  V --> A[Application Use Cases]
-  A --> D[Pure Python Domain]
-  A --> P[Ports and UnitOfWork]
-  I[Django ORM Infrastructure] -. implements .-> P
-  I --> DB[(SQLite or PostgreSQL)]
-  W[Outbox Management Command] --> I
-  C[Composition Root] --> A
-  C --> I
+flowchart TD
+  Customer[Customer Portal :4173] -->|same-origin API proxy / JWT| API[Django REST API :8000]
+  Management[Management Portal :4174] -->|same-origin API proxy / JWT| API
+  API --> RBAC[Roles / ownership / pharmacy assignments / pharmacist qualification]
+  RBAC --> Services[Application services / domain patterns]
+  Services --> UOW[Repositories / Unit of Work / Django ORM]
+  UOW --> DB[(Original MySQL internet_pharmacy)]
+  Worker[Outbox worker / same backend code] --> DB

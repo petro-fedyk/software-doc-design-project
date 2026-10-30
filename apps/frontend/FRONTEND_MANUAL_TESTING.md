@@ -99,6 +99,7 @@ Use only existing, explicitly designated coursework accounts and records. Do not
 3. Choose a pharmacy, fulfilment mode, and simulated payment method. For delivery, supply a recipient and destination.
 4. Request a quote. Review the API-calculated line prices and total; confirm only if you intend to create a persistent order and reserve stock.
 5. In order history, review status, payment, delivery, refund, cancel, and reorder actions. Payment and shipment are simulated.
+6. For a CARD order, choose **Оплатити** and use only `DEMO USER`, `0000 0000 0000 0000`, `12/30`, `000`. Run APPROVED, DECLINED, and TIMEOUT on separate designated orders. Confirm the API request contains only `idempotency_key` and `demo_scenario`; never submit real credentials. In MySQL, inspect `payments.status`, `provider = EDUCATIONAL_SIMULATOR`, and the outbox scenario. Verify no card-number/CVV columns or values are present in payment/outbox rows or backend logs.
 6. Review and update profile, preferences, loyalty transactions, notification read state, saved prescription labels, watches, and reminders.
 
 ### Staff

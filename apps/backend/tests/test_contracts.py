@@ -65,9 +65,9 @@ def test_shared_order_repository_roundtrip_and_detached_entities(adapter):
     result = OrderApplicationService(factory).place(actor, command)
     with factory() as uow:
         order = uow.orders.get(result["id"])
-        assert order.total == Decimal("200.00") and order.status == "CONFIRMED"
+        assert order.total == Decimal("200.00") and order.status == "PENDING_CONFIRMATION"
         order.status = "PROCESSING"
-        assert uow.orders.get(order.id).status == "CONFIRMED"
+        assert uow.orders.get(order.id).status == "PENDING_CONFIRMATION"
         uow.orders.save(order)
         uow.commit()
     with factory() as uow:
@@ -83,7 +83,7 @@ def test_shared_unit_of_work_rollback_and_inventory_contract(adapter):
         uow.orders.save(order)
         uow.outbox.add("will.rollback", {})
     with factory() as uow:
-        assert uow.orders.get(result["id"]).status == "CONFIRMED"
+        assert uow.orders.get(result["id"]).status == "PENDING_CONFIRMATION"
         assert (
             uow.inventory.offer(
                 command["pharmacy_id"], command["items"][0]["product_id"]

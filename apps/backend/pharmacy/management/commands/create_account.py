@@ -19,9 +19,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         password = getpass("Password: ")
-        if len(password) < 12 or password != getpass("Repeat password: "):
+        if len(password) < 4 or password != getpass("Repeat password: "):
             raise CommandError(
-                "Passwords must match and contain at least 12 characters."
+                "Passwords must match and contain at least 4 characters."
             )
         if Users.objects.filter(username=options["username"]).exists():
             raise CommandError("Username already exists.")

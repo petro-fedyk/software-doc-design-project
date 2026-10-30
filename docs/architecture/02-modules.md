@@ -1,3 +1,5 @@
+> Current frontend architecture (2026-10-29): two independent portals, one Django API and one MySQL database. See [portal requirements, sessions and roles](../portals/ARCHITECTURE.md) and [page/API responsibility matrix](../portals/PAGE_API_MATRIX.md). Historical framework/database deployment assumptions below are superseded by that implementation.
+
 # 02 — Modules and Ownership
 
 | Module | Owns | Primary operations | Outbound collaboration |

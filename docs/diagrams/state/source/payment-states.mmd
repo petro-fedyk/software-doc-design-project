@@ -1,10 +1,11 @@
 stateDiagram-v2
- [*] --> PENDING
- PENDING --> PROCESSING: start payment attempt
- PROCESSING --> SUCCEEDED: trusted sandbox confirmation
- PROCESSING --> FAILED: provider failure
- PENDING --> CANCELLED: user abort
+ [*] --> PENDING: API accepted scenario
+ PENDING --> SUCCEEDED: APPROVED from educational adapter
+ PENDING --> FAILED: DECLINED from educational adapter
+ PENDING --> UNKNOWN: TIMEOUT from educational adapter
+ PENDING --> FAILED: Order cancelled
  SUCCEEDED --> [*]
  FAILED --> [*]
- CANCELLED --> [*]
+ UNKNOWN --> [*]: no authorization is claimed
+ note right of SUCCEEDED: Educational outcome only; no money moved
  note right of SUCCEEDED: Refund has a separate lifecycle

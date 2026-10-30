@@ -4,9 +4,9 @@ import jwt
 from django.conf import settings
 from django.utils import timezone
 from pharmacy import models as m
+from pharmacy.api.serializers import PaymentSerializer
 from pharmacy.composition import Services
 from pharmacy.infrastructure.worker import OutboxWorker
-from pharmacy.infrastructure.providers import SimulatedPaymentGateway
 
 
 def command(r, rx=False, method="PICKUP", payment="CARD"):
@@ -65,7 +65,7 @@ def test_complete_checkout_payment_loyalty_and_replay(records, client_for):
     assert m.Payments.objects.get(order_id=identifier).status == "PENDING"
     drain()
     assert m.Payments.objects.get(order_id=identifier).status == "SUCCEEDED"
-    for status in ("PROCESSING", "READY_FOR_PICKUP", "COMPLETED"):
+    for status in ("CONFIRMED", "PROCESSING", "READY_FOR_PICKUP", "COMPLETED"):
         response = staff.post(
             f"/api/orders/{identifier}/transition/", {"status": status}, format="json"
         )
@@ -91,6 +91,84 @@ def test_complete_checkout_payment_loyalty_and_replay(records, client_for):
         ).status_code
         == 409
     )
+
+
+def test_customer_can_select_social_or_premium_loyalty(records, client_for):
+    customer = client_for(records["customer"])
+    social = m.LoyaltyTiers.objects.create(
+        code="SOCIAL", discount_rate=".10", bonus_rate=".05"
+    )
+    premium = m.LoyaltyTiers.objects.create(
+        code="PREMIUM", discount_rate=".15", bonus_rate=".10"
+    )
+
+    invalid = customer.post(
+        "/api/loyalty/", {"tier": "SOCIAL", "document_number": "12345x"}, format="json"
+    )
+    assert invalid.status_code == 400
+    valid = customer.post(
+        "/api/loyalty/", {"tier": "SOCIAL", "document_number": "123456"}, format="json"
+    )
+    assert valid.status_code == 200
+    account = m.LoyaltyAccounts.objects.get(customer=records["customer"])
+    assert account.tier_id == social.id
+    assert account.social_document_number == "123456"
+
+    unconfirmed = customer.post(
+        "/api/loyalty/", {"tier": "PREMIUM", "confirm_subscription": False}, format="json"
+    )
+    assert unconfirmed.status_code == 400
+    subscribed = customer.post(
+        "/api/loyalty/",
+        {
+            "tier": "PREMIUM", "confirm_subscription": True,
+            "idempotency_key": "premium-test-key-123", "demo_scenario": "APPROVED",
+        },
+        format="json",
+    )
+    assert subscribed.status_code == 200
+    assert subscribed.data["payment_status"] == "SUCCEEDED"
+    account.refresh_from_db()
+    assert account.tier_id == premium.id
+    assert account.premium_status == "ACTIVE"
+    assert account.premium_active_until > timezone.now()
+
+
+def test_declined_premium_payment_does_not_activate_tier(records, client_for):
+    customer = client_for(records["customer"])
+    m.LoyaltyTiers.objects.create(code="PREMIUM", discount_rate=".15", bonus_rate=".10")
+    response = customer.post(
+        "/api/loyalty/",
+        {
+            "tier": "PREMIUM", "confirm_subscription": True,
+            "idempotency_key": "premium-declined-key", "demo_scenario": "DECLINED",
+        },
+        format="json",
+    )
+    assert response.status_code == 200, response.data
+    assert response.data["payment_status"] == "FAILED"
+    account = m.LoyaltyAccounts.objects.get(customer=records["customer"])
+    assert account.tier.code == "STANDARD"
+    assert account.premium_status == "INACTIVE"
+
+
+def test_staff_cancellation_reason_is_required_and_visible_to_customer(records, client_for):
+    customer = client_for(records["customer"])
+    staff = client_for(records["staff"])
+    order_id = create(customer, records)
+    assert m.Orders.objects.get(id=order_id).status == "PENDING_CONFIRMATION"
+    path = f"/api/orders/{order_id}/transition/"
+    missing = staff.post(path, {"status": "CANCELLED"}, format="json")
+    assert missing.status_code == 400
+    cancelled = staff.post(
+        path,
+        {"status": "CANCELLED", "cancellation_reason_code": "OUT_OF_STOCK"},
+        format="json",
+    )
+    assert cancelled.status_code == 200, cancelled.data
+    history = customer.get("/api/orders/")
+    order = next(item for item in history.data["results"] if item["id"] == order_id)
+    assert order["cancellation_reason_code"] == "OUT_OF_STOCK"
 
 
 def test_cancellation_releases_once_and_refunds(records, client_for):
@@ -170,7 +248,7 @@ def test_prescription_authority_and_handover(records, client_for, settings):
         == 403
     )
     assert staff.post(path, {"approved": True}, format="json").status_code == 403
-    for status in ("PROCESSING", "READY_FOR_PICKUP"):
+    for status in ("CONFIRMED", "PROCESSING", "READY_FOR_PICKUP"):
         assert (
             staff.post(
                 f"/api/orders/{identifier}/transition/",
@@ -229,7 +307,7 @@ def test_jwt_registration_expiry_tampering_and_no_role_escalation(records, clien
     anonymous = client_for()
     login = anonymous.post(
         "/api/auth/token/",
-        {"username": r["customer"].username, "password": "Long-Test-Password-123"},
+        {"username": r["customer"].username, "password": "pass"},
         format="json",
     )
     assert login.status_code == 200, login.data
@@ -251,7 +329,7 @@ def test_jwt_registration_expiry_tampering_and_no_role_escalation(records, clien
     registration = {
         "username": "SS_new",
         "email": "new@example.test",
-        "password": "Long-Test-Password-123",
+        "password": "pass",
         "full_name": "New User",
         "role": "ADMIN",
     }
@@ -265,27 +343,99 @@ def test_jwt_registration_expiry_tampering_and_no_role_escalation(records, clien
     assert m.Users.objects.get(username="SS_new").role == "CUSTOMER"
 
 
+def test_registration_and_admin_accounts_accept_four_character_passwords(records, client_for):
+    r = records
+    anonymous = client_for()
+    response = anonymous.post(
+        "/api/auth/register/",
+        {
+            "username": "fourchar",
+            "email": "fourchar@example.test",
+            "password": "pass",
+            "full_name": "Four Character",
+        },
+        format="json",
+    )
+    assert response.status_code == 201, response.data
+    admin = client_for(r["admin"])
+    response = admin.post(
+        "/api/admin/users/",
+        {
+            "username": "short-pass-staff",
+            "email": "short-pass-staff@example.test",
+            "password": "pass",
+            "role": "STAFF",
+        },
+        format="json",
+    )
+    assert response.status_code == 201, response.data
+
+
 def test_payment_failure_replay_and_no_secrets(records, client_for):
     r = records
     client = client_for(r["customer"])
     identifier = create(client, r)
     path = f"/api/orders/{identifier}/pay/"
-    assert (
-        client.post(
-            path, {"idempotency_key": "unique-key", "cvv": "123"}, format="json"
-        ).status_code
-        == 400
-    )
     for _ in range(2):
         assert (
             client.post(
-                path, {"idempotency_key": "unique-key"}, format="json"
+                path,
+                {"idempotency_key": "unique-key", "demo_scenario": "DECLINED"},
+                format="json",
             ).status_code
             == 202
         )
     assert m.Payments.objects.count() == 1
-    drain(Services(payment_gateway=SimulatedPaymentGateway(False)))
+    drain()
     assert m.Payments.objects.get().status == "FAILED"
+
+
+@pytest.mark.parametrize(
+    ("scenario", "expected"),
+    [("APPROVED", "SUCCEEDED"), ("DECLINED", "FAILED"), ("TIMEOUT", "UNKNOWN")],
+)
+def test_educational_payment_scenarios_are_persisted_without_card_data(
+    records, client_for, scenario, expected
+):
+    customer = client_for(records["customer"])
+    order_id = create(customer, records)
+    path = f"/api/orders/{order_id}/pay/"
+    payload = {"idempotency_key": f"demo-{scenario.lower()}-123", "demo_scenario": scenario}
+
+    response = customer.post(path, payload, format="json")
+    assert response.status_code == 202, response.data
+    # Replaying the same request returns the same payment and queues one event.
+    replay = customer.post(path, payload, format="json")
+    assert replay.status_code == 202, replay.data
+    assert m.Payments.objects.filter(order_id=order_id).count() == 1
+    assert m.OutboxEvents.objects.filter(
+        event_type="payment.requested", payload__payment_id=response.data["id"]
+    ).count() == 1
+
+    drain()
+    payment = m.Payments.objects.get(order_id=order_id)
+    assert payment.status == expected
+    assert payment.provider == "EDUCATIONAL_SIMULATOR"
+    assert m.Orders.objects.get(id=order_id).status == "PENDING_CONFIRMATION"
+    event = m.OutboxEvents.objects.get(
+        event_type="payment.requested", payload__payment_id=payment.id
+    )
+    assert event.payload["demo_scenario"] == scenario
+    assert not {"card_number", "cvv", "cardholder", "expiry"}.intersection(event.payload)
+    assert not any(
+        value in str(payment.__dict__)
+        for value in ("0000000000000000", "000", "DEMO USER", "12/30")
+    )
+
+
+def test_payment_serializer_has_no_card_credential_fields():
+    for field in ("card_number", "cvv", "cardholder", "expiry"):
+        serializer = PaymentSerializer(data={
+            "idempotency_key": "demo-serializer-123",
+            field: None,
+        })
+        assert not serializer.is_valid()
+        assert "fields" in serializer.errors
 
 
 def test_shipping_worker_and_refund_limit(records, client_for):
@@ -302,7 +452,7 @@ def test_shipping_worker_and_refund_limit(records, client_for):
         == 202
     )
     drain()
-    for status in ("PROCESSING", "AWAITING_SHIPMENT"):
+    for status in ("CONFIRMED", "PROCESSING", "AWAITING_SHIPMENT"):
         assert (
             staff.post(
                 f"/api/orders/{identifier}/transition/",
@@ -601,7 +751,7 @@ def test_loyalty_snapshot_survives_rate_change_and_restrictions_are_locked(
         format="json",
     )
     assert response.status_code == 409
-    for status in ("PROCESSING", "READY_FOR_PICKUP", "COMPLETED"):
+    for status in ("CONFIRMED", "PROCESSING", "READY_FOR_PICKUP", "COMPLETED"):
         assert (
             staff.post(
                 f"/api/orders/{identifier}/transition/",

@@ -7,6 +7,7 @@ info:
 paths:
   /api/admin/assignments/:
     get:
+      x-portals: [management]
       operationId: admin_assignments_list
       parameters:
       - name: page
@@ -27,6 +28,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedAssignmentList'
           description: ''
     post:
+      x-portals: [management]
       operationId: admin_assignments_create
       tags:
       - admin
@@ -53,6 +55,7 @@ paths:
           description: ''
   /api/admin/assignments/{id}/:
     get:
+      x-portals: [management]
       operationId: admin_assignments_retrieve
       parameters:
       - in: path
@@ -73,6 +76,7 @@ paths:
                 $ref: '#/components/schemas/Assignment'
           description: ''
     patch:
+      x-portals: [management]
       operationId: admin_assignments_partial_update
       parameters:
       - in: path
@@ -105,6 +109,7 @@ paths:
           description: ''
   /api/admin/audit/:
     get:
+      x-portals: [management]
       operationId: admin_audit_retrieve
       tags:
       - admin
@@ -120,6 +125,7 @@ paths:
           description: ''
   /api/admin/delivery-rules/:
     get:
+      x-portals: [management]
       operationId: admin_delivery_rules_list
       parameters:
       - name: page
@@ -140,6 +146,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedDeliveryRuleList'
           description: ''
     post:
+      x-portals: [management]
       operationId: admin_delivery_rules_create
       tags:
       - admin
@@ -166,6 +173,7 @@ paths:
           description: ''
   /api/admin/delivery-rules/{id}/:
     get:
+      x-portals: [management]
       operationId: admin_delivery_rules_retrieve
       parameters:
       - in: path
@@ -186,6 +194,7 @@ paths:
                 $ref: '#/components/schemas/DeliveryRule'
           description: ''
     patch:
+      x-portals: [management]
       operationId: admin_delivery_rules_partial_update
       parameters:
       - in: path
@@ -218,6 +227,7 @@ paths:
           description: ''
   /api/admin/loyalty-tiers/:
     get:
+      x-portals: [management]
       operationId: admin_loyalty_tiers_list
       parameters:
       - name: page
@@ -238,6 +248,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedTierList'
           description: ''
     post:
+      x-portals: [management]
       operationId: admin_loyalty_tiers_create
       tags:
       - admin
@@ -264,6 +275,7 @@ paths:
           description: ''
   /api/admin/loyalty-tiers/{id}/:
     get:
+      x-portals: [management]
       operationId: admin_loyalty_tiers_retrieve
       parameters:
       - in: path
@@ -284,6 +296,7 @@ paths:
                 $ref: '#/components/schemas/Tier'
           description: ''
     patch:
+      x-portals: [management]
       operationId: admin_loyalty_tiers_partial_update
       parameters:
       - in: path
@@ -316,6 +329,7 @@ paths:
           description: ''
   /api/admin/promotion-products/:
     get:
+      x-portals: [management]
       operationId: admin_promotion_products_list
       parameters:
       - name: page
@@ -336,6 +350,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedPromotionProductList'
           description: ''
     post:
+      x-portals: [management]
       operationId: admin_promotion_products_create
       tags:
       - admin
@@ -362,6 +377,7 @@ paths:
           description: ''
   /api/admin/promotion-products/{id}/:
     get:
+      x-portals: [management]
       operationId: admin_promotion_products_retrieve
       parameters:
       - in: path
@@ -382,6 +398,7 @@ paths:
                 $ref: '#/components/schemas/PromotionProduct'
           description: ''
     patch:
+      x-portals: [management]
       operationId: admin_promotion_products_partial_update
       parameters:
       - in: path
@@ -414,6 +431,7 @@ paths:
           description: ''
   /api/admin/promotions/:
     get:
+      x-portals: [management]
       operationId: admin_promotions_list
       parameters:
       - name: page
@@ -434,6 +452,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedPromotionList'
           description: ''
     post:
+      x-portals: [management]
       operationId: admin_promotions_create
       tags:
       - admin
@@ -460,6 +479,7 @@ paths:
           description: ''
   /api/admin/promotions/{id}/:
     get:
+      x-portals: [management]
       operationId: admin_promotions_retrieve
       parameters:
       - in: path
@@ -480,6 +500,7 @@ paths:
                 $ref: '#/components/schemas/Promotion'
           description: ''
     patch:
+      x-portals: [management]
       operationId: admin_promotions_partial_update
       parameters:
       - in: path
@@ -512,6 +533,7 @@ paths:
           description: ''
   /api/admin/statistics/:
     get:
+      x-portals: [management]
       operationId: admin_statistics_retrieve
       tags:
       - admin
@@ -527,6 +549,7 @@ paths:
           description: ''
   /api/admin/users/:
     get:
+      x-portals: [management]
       operationId: admin_users_list
       parameters:
       - name: page
@@ -547,6 +570,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedUserAdminList'
           description: ''
     post:
+      x-portals: [management]
       operationId: admin_users_create
       tags:
       - admin
@@ -573,6 +597,7 @@ paths:
           description: ''
   /api/admin/users/{id}/:
     get:
+      x-portals: [management]
       operationId: admin_users_retrieve
       parameters:
       - in: path
@@ -593,6 +618,7 @@ paths:
                 $ref: '#/components/schemas/UserAdmin'
           description: ''
     patch:
+      x-portals: [management]
       operationId: admin_users_partial_update
       parameters:
       - in: path
@@ -625,6 +651,7 @@ paths:
           description: ''
   /api/auth/register/:
     post:
+      x-portals: [customer]
       operationId: auth_register_create
       tags:
       - auth
@@ -649,6 +676,7 @@ paths:
           description: ''
   /api/auth/token/:
     post:
+      x-portals: [customer, management]
       operationId: auth_token_create
       tags:
       - auth
@@ -673,6 +701,7 @@ paths:
           description: ''
   /api/availability-watches/:
     get:
+      x-portals: [customer]
       operationId: availability_watches_retrieve
       tags:
       - availability-watches
@@ -687,6 +716,7 @@ paths:
                 additionalProperties: {}
           description: ''
     post:
+      x-portals: [customer]
       operationId: availability_watches_create
       tags:
       - availability-watches
@@ -713,6 +743,7 @@ paths:
           description: ''
   /api/cart/:
     get:
+      x-portals: [customer]
       operationId: cart_retrieve
       tags:
       - cart
@@ -727,6 +758,7 @@ paths:
                 additionalProperties: {}
           description: ''
     put:
+      x-portals: [customer]
       operationId: cart_update
       tags:
       - cart
@@ -754,6 +786,7 @@ paths:
           description: ''
   /api/categories/:
     get:
+      x-portals: [customer, management]
       operationId: categories_list
       parameters:
       - name: page
@@ -775,6 +808,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedCategoryList'
           description: ''
     post:
+      x-portals: [management]
       operationId: categories_create
       tags:
       - categories
@@ -801,6 +835,7 @@ paths:
           description: ''
   /api/categories/{id}/:
     get:
+      x-portals: [customer, management]
       operationId: categories_retrieve
       parameters:
       - in: path
@@ -822,6 +857,7 @@ paths:
                 $ref: '#/components/schemas/Category'
           description: ''
     patch:
+      x-portals: [management]
       operationId: categories_partial_update
       parameters:
       - in: path
@@ -854,6 +890,7 @@ paths:
           description: ''
   /api/checkout/quote/:
     post:
+      x-portals: [customer]
       operationId: checkout_quote_create
       tags:
       - checkout
@@ -881,6 +918,7 @@ paths:
           description: ''
   /api/guest-cart/:
     get:
+      x-portals: [customer]
       operationId: guest_cart_retrieve
       tags:
       - guest-cart
@@ -893,6 +931,7 @@ paths:
                 additionalProperties: {}
           description: ''
     put:
+      x-portals: [customer]
       operationId: guest_cart_update
       tags:
       - guest-cart
@@ -918,6 +957,7 @@ paths:
           description: ''
   /api/health/:
     get:
+      x-portals: [customer, management]
       operationId: health_retrieve
       tags:
       - health
@@ -931,6 +971,7 @@ paths:
           description: ''
   /api/loyalty/:
     get:
+      x-portals: [customer]
       operationId: loyalty_retrieve
       tags:
       - loyalty
@@ -946,6 +987,7 @@ paths:
           description: ''
   /api/manufacturers/:
     get:
+      x-portals: [customer, management]
       operationId: manufacturers_list
       parameters:
       - name: page
@@ -967,6 +1009,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedManufacturerList'
           description: ''
     post:
+      x-portals: [management]
       operationId: manufacturers_create
       tags:
       - manufacturers
@@ -993,6 +1036,7 @@ paths:
           description: ''
   /api/manufacturers/{id}/:
     get:
+      x-portals: [customer, management]
       operationId: manufacturers_retrieve
       parameters:
       - in: path
@@ -1014,6 +1058,7 @@ paths:
                 $ref: '#/components/schemas/Manufacturer'
           description: ''
     patch:
+      x-portals: [management]
       operationId: manufacturers_partial_update
       parameters:
       - in: path
@@ -1046,6 +1091,7 @@ paths:
           description: ''
   /api/me/:
     get:
+      x-portals: [customer, management]
       operationId: me_retrieve
       tags:
       - me
@@ -1061,6 +1107,7 @@ paths:
           description: ''
   /api/notifications/:
     get:
+      x-portals: [customer]
       operationId: notifications_retrieve
       tags:
       - notifications
@@ -1076,6 +1123,7 @@ paths:
           description: ''
   /api/notifications/{notification_id}/read/:
     post:
+      x-portals: [customer]
       operationId: notifications_read_create
       parameters:
       - in: path
@@ -1097,6 +1145,7 @@ paths:
           description: ''
   /api/orders/:
     get:
+      x-portals: [customer, management]
       operationId: orders_list
       parameters:
       - name: page
@@ -1117,6 +1166,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedOrderList'
           description: ''
     post:
+      x-portals: [customer]
       operationId: orders_create
       tags:
       - orders
@@ -1144,6 +1194,7 @@ paths:
           description: ''
   /api/orders/{order_id}/reorder/:
     post:
+      x-portals: [customer]
       operationId: orders_reorder_create
       parameters:
       - in: path
@@ -1165,6 +1216,7 @@ paths:
           description: ''
   /api/orders/{id}/:
     get:
+      x-portals: [customer, management]
       operationId: orders_retrieve
       parameters:
       - in: path
@@ -1186,6 +1238,7 @@ paths:
           description: ''
   /api/orders/{id}/fulfillment/:
     get:
+      x-portals: [customer, management]
       operationId: orders_fulfillment_retrieve
       parameters:
       - in: path
@@ -1208,7 +1261,12 @@ paths:
           description: ''
   /api/orders/{id}/pay/:
     post:
+      x-portals: [customer]
       operationId: orders_pay_create
+      description: >-
+        Educational payment simulator only. Accepts an idempotency key and a
+        selected demo outcome; never send card fields. No real provider or money
+        movement is involved.
       parameters:
       - in: path
         name: id
@@ -1242,6 +1300,7 @@ paths:
           description: ''
   /api/orders/{id}/refund/:
     post:
+      x-portals: [management]
       operationId: orders_refund_create
       parameters:
       - in: path
@@ -1276,6 +1335,7 @@ paths:
           description: ''
   /api/orders/{id}/ship/:
     post:
+      x-portals: [management]
       operationId: orders_ship_create
       parameters:
       - in: path
@@ -1298,6 +1358,7 @@ paths:
           description: ''
   /api/orders/{id}/transition/:
     post:
+      x-portals: [customer, management]
       operationId: orders_transition_create
       parameters:
       - in: path
@@ -1332,6 +1393,7 @@ paths:
           description: ''
   /api/orders/{id}/verify-prescription/:
     post:
+      x-portals: [management]
       operationId: orders_verify_prescription_create
       parameters:
       - in: path
@@ -1366,6 +1428,7 @@ paths:
           description: ''
   /api/payment-methods/:
     get:
+      x-portals: [customer, management]
       operationId: payment_methods_retrieve
       tags:
       - payment-methods
@@ -1382,6 +1445,7 @@ paths:
           description: ''
   /api/pharmacies/:
     get:
+      x-portals: [customer, management]
       operationId: pharmacies_list
       parameters:
       - name: page
@@ -1403,6 +1467,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedPharmacyList'
           description: ''
     post:
+      x-portals: [management]
       operationId: pharmacies_create
       tags:
       - pharmacies
@@ -1429,6 +1494,7 @@ paths:
           description: ''
   /api/pharmacies/{pharmacy_id}/audit/:
     get:
+      x-portals: [management]
       operationId: pharmacies_audit_retrieve
       parameters:
       - in: path
@@ -1450,6 +1516,7 @@ paths:
           description: ''
   /api/pharmacies/{pharmacy_id}/inventory/:
     get:
+      x-portals: [customer, management]
       operationId: pharmacies_inventory_retrieve
       parameters:
       - in: path
@@ -1472,6 +1539,7 @@ paths:
           description: ''
   /api/pharmacies/{pharmacy_id}/inventory/{product_id}/:
     patch:
+      x-portals: [management]
       operationId: pharmacies_inventory_partial_update
       parameters:
       - in: path
@@ -1509,6 +1577,7 @@ paths:
           description: ''
   /api/pharmacies/{pharmacy_id}/statistics/:
     get:
+      x-portals: [management]
       operationId: pharmacies_statistics_retrieve
       parameters:
       - in: path
@@ -1530,6 +1599,7 @@ paths:
           description: ''
   /api/pharmacies/{id}/:
     get:
+      x-portals: [customer, management]
       operationId: pharmacies_retrieve
       parameters:
       - in: path
@@ -1551,6 +1621,7 @@ paths:
                 $ref: '#/components/schemas/Pharmacy'
           description: ''
     patch:
+      x-portals: [management]
       operationId: pharmacies_partial_update
       parameters:
       - in: path
@@ -1583,6 +1654,7 @@ paths:
           description: ''
   /api/preferences/:
     get:
+      x-portals: [customer]
       operationId: preferences_retrieve
       tags:
       - preferences
@@ -1597,6 +1669,7 @@ paths:
                 additionalProperties: {}
           description: ''
     post:
+      x-portals: [customer]
       operationId: preferences_create
       tags:
       - preferences
@@ -1623,6 +1696,7 @@ paths:
           description: ''
   /api/prescriptions/:
     get:
+      x-portals: [customer]
       operationId: prescriptions_retrieve
       tags:
       - prescriptions
@@ -1637,6 +1711,7 @@ paths:
                 additionalProperties: {}
           description: ''
     post:
+      x-portals: [customer]
       operationId: prescriptions_create
       tags:
       - prescriptions
@@ -1664,6 +1739,7 @@ paths:
           description: ''
   /api/prescriptions/{prescription_id}/:
     delete:
+      x-portals: [customer]
       operationId: prescriptions_destroy
       parameters:
       - in: path
@@ -1680,6 +1756,7 @@ paths:
           description: No response body
   /api/products/:
     get:
+      x-portals: [customer, management]
       operationId: products_list
       parameters:
       - name: page
@@ -1701,6 +1778,7 @@ paths:
                 $ref: '#/components/schemas/PaginatedProductList'
           description: ''
     post:
+      x-portals: [management]
       operationId: products_create
       tags:
       - products
@@ -1727,6 +1805,7 @@ paths:
           description: ''
   /api/products/{id}/:
     get:
+      x-portals: [customer, management]
       operationId: products_retrieve
       parameters:
       - in: path
@@ -1748,6 +1827,7 @@ paths:
                 $ref: '#/components/schemas/Product'
           description: ''
     patch:
+      x-portals: [management]
       operationId: products_partial_update
       parameters:
       - in: path
@@ -1780,6 +1860,7 @@ paths:
           description: ''
   /api/products/{id}/availability/:
     get:
+      x-portals: [customer, management]
       operationId: products_availability_retrieve
       parameters:
       - in: path
@@ -1803,6 +1884,7 @@ paths:
           description: ''
   /api/profile/:
     get:
+      x-portals: [customer]
       operationId: profile_retrieve
       tags:
       - profile
@@ -1817,6 +1899,7 @@ paths:
                 additionalProperties: {}
           description: ''
     patch:
+      x-portals: [customer]
       operationId: profile_partial_update
       tags:
       - profile
@@ -1843,6 +1926,7 @@ paths:
           description: ''
   /api/reminders/:
     get:
+      x-portals: [customer]
       operationId: reminders_retrieve
       tags:
       - reminders
@@ -1857,6 +1941,7 @@ paths:
                 additionalProperties: {}
           description: ''
     post:
+      x-portals: [customer]
       operationId: reminders_create
       tags:
       - reminders
@@ -2023,8 +2108,17 @@ components:
           type: integer
           readOnly: true
         status:
+          $ref: '#/components/schemas/StatusEnum'
+        cancellation_reason_code:
           type: string
-          maxLength: 32
+          nullable: true
+          enum:
+          - OUT_OF_STOCK
+          - PRICE_CHANGED
+          - PRESCRIPTION_ISSUE
+          - DELIVERY_UNAVAILABLE
+          - OTHER
+          - CUSTOMER_REQUEST
         fulfillment_method:
           type: string
           maxLength: 16
@@ -2549,6 +2643,11 @@ components:
           type: string
           maxLength: 80
           minLength: 8
+        demo_scenario:
+          type: string
+          enum: [APPROVED, DECLINED, TIMEOUT]
+          default: APPROVED
+          description: Educational simulator outcome. Never a real provider authorization.
       required:
       - idempotency_key
     PaymentMethodEnum:
@@ -2838,6 +2937,8 @@ components:
       - display_label
     StatusEnum:
       enum:
+      - PENDING_CONFIRMATION
+      - CONFIRMED
       - PROCESSING
       - READY_FOR_PICKUP
       - AWAITING_SHIPMENT
@@ -2845,6 +2946,8 @@ components:
       - CANCELLED
       type: string
       description: |-
+        * `PENDING_CONFIRMATION` - PENDING_CONFIRMATION
+        * `CONFIRMED` - CONFIRMED
         * `PROCESSING` - PROCESSING
         * `READY_FOR_PICKUP` - READY_FOR_PICKUP
         * `AWAITING_SHIPMENT` - AWAITING_SHIPMENT
@@ -2887,6 +2990,14 @@ components:
       properties:
         status:
           $ref: '#/components/schemas/StatusEnum'
+        cancellation_reason_code:
+          type: string
+          enum:
+          - OUT_OF_STOCK
+          - PRICE_CHANGED
+          - PRESCRIPTION_ISSUE
+          - DELIVERY_UNAVAILABLE
+          - OTHER
       required:
       - status
     UserAdmin:

@@ -1,3 +1,5 @@
+> Current frontend architecture (2026-10-29): two independent portals, one Django API and one MySQL database. See [portal requirements, sessions and roles](../portals/ARCHITECTURE.md) and [page/API responsibility matrix](../portals/PAGE_API_MATRIX.md). Historical framework/database deployment assumptions below are superseded by that implementation.
+
 # 04 — Business Operations
 
 This catalogue describes domain *commands and outcomes*, not API endpoints. IDs are stable for later traceability.
@@ -9,7 +11,7 @@ This catalogue describes domain *commands and outcomes*, not API endpoints. IDs 
 | OP-03 | Quote checkout (customer) | Choose single branch; validate lines and fulfilment options | Cart, BranchAssortment, DeliverySelection, Promotion | Quoted amount/options / conflict or ineligible delivery |
 | OP-04 | Place order (customer) | Authorized, valid quote, available quantities, valid delivery selection | Order, OrderItem, Reservation, StockBalance | Order and atomic holds / insufficient inventory, stale price, forbidden item |
 | OP-05 | Select payment method (customer) | Allowed for chosen delivery/order | Payment method choice | Payment initiated or offline condition recorded / unavailable method |
-| OP-06 | Confirm sandbox payment (provider/system) | Trusted callback or simulated verification; idempotency key | Payment, Order | Settled attempt / duplicate safely ignored / failed attempt |
+| OP-06 | Run educational card-payment scenario (customer) | Fictional credentials validated in browser; selected scenario and idempotency key | Payment, Order, outbox | Adapter returns APPROVED/DECLINED/TIMEOUT; duplicate safely ignored; no card credentials reach API |
 | OP-07 | Cancel order (customer/employee) | Policy allows state transition | Order, Reservation, Payment, Refund | Cancel/release/refund workflow / cancellation forbidden |
 | OP-08 | Fulfil pickup order (assigned employee) | Order ready; if Rx, valid pharmacist verification | Order, Reservation, StockBalance | Completed and stock deducted / verification missing |
 | OP-09 | Prepare shipment (assigned employee) | Shipping eligible, address valid, stock reserved | Shipment, Order | Label/tracking placeholder / carrier mismatch |

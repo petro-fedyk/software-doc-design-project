@@ -22,7 +22,7 @@ def db(django_db_blocker):
 @pytest.fixture
 def records(db):
     now = timezone.now()
-    password = make_password("Long-Test-Password-123")
+    password = make_password("pass")
 
     def user(name, role):
         return m.Users.objects.create(

@@ -7,7 +7,7 @@ from pharmacy.models import Users
 
 
 class Command(BaseCommand):
-    help = "Create admin / admim only when no ADMIN account exists (local coursework)."
+    help = "Create admin / admin only when no ADMIN account exists (local coursework)."
 
     def handle(self, *args, **options):
         # Serialize simultaneous startup attempts without adding schema objects.
@@ -25,7 +25,7 @@ class Command(BaseCommand):
                     raise CommandError("Bootstrap email admin@localhost.test is already in use; no account changed.")
                 user = Users.objects.create(
                     username="admin", email="admin@localhost.test",
-                    password=make_password("admim"), role="ADMIN",
+                    password=make_password("admin"), role="ADMIN",
                     is_staff=True, is_active=True, created_at=timezone.now(),
                 )
                 self.stdout.write(self.style.SUCCESS(f"Created initial administrator admin (id={user.id})."))

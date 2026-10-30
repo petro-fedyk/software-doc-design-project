@@ -295,6 +295,7 @@ class Order:
     method: str
     total: Decimal
     payment_method: str
+    cancellation_reason: str | None = None
 
     def transition(self, target):
         STATES[self.status].transition(self, target)

@@ -143,6 +143,13 @@ class LoyaltyAccounts(models.Model):
     customer = models.OneToOneField("Users", models.DO_NOTHING)
     tier = models.ForeignKey("LoyaltyTiers", models.DO_NOTHING)
     balance = models.PositiveIntegerField()
+    social_document_number = models.CharField(max_length=6, blank=True, null=True)
+    premium_active_until = models.DateTimeField(blank=True, null=True)
+    premium_status = models.CharField(max_length=16, default="INACTIVE")
+    premium_monthly_price = models.DecimalField(max_digits=8, decimal_places=2, default="30.00")
+    premium_payment_status = models.CharField(max_length=16, default="NOT_PAID")
+    premium_payment_reference = models.CharField(max_length=100, blank=True, null=True)
+    premium_payment_key = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -237,6 +244,7 @@ class Orders(models.Model):
     shipping_total = models.DecimalField(max_digits=12, decimal_places=2)
     grand_total = models.DecimalField(max_digits=12, decimal_places=2)
     currency = models.CharField(max_length=3)
+    cancellation_reason_code = models.CharField(max_length=32, blank=True, null=True)
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
 
@@ -289,6 +297,8 @@ class Pharmacies(models.Model):
     address = models.CharField(max_length=300)
     city = models.CharField(max_length=100)
     phone = models.CharField(max_length=32, blank=True, null=True)
+    image_url = models.URLField(max_length=2048, blank=True, null=True)
+    image_source_url = models.URLField(max_length=2048, blank=True, null=True)
     is_active = models.BooleanField()
 
     class Meta:
